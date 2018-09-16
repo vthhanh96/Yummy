@@ -1,0 +1,8 @@
+package com.example.thesis.yummy.restful.model;
+
+import com.squareup.moshi.Json;
+
+public class Category extends Base {
+    @Json(name = "_id") public Integer mId;
+    @Json(name = "name") public String mName;
+}

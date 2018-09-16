@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Yummy</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="do_not_have_an_account">Don\'t have an account?</string>
+    <string name="register_now">Register now</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_password">Enter password</string>
+    <string name="loading">Loading...</string>
+    <string name="login_success">Login success</string>
+    <string name="unauthorized">Unauthorized</string>
 </resources>
