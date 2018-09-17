@@ -19,4 +19,7 @@ public class User extends Base{
     @Json(name = "targetStyle") public String mTargetStyle;
     @Json(name = "targetFood") public String mTargetFood;
 
+    public User(Integer id) {
+        mId = id;
+    }
 }

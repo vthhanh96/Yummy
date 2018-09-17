@@ -1,4 +1,4 @@
-package com.example.thesis.yummy.function.login;
+package com.example.thesis.yummy.controller.login;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,12 +7,9 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.example.thesis.yummy.R;
-import com.example.thesis.yummy.function.BaseActivity;
-import com.example.thesis.yummy.restful.RestCallback;
-import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.restful.auth.AuthClient;
-import com.example.thesis.yummy.restful.model.Token;
-import com.example.thesis.yummy.storage.StorageManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +65,7 @@ public class LoginActivity extends BaseActivity {
             public void onAuthorized() {
                 hideLoading();
                 Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                HomeActivity.start(LoginActivity.this);
             }
 
             @Override

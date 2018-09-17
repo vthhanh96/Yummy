@@ -1,4 +1,4 @@
-package com.example.thesis.yummy.function;
+package com.example.thesis.yummy.controller.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

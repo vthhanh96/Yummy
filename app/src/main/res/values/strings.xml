@@ -11,4 +11,6 @@
     <string name="loading">Loading...</string>
     <string name="login_success">Login success</string>
     <string name="unauthorized">Unauthorized</string>
+    <string name="interested">Interested (%d)</string>
+    <string name="comment_amount">Comment (%d)</string>
 </resources>

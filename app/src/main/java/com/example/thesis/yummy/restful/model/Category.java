@@ -5,4 +5,8 @@ import com.squareup.moshi.Json;
 public class Category extends Base {
     @Json(name = "_id") public Integer mId;
     @Json(name = "name") public String mName;
+
+    public Category(Integer id) {
+        mId = id;
+    }
 }
