@@ -14,6 +14,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.RestError;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
@@ -88,18 +91,18 @@ public class PostRecyclerView extends RecyclerView {
     }
 
     private void interested(Post post, final int position) {
-//        ServiceManager.getInstance().getPostService().interested(mToken, post.mId).enqueue(new RestCallback<PostResponse>() {
-//            @Override
-//            public void success(PostResponse res) {
-//                mPostAdapter.getData().get(position).setInterestedPeople(res.getPost().mInterestedPeople);
-//                mPostAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//
-//            }
-//        });
+        ServiceManager.getInstance().getPostService().interested(post.mId).enqueue(new RestCallback<Post>() {
+            @Override
+            public void onSuccess(String message, Post post) {
+                mPostAdapter.getData().get(position).mInterestedPeople = post.mInterestedPeople;
+                mPostAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
     }
 
     public void setLoadMoreEnable(final OnPostRecyclerViewLoadMoreListener listener) {

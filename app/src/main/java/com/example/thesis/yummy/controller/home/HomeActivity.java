@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.post.AddPostActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_HOME_PAGE;
 
@@ -45,6 +47,11 @@ public class HomeActivity extends DrawerActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.activity_home;
+    }
+
+    @OnClick(R.id.btnCreatePost)
+    public void createPost() {
+        AddPostActivity.start(this);
     }
 
     @Override

@@ -13,4 +13,5 @@
     <string name="unauthorized">Unauthorized</string>
     <string name="interested">Interested (%d)</string>
     <string name="comment_amount">Comment (%d)</string>
+    <string name="new_post">New Post</string>
 </resources>

@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCVx9d1SWvimYuz2q77pxN5VgN1NzsJ-qI" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name=".controller.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +27,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.home.HomeActivity" />
+        <activity android:name=".controller.post.AddPostActivity" />
+        <activity android:name=".controller.post.CategoryActivity" />
 
     </application>
 </manifest>

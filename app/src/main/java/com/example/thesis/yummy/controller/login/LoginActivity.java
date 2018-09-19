@@ -9,7 +9,11 @@ import android.widget.Toast;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.home.HomeActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.auth.AuthClient;
+import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,9 +67,7 @@ public class LoginActivity extends BaseActivity {
         AuthClient.login(mEdtEmail.getText().toString(), mEdtPassword.getText().toString(), new AuthClient.AuthCallBack() {
             @Override
             public void onAuthorized() {
-                hideLoading();
-                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                HomeActivity.start(LoginActivity.this);
+                getUserInfo();
             }
 
             @Override
@@ -78,5 +80,24 @@ public class LoginActivity extends BaseActivity {
 
     private void register() {
 
+    }
+
+    private void getUserInfo() {
+        ServiceManager.getInstance().getUserService().getUserInfo().enqueue(new RestCallback<User>() {
+            @Override
+            public void onSuccess(String message, User user) {
+                hideLoading();
+                StorageManager.saveUser(user);
+                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                HomeActivity.start(LoginActivity.this);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                HomeActivity.start(LoginActivity.this);
+            }
+        });
     }
 }
