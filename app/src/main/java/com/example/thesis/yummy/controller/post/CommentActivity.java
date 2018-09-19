@@ -23,7 +23,10 @@ import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.utils.DateUtils;
 import com.example.thesis.yummy.view.TopBarView;
+import com.example.thesis.yummy.view.dialog.InputDialog;
+import com.example.thesis.yummy.view.dialog.SelectCommentOptionsDialogFragment;
 
 import java.util.ArrayList;
 
@@ -139,58 +142,58 @@ public class CommentActivity extends BaseActivity {
     }
 
     private void openInputDialog() {
-//        InputDialog inputDialog = new InputDialog(mContext);
-//        inputDialog.setListener(new InputDialog.InputDialogListener() {
-//            @Override
-//            public void onCancelClick() {
-//
-//            }
-//
-//            @Override
-//            public void onDoneClick(String content) {
-//                createComment(content);
-//            }
-//        });
-//        inputDialog.show();
+        InputDialog inputDialog = new InputDialog(mContext);
+        inputDialog.setListener(new InputDialog.InputDialogListener() {
+            @Override
+            public void onCancelClick() {
+
+            }
+
+            @Override
+            public void onDoneClick(String content) {
+                createComment(content);
+            }
+        });
+        inputDialog.show();
     }
 
     private void showCommentActionPopup(View view, final Comment comment) {
-//        if(mUser != null && mUser.getId() == comment.getCreator().getId()) {
-//            SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
-//            dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
-//                @Override
-//                public void editComment() {
-//                    showEditCommentDialog(comment);
-//                }
-//
-//                @Override
-//                public void deleteComment() {
-//                    onDeleteComment(comment);
-//                }
-//            });
-//            dialogFragment.show(getSupportFragmentManager(), ListCommentsActivity.class.getName());
-//        }
+        if(mUser != null && mUser.mId.equals(comment.mCreator.mId)) {
+            SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
+            dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
+                @Override
+                public void editComment() {
+                    showEditCommentDialog(comment);
+                }
+
+                @Override
+                public void deleteComment() {
+                    onDeleteComment(comment);
+                }
+            });
+            dialogFragment.show(getSupportFragmentManager(), CommentActivity.class.getName());
+        }
     }
 
     private void showEditCommentDialog(final Comment comment) {
-//        if(mUser == null || mUser.getId() != comment.getCreator().getId()) {
-//            Toast.makeText(mContext, "Bạn không có quyền chỉnh sửa bình luận này.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        InputDialog inputDialog = new InputDialog(mContext);
-//        inputDialog.setListener(new InputDialog.InputDialogListener() {
-//            @Override
-//            public void onCancelClick() {
-//
-//            }
-//
-//            @Override
-//            public void onDoneClick(String content) {
-//                editComment(content, comment);
-//            }
-//        });
-//        inputDialog.setContentInput(comment.getContent());
-//        inputDialog.show();
+        if(mUser == null || !mUser.mId.equals(comment.mCreator.mId)) {
+            Toast.makeText(mContext, "Bạn không có quyền chỉnh sửa bình luận này.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        InputDialog inputDialog = new InputDialog(mContext);
+        inputDialog.setListener(new InputDialog.InputDialogListener() {
+            @Override
+            public void onCancelClick() {
+
+            }
+
+            @Override
+            public void onDoneClick(String content) {
+                editComment(content, comment);
+            }
+        });
+        inputDialog.setContentInput(comment.mContent);
+        inputDialog.show();
     }
 
     private void editComment(String content, final Comment comment) {
@@ -260,7 +263,7 @@ public class CommentActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder helper, Comment item) {
             helper.setText(R.id.tvName, item.mCreator.mFullName);
-//            helper.setText(R.id.tvTime, DateUtils.getTimeAgo(mContext, item.getCreatedDate()));
+            helper.setText(R.id.tvTime, DateUtils.getTimeAgo(mContext, item.mCreatedDate));
             helper.setText(R.id.tvContent, item.mContent);
 
             ImageView imgAvatar = helper.getView(R.id.imgAvatar);

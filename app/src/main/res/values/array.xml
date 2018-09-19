@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dialog_select_iamge">
+        <item>"Máy ảnh"</item>
+        <item>"Thư viện"</item>
+    </string-array>
+
+    <string-array name="post_options_creator">
+        <item>"Chỉnh sửa bài viết"</item>
+        <item>"Xóa bài viết"</item>
+    </string-array>
+
+    <string-array name="post_options_not_creator">
+        <item>"Đánh giá bài viết"</item>
+        <item>"Báo cáo bài viết"</item>
+    </string-array>
+
+    <string-array name="dialog_select_comment_options">
+        <item>"Chỉnh sửa bình luận"</item>
+        <item>"Xóa bình luận"</item>
+    </string-array>
+
+    <string-array name="dialog_select_location_options">
+        <item>"Vị trí hiện tại"</item>
+        <item>"Tìm kiếm vị trí khác"</item>
+    </string-array>
+</resources>

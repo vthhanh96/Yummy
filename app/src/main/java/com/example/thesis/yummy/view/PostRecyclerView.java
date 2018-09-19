@@ -2,6 +2,7 @@ package com.example.thesis.yummy.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -23,6 +24,9 @@ import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.SelectPostOptionsDialogFragment;
+import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
 import java.util.ArrayList;
@@ -149,47 +153,47 @@ public class PostRecyclerView extends RecyclerView {
     }
 
     private void openOptionsPopup(final Post post, View view) {
-//        boolean isCreator = !(TextUtils.isEmpty(mToken) || mUser == null || mUser.mId != post.mCreator.mId);
-//        SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
-//        dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
-//            @Override
-//            public void editPost() {
+        boolean isCreator = !(mUser == null || !mUser.mId.equals(post.mCreator.mId));
+        SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
+        dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
+            @Override
+            public void editPost() {
 //                EditPostActivity.start(getContext(), post);
-//            }
-//
-//            @Override
-//            public void deletePost() {
-//                showDialogConfirmDeletePost(post);
-//            }
-//
-//            @Override
-//            public void judgePost() {
-//
-//            }
-//
-//            @Override
-//            public void reportPost() {
-//
-//            }
-//        });
-//        dialogFragment.show(((FragmentActivity)getContext()).getSupportFragmentManager(), "");
+            }
+
+            @Override
+            public void deletePost() {
+                showDialogConfirmDeletePost(post);
+            }
+
+            @Override
+            public void judgePost() {
+
+            }
+
+            @Override
+            public void reportPost() {
+
+            }
+        });
+        dialogFragment.show(((FragmentActivity)getContext()).getSupportFragmentManager(), "");
     }
 
     private void showDialogConfirmDeletePost(final Post post) {
-//        final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn xóa bài viết này?");
-//        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
-//            @Override
-//            public void dialogCancel() {
-//                questionDialog.dismissDialog();
-//            }
-//
-//            @Override
-//            public void dialogPerformAction() {
-//                questionDialog.dismissDialog();
-//                deletePost(post);
-//            }
-//        });
-//        questionDialog.show(((FragmentActivity)getContext()).getSupportFragmentManager(), "");
+        final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn xóa bài viết này?");
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                questionDialog.dismissDialog();
+                deletePost(post);
+            }
+        });
+        questionDialog.show(((FragmentActivity)getContext()).getSupportFragmentManager(), "");
     }
 
     private void deletePost(final Post post) {
