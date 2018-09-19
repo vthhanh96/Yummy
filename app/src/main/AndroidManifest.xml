@@ -29,6 +29,7 @@
         <activity android:name=".controller.home.HomeActivity" />
         <activity android:name=".controller.post.AddPostActivity" />
         <activity android:name=".controller.post.CategoryActivity" />
+        <activity android:name=".controller.post.PostDetailActivity" />
 
     </application>
 </manifest>

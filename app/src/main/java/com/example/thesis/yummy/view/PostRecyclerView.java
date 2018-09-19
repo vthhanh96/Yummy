@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestError;
 import com.example.thesis.yummy.restful.ServiceManager;
@@ -60,7 +61,7 @@ public class PostRecyclerView extends RecyclerView {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Post post = (Post) adapter.getItem(position);
                 if (post == null) return;
-//                PostDetailActivity.start(getContext(), post.mId);
+                PostDetailActivity.start(getContext(), post.mId);
             }
         });
 
