@@ -30,6 +30,7 @@
         <activity android:name=".controller.post.AddPostActivity" />
         <activity android:name=".controller.post.CategoryActivity" />
         <activity android:name=".controller.post.PostDetailActivity" />
+        <activity android:name=".controller.post.CommentActivity" />
 
     </application>
 </manifest>

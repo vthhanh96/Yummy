@@ -14,4 +14,5 @@
     <string name="interested">Interested (%d)</string>
     <string name="comment_amount">Comment (%d)</string>
     <string name="new_post">New Post</string>
+    <string name="comment">Comment</string>
 </resources>

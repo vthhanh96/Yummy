@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.post.CommentActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestError;
@@ -76,7 +77,7 @@ public class PostRecyclerView extends RecyclerView {
                         interested(post, position);
                         break;
                     case R.id.loComment:
-//                        ListCommentsActivity.start(getContext(), post.mId);
+                        CommentActivity.start(getContext(), post.mId);
                         break;
                     case R.id.btnMenuPost:
                         openOptionsPopup(post, view);
