@@ -19,6 +19,7 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
@@ -197,61 +198,57 @@ public class CommentActivity extends BaseActivity {
     }
 
     private void editComment(String content, final Comment comment) {
-//        showLoading();
-//        ApiManager.getInstance().getPostService().editComment(mToken, mPostId, comment.getId(), new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
-//            @Override
-//            public void success(CommentResponse res) {
-//                hideLoading();
-//                int position = mAdapter.getData().indexOf(comment);
-//                mAdapter.getData().remove(comment);
-//                mAdapter.getData().add(position, res.getComment());
-//                mAdapter.setNewData(mAdapter.getData());
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                hideLoading();
-//            }
-//        });
+        showLoading();
+        ServiceManager.getInstance().getPostService().editComment(mPostId, comment.mId, content).enqueue(new RestCallback<Comment>() {
+            @Override
+            public void onSuccess(String message, Comment comment) {
+                hideLoading();
+                int position = mAdapter.getData().indexOf(comment);
+                mAdapter.remove(position);
+                mAdapter.addData(position, comment);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void onDeleteComment(final Comment comment) {
-//        if(mUser == null || mUser.getId() != comment.getCreator().getId()) {
-//            Toast.makeText(mContext, "Bạn không có quyền xóa bình luận này.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        showLoading();
-//        ApiManager.getInstance().getPostService().deleteComment(mToken, mPostId, comment.getId()).enqueue(new RestCallback<BaseResponse>() {
-//            @Override
-//            public void success(BaseResponse res) {
-//                hideLoading();
-//                mAdapter.getData().remove(comment);
-//                mAdapter.setNewData(mAdapter.getData());
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                hideLoading();
-//            }
-//        });
+        showLoading();
+        ServiceManager.getInstance().getPostService().deleteComment(mPostId, comment.mId).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                mAdapter.getData().remove(comment);
+                mAdapter.setNewData(mAdapter.getData());
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void createComment(String content) {
-//        showLoading();
-//        ApiManager.getInstance().getPostService().createComment(mToken, mPostId, new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
-//            @Override
-//            public void success(CommentResponse res) {
-//                hideLoading();
-//                mAdapter.getData().add(res.getComment());
-//                mAdapter.setNewData(mAdapter.getData());
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                hideLoading();
-//                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        showLoading();
+        ServiceManager.getInstance().getPostService().createComment(mPostId, content).enqueue(new RestCallback<Comment>() {
+            @Override
+            public void onSuccess(String message, Comment comment) {
+                hideLoading();
+                mAdapter.addData(comment);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public class CommentAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {

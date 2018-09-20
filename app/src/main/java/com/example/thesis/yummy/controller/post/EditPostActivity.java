@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,9 +34,7 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
-import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.restful.request.PostRequest;
-import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.FileUtils;
 import com.example.thesis.yummy.utils.PermissionUtils;
 import com.example.thesis.yummy.view.TopBarView;
@@ -66,8 +63,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddPostActivity extends BaseActivity {
+public class EditPostActivity extends BaseActivity {
 
+    private static final String ARG_KEY_POST = "ARG_KEY_POST";
     private static final String ARG_KEY_SELECTED_CATEGORIES = "ARG_KEY_SELECTED_CATEGORIES";
     private static final int REQUEST_CODE_SELECT_CATEGORY = 1;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 2;
@@ -88,8 +86,6 @@ public class AddPostActivity extends BaseActivity {
     @BindView(R.id.tvTime) TextView mTvTime;
     @BindView(R.id.edtContent) EditText mEdtContent;
 
-    private User mUser;
-    private List<Category> mSelectedCategories;
     private CategoryAdapter mCategoryAdapter;
     private Location mLocation = new Location("");
     private File mFile;
@@ -97,15 +93,12 @@ public class AddPostActivity extends BaseActivity {
     private ImageAdapter mImageAdapter;
     private Date mTime;
     private int mAmount;
+    private Post mPost;
 
-    public static void start(Context context) {
-        Intent starter = new Intent(context, AddPostActivity.class);
+    public static void start(Context context, Post post) {
+        Intent starter = new Intent(context, EditPostActivity.class);
+        starter.putExtra(ARG_KEY_POST, post);
         context.startActivity(starter);
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_add_post;
     }
 
     @OnClick(R.id.btnCamera)
@@ -119,7 +112,7 @@ public class AddPostActivity extends BaseActivity {
 
     @OnClick(R.id.btnCategory)
     public void chooseCategory() {
-        CategoryActivity.startForResult(this, mSelectedCategories, REQUEST_CODE_SELECT_CATEGORY);
+        CategoryActivity.startForResult(this, mPost.mCategories, REQUEST_CODE_SELECT_CATEGORY);
     }
 
     @OnClick(R.id.btnAmount)
@@ -138,6 +131,11 @@ public class AddPostActivity extends BaseActivity {
     }
 
     @Override
+    protected int getLayoutId() {
+        return R.layout.activity_edit_post;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
@@ -146,16 +144,39 @@ public class AddPostActivity extends BaseActivity {
 
     private void init() {
         initTopBar();
+        getExtras();
         initData();
         initCategoryRecyclerView();
         initImageRecyclerView();
     }
 
+    private void getExtras() {
+        mPost = (Post) getIntent().getSerializableExtra(ARG_KEY_POST);
+    }
+
     private void initData() {
-        mUser = StorageManager.getUser();
-        if(mUser == null) return;
-        Glide.with(getApplicationContext()).load(mUser.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
-        mTvName.setText(mUser.mFullName);
+        mCategoryAdapter = new CategoryAdapter();
+
+        if(mPost == null) return;
+        if(mPost.mCreator != null) {
+            Glide.with(getApplicationContext()).load(mPost.mCreator.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+            mTvName.setText(mPost.mCreator.mFullName);
+        }
+
+        mTvAmount.setText(String.valueOf(mPost.mAmount));
+        mAmountLayout.setVisibility(View.VISIBLE);
+
+        mTvPlace.setText(mPost.mPlace);
+        mPlaceLayout.setVisibility(View.VISIBLE);
+
+        setTime(mPost.mTime);
+        mTimeLayout.setVisibility(View.VISIBLE);
+
+        mEdtContent.setText(mPost.mContent);
+        mCategoryAdapter.setNewData(mPost.mCategories);
+        mLocation = new Location("");
+        mLocation.setLongitude(mPost.mLocation.mCoordinates.get(0));
+        mLocation.setLatitude(mPost.mLocation.mCoordinates.get(1));
     }
 
     private void initTopBar() {
@@ -170,7 +191,7 @@ public class AddPostActivity extends BaseActivity {
 
             @Override
             public void onRightClick() {
-                addPost();
+                updatePost();
             }
         });
     }
@@ -203,14 +224,14 @@ public class AddPostActivity extends BaseActivity {
     }
 
     private void updateCategory() {
-        if(mSelectedCategories == null || mSelectedCategories.isEmpty()) {
+        if(mPost.mCategories == null || mPost.mCategories.isEmpty()) {
             mCategoryAdapter.setNewData(new ArrayList<Category>());
             mCategoriesRecyclerView.setVisibility(View.GONE);
             return;
         }
 
         mCategoriesRecyclerView.setVisibility(View.VISIBLE);
-        mCategoryAdapter.setNewData(mSelectedCategories);
+        mCategoryAdapter.setNewData(mPost.mCategories);
     }
 
     private void openSearchActivity() {
@@ -333,9 +354,10 @@ public class AddPostActivity extends BaseActivity {
         mTimeLayout.setVisibility(View.VISIBLE);
     }
 
-    private void addPost() {
+    private void updatePost() {
         showLoading();
-        PostRequest.createPost(mEdtContent.getText().toString(),
+        PostRequest.updatePost(mPost.mId,
+                mEdtContent.getText().toString(),
                 mLocation.getLatitude(),
                 mLocation.getLongitude(),
                 mTvPlace.getText().toString(),
@@ -350,7 +372,7 @@ public class AddPostActivity extends BaseActivity {
                     @Override
                     public void onFailure(String message) {
                         hideLoading();
-                        Toast.makeText(AddPostActivity.this, message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditPostActivity.this, message, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -376,11 +398,11 @@ public class AddPostActivity extends BaseActivity {
                 try {
                     String selectedCategories = data.getStringExtra(ARG_KEY_SELECTED_CATEGORIES);
                     List<Category> selected = Arrays.asList(new Gson().fromJson(selectedCategories, Category[].class));
-                    mSelectedCategories = new ArrayList<>();
-                    mSelectedCategories.addAll(selected);
+                    mPost.mCategories = new ArrayList<>();
+                    mPost.mCategories.addAll(selected);
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    mSelectedCategories = new ArrayList<>();
+                    mPost.mCategories = new ArrayList<>();
                 }
                 updateCategory();
                 break;
@@ -410,6 +432,7 @@ public class AddPostActivity extends BaseActivity {
                 break;
         }
     }
+
 
     private class CategoryAdapter extends BaseQuickAdapter<Category, BaseViewHolder> {
 

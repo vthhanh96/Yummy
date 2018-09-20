@@ -9,6 +9,7 @@ import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -16,10 +17,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.post.CommentActivity;
+import com.example.thesis.yummy.controller.post.EditPostActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestError;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
@@ -158,7 +161,7 @@ public class PostRecyclerView extends RecyclerView {
         dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
             @Override
             public void editPost() {
-//                EditPostActivity.start(getContext(), post);
+                EditPostActivity.start(getContext(), post);
             }
 
             @Override
@@ -197,22 +200,19 @@ public class PostRecyclerView extends RecyclerView {
     }
 
     private void deletePost(final Post post) {
-//        showLoading();
-//        ApiManager.getInstance().getPostService().deletePost(mToken, post.mId).enqueue(new RestCallback<BaseResponse>() {
-////            @Override
-////            public void success(BaseResponse res) {
-//////                hideLoading();
-////                mPostAdapter.getData().remove(post);
-////                mPostAdapter.setNewData(mPostAdapter.getData());
-////                Toast.makeText(getContext(), "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
-////            }
-////
-////            @Override
-////            public void failure(RestError error) {
-//////                hideLoading();
-////                Toast.makeText(getContext(), error.message, Toast.LENGTH_SHORT).show();
-////            }
-////        });
+        ServiceManager.getInstance().getPostService().deletePost(post.mId).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                mPostAdapter.getData().remove(post);
+                mPostAdapter.setNewData(mPostAdapter.getData());
+                Toast.makeText(getContext(), R.string.delete_post_success, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public interface OnPostRecyclerViewLoadMoreListener {

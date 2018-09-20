@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,13 +21,20 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.utils.DateUtils;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.CustomProgressDialog;
+import com.example.thesis.yummy.view.dialog.InputDialog;
+import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.SelectCommentOptionsDialogFragment;
+import com.example.thesis.yummy.view.dialog.SelectPostOptionsDialogFragment;
+import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
 import java.util.ArrayList;
@@ -223,65 +231,65 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void openOptionsPopup(final Post post) {
-//        boolean isCreator = !(TextUtils.isEmpty(mToken) || mUser == null || mUser.mId != post.mCreator.mId);
-//        SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
-//        dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
-//            @Override
-//            public void editPost() {
-//                EditPostActivity.start(PostDetailActivity.this, post);
-//            }
-//
-//            @Override
-//            public void deletePost() {
-//                showDialogConfirmDeletePost(post);
-//            }
-//
-//            @Override
-//            public void judgePost() {
-//
-//            }
-//
-//            @Override
-//            public void reportPost() {
-//
-//            }
-//        });
-//        dialogFragment.show(getSupportFragmentManager(), "");
+        boolean isCreator = !(TextUtils.isEmpty(mToken) || mUser == null || !mUser.mId.equals(post.mCreator.mId));
+        SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
+        dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
+            @Override
+            public void editPost() {
+                EditPostActivity.start(PostDetailActivity.this, post);
+            }
+
+            @Override
+            public void deletePost() {
+                showDialogConfirmDeletePost(post);
+            }
+
+            @Override
+            public void judgePost() {
+
+            }
+
+            @Override
+            public void reportPost() {
+
+            }
+        });
+        dialogFragment.show(getSupportFragmentManager(), "");
     }
 
     private void showDialogConfirmDeletePost(final Post post) {
-//        final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn xóa bài viết này?");
-//        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
-//            @Override
-//            public void dialogCancel() {
-//                questionDialog.dismissDialog();
-//            }
-//
-//            @Override
-//            public void dialogPerformAction() {
-//                questionDialog.dismissDialog();
-//                deletePost();
-//            }
-//        });
-//        questionDialog.show(getSupportFragmentManager(), "");
+        final QuestionDialog questionDialog = new QuestionDialog("Bạn có chắc chắn muốn xóa bài viết này?");
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                questionDialog.dismissDialog();
+                deletePost();
+            }
+        });
+        questionDialog.show(getSupportFragmentManager(), "");
     }
 
     private void deletePost() {
-//        showLoading();
-//        ApiManager.getInstance().getPostService().deletePost(mToken, mPost.mId).enqueue(new RestCallback<BaseResponse>() {
-//            @Override
-//            public void success(BaseResponse res) {
-//                hideLoading();
-//                finish();
-//                Toast.makeText(mContext, "Xóa bài viết thành công.", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                hideLoading();
-//                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        showLoading();
+        ServiceManager.getInstance().getPostService().deletePost(mPostId).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                finish();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void interested() {
@@ -304,108 +312,109 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void openInputDialog() {
-//        InputDialog inputDialog = new InputDialog(mContext);
-//        inputDialog.setListener(new InputDialog.InputDialogListener() {
-//            @Override
-//            public void onCancelClick() {
-//
-//            }
-//
-//            @Override
-//            public void onDoneClick(String content) {
-//                createComment(content);
-//            }
-//        });
-//        inputDialog.show();
+        InputDialog inputDialog = new InputDialog(mContext);
+        inputDialog.setListener(new InputDialog.InputDialogListener() {
+            @Override
+            public void onCancelClick() {
+
+            }
+
+            @Override
+            public void onDoneClick(String content) {
+                createComment(content);
+            }
+        });
+        inputDialog.show();
     }
 
     private void showCommentActionPopup(final Comment comment) {
-//        if(mUser != null && mUser.mId == comment.mCreator.mId) {
-//            SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
-//            dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
-//                @Override
-//                public void editComment() {
-//                    showEditCommentDialog(comment);
-//                }
-//
-//                @Override
-//                public void deleteComment() {
-//                    onDeleteComment(comment);
-//                }
-//            });
-//            dialogFragment.show(getSupportFragmentManager(), ListCommentsActivity.class.getName());
-//        }
+        if(mUser != null && mUser.mId == comment.mCreator.mId) {
+            SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
+            dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
+                @Override
+                public void editComment() {
+                    showEditCommentDialog(comment);
+                }
+
+                @Override
+                public void deleteComment() {
+                    onDeleteComment(comment);
+                }
+            });
+            dialogFragment.show(getSupportFragmentManager(), "");
+        }
     }
 
     private void showEditCommentDialog(final Comment comment) {
-//        InputDialog inputDialog = new InputDialog(mContext);
-//        inputDialog.setListener(new InputDialog.InputDialogListener() {
-//            @Override
-//            public void onCancelClick() {
-//
-//            }
-//
-//            @Override
-//            public void onDoneClick(String content) {
-//                editComment(content, comment);
-//            }
-//        });
-//        inputDialog.setContentInput(comment.mContent);
-//        inputDialog.show();
+        InputDialog inputDialog = new InputDialog(mContext);
+        inputDialog.setListener(new InputDialog.InputDialogListener() {
+            @Override
+            public void onCancelClick() {
+
+            }
+
+            @Override
+            public void onDoneClick(String content) {
+                editComment(content, comment);
+            }
+        });
+        inputDialog.setContentInput(comment.mContent);
+        inputDialog.show();
     }
 
     private void editComment(String content, final Comment comment) {
-//        showLoading();
-//        ApiManager.getInstance().getPostService().editComment(mToken, mPostId, comment.mId, new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
-//            @Override
-//            public void success(CommentResponse res) {
-//                hideLoading();
-//                int position = mAdapter.getData().indexOf(comment);
-//                mAdapter.getData().remove(comment);
-//                mAdapter.getData().add(position, res.getComment());
-//                mAdapter.setNewData(mAdapter.getData());
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                hideLoading();
-//            }
-//        });
+        showLoading();
+        ServiceManager.getInstance().getPostService().editComment(mPostId, comment.mId, content).enqueue(new RestCallback<Comment>() {
+            @Override
+            public void onSuccess(String message, Comment comment) {
+                hideLoading();
+                int position = mAdapter.getData().indexOf(comment);
+                mAdapter.remove(position);
+                mAdapter.addData(position, comment);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void onDeleteComment(final Comment comment) {
-//        showLoading();
-//        ApiManager.getInstance().getPostService().deleteComment(mToken, mPostId, comment.mId).enqueue(new RestCallback<BaseResponse>() {
-//            @Override
-//            public void success(BaseResponse res) {
-//                hideLoading();
-//                mAdapter.remove(mAdapter.getData().indexOf(comment));
-//                mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                hideLoading();
-//            }
-//        });
+        showLoading();
+        ServiceManager.getInstance().getPostService().deleteComment(mPostId, comment.mId).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                mAdapter.remove(mAdapter.getData().indexOf(comment));
+                mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void createComment(String content) {
-//        showLoading();
-//        ApiManager.getInstance().getPostService().createComment(mToken, mPostId, new CommentRequest(content)).enqueue(new RestCallback<CommentResponse>() {
-//            @Override
-//            public void success(CommentResponse res) {
-//                hideLoading();
-//                mAdapter.addData(res.getComment());
-//                mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
-//            }
-//
-//            @Override
-//            public void failure(RestError error) {
-//                hideLoading();
-//                Toast.makeText(mContext, error.message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        showLoading();
+        ServiceManager.getInstance().getPostService().createComment(mPostId, content).enqueue(new RestCallback<Comment>() {
+            @Override
+            public void onSuccess(String message, Comment comment) {
+                hideLoading();
+                mAdapter.addData(comment);
+                mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private class CategoryAdapter extends BaseQuickAdapter<Category, BaseViewHolder> {
@@ -429,7 +438,7 @@ public class PostDetailActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder helper, Comment item) {
             helper.setText(R.id.tvName, item.mCreator.mFullName);
-//            helper.setText(R.id.tvTime, DateUtils.getTimeAgo(mContext, item.mCreatedDate));
+            helper.setText(R.id.tvTime, DateUtils.getTimeAgo(mContext, item.mCreatedDate));
             helper.setText(R.id.tvContent, item.mContent);
 
             ImageView imgAvatar = helper.getView(R.id.imgAvatar);

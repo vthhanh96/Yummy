@@ -33,4 +33,26 @@ public class PostRequest {
 
         ServiceManager.getInstance().getPostService().createPost(params).enqueue(callback);
     }
+
+    public static void updatePost(int postId, String content, double latitude, double longitude, String place,
+                                  List<Category> categories, Date time, int amount, RestCallback<Post> callback) {
+        List<Integer> categoriesId = new ArrayList<>();
+        for (Category category : categories) {
+            categoriesId.add(category.mId);
+        }
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("content", content);
+        params.put("place", place);
+        params.put("categories", categoriesId);
+        params.put("time", time);
+        params.put("amount", amount);
+
+        HashMap<String, Object> coordinate = new HashMap<>();
+        coordinate.put("coordinates", new Double[]{longitude, latitude});
+
+        params.put("location", coordinate);
+
+        ServiceManager.getInstance().getPostService().updatePost(postId, params).enqueue(callback);
+    }
 }
