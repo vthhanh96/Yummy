@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_16dp"
-            android:text="TP HCM cang ngay cang ket xe luon ak"
+            android:text="Đi chung với bạn này vui nè ^^"
             android:textColor="@color/black"
             android:layout_below="@id/tvName"
             android:layout_marginTop="4dp"/>

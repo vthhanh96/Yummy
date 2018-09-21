@@ -231,7 +231,7 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void openOptionsPopup(final Post post) {
-        boolean isCreator = !(TextUtils.isEmpty(mToken) || mUser == null || !mUser.mId.equals(post.mCreator.mId));
+        boolean isCreator = !(mUser == null || !mUser.mId.equals(post.mCreator.mId));
         SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
         dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
             @Override

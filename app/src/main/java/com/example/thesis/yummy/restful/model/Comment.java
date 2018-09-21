@@ -11,6 +11,9 @@ public class Comment extends Base{
     @Json(name = "created_date") public Date mCreatedDate;
     @Json(name = "modify_date") public Date mModifiedDate;
 
+    public Comment() {
+    }
+
     public Comment(Integer id) {
         mId = id;
     }

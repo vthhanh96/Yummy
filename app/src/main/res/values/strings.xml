@@ -16,4 +16,5 @@
     <string name="new_post">New Post</string>
     <string name="comment">Comment</string>
     <string name="delete_post_success">Delete post success</string>
+    <string name="profile">Profile</string>
 </resources>

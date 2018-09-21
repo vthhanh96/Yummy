@@ -7,16 +7,26 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.home.HomeActivity;
+import com.example.thesis.yummy.controller.profile.ProfileActivity;
+import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.view.DrawerHeaderLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_HOME_PAGE;
 
@@ -24,6 +34,7 @@ public abstract class DrawerActivity extends BaseActivity {
 
     @BindView(R.id.drawerLayout) DrawerLayout mDrawerLayout;
     @BindView(R.id.rcvMenu) RecyclerView mMenuRecyclerView;
+
 
     private MenuAdapter mMenuAdapter;
     private List<ItemMenu> mMenuItems;
@@ -53,11 +64,23 @@ public abstract class DrawerActivity extends BaseActivity {
         mMenuAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                closeDrawer();
                 ItemMenu itemMenu = mMenuAdapter.getItem(position);
                 if(itemMenu == null) return;
                 onItemClickListener(itemMenu);
             }
         });
+
+        DrawerHeaderLayout headerLayout = new DrawerHeaderLayout(this);
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeDrawer();
+                if(DrawerActivity.this instanceof ProfileActivity) return;
+                ProfileActivity.start(DrawerActivity.this);
+            }
+        });
+        mMenuAdapter.addHeaderView(headerLayout);
 
         mMenuRecyclerView.setAdapter(mMenuAdapter);
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -66,6 +89,8 @@ public abstract class DrawerActivity extends BaseActivity {
     private void onItemClickListener(ItemMenu itemMenu) {
         switch (itemMenu.mKey) {
             case NAV_DRAWER_ID_HOME_PAGE:
+                if(this instanceof HomeActivity) return;
+                HomeActivity.start(this);
                 break;
         }
     }
