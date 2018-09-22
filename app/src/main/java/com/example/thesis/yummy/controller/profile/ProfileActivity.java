@@ -81,7 +81,7 @@ public class ProfileActivity extends DrawerActivity {
 
             @Override
             public void onRightClick() {
-
+                EditProfileActivity.start(ProfileActivity.this);
             }
         });
     }

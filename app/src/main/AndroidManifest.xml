@@ -33,6 +33,7 @@
         <activity android:name=".controller.post.CommentActivity" />
         <activity android:name=".controller.post.EditPostActivity" />
         <activity android:name=".controller.profile.ProfileActivity" />
+        <activity android:name=".controller.profile.EditProfileActivity" />
 
     </application>
 </manifest>
