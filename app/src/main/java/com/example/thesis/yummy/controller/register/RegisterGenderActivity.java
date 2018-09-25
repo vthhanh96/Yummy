@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,6 +19,7 @@ import butterknife.OnClick;
 
 public class RegisterGenderActivity extends BaseActivity {
 
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.imgMaleChecked) ImageView mImgMaleChecked;
     @BindView(R.id.imgFemaleChecked) ImageView mImgFemaleChecked;
 
@@ -45,7 +47,7 @@ public class RegisterGenderActivity extends BaseActivity {
 
     @OnClick(R.id.btnNext)
     public void next() {
-
+        RegisterAddressActivity.start(this);
     }
 
     @Override
@@ -61,11 +63,26 @@ public class RegisterGenderActivity extends BaseActivity {
     }
 
     private void init() {
+        initToolbar();
+        initData();
+    }
+
+    private void initToolbar() {
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void initData() {
         mUser = StorageManager.getUser();
     }
 
     @Override
-    public void onBackPressed() {
-
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

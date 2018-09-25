@@ -23,4 +23,8 @@
     <string name="register">Register</string>
     <string name="next">Next</string>
     <string name="gender">Gender</string>
+    <string name="avatar">Avatar</string>
+    <string name="address">Address</string>
+    <string name="characteristic">Characteristic</string>
+    <string name="favorite_food">Favorite Food</string>
 </resources>

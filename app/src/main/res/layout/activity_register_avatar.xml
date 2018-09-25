@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/avatar"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_margin="@dimen/dimen_16dp"
+        android:paddingTop="?actionBarSize"/>
+
+    <FrameLayout
+        android:id="@+id/loAvatar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dimen_16dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bg_circle_solig_grey"/>
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btnAvatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end|bottom"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_camera_edit_profile"/>
+    </FrameLayout>
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/btnNext"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="@dimen/dimen_16dp"
+        fancy:fb_defaultColor="@color/colorPrimary"
+        android:text="@string/next"
+        fancy:fb_radius="@dimen/dimen_32dp"/>
+</LinearLayout>

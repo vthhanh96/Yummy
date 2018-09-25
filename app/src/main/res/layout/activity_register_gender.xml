@@ -6,6 +6,12 @@
     android:orientation="vertical"
     android:background="@color/white">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        fancy:title="Gender"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,8 +19,7 @@
         android:textSize="20sp"
         android:layout_margin="@dimen/dimen_16dp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:paddingTop="?android:attr/actionBarSize"/>
+        android:textColor="@color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"

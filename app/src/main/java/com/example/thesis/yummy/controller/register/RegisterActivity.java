@@ -34,43 +34,44 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.btnRegister)
     public void register() {
-        if (TextUtils.isEmpty(mEdtName.getText())) {
-            Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(mEdtEmail.getText())) {
-            Toast.makeText(this, "Enter email", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(mEdtPassword.getText())) {
-            Toast.makeText(this, "Enter password", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(mEdtConfirmPassword.getText())) {
-            Toast.makeText(this, "Enter confirm password", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!mEdtPassword.getText().toString().trim().equals(mEdtConfirmPassword.getText().toString().trim())) {
-            Toast.makeText(this, "Password and confirm password must match", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        showLoading();
-        ServiceManager.getInstance().getUserService().register(mEdtEmail.getText().toString(),
-                mEdtName.getText().toString(),
-                mEdtPassword.getText().toString()).enqueue(new RestCallback<User>() {
-            @Override
-            public void onSuccess(String message, User user) {
-                StorageManager.saveUser(user);
-                login();
-            }
-
-            @Override
-            public void onFailure(String message) {
-                hideLoading();
-                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-            }
-        });
+//        if (TextUtils.isEmpty(mEdtName.getText())) {
+//            Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (TextUtils.isEmpty(mEdtEmail.getText())) {
+//            Toast.makeText(this, "Enter email", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (TextUtils.isEmpty(mEdtPassword.getText())) {
+//            Toast.makeText(this, "Enter password", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (TextUtils.isEmpty(mEdtConfirmPassword.getText())) {
+//            Toast.makeText(this, "Enter confirm password", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (!mEdtPassword.getText().toString().trim().equals(mEdtConfirmPassword.getText().toString().trim())) {
+//            Toast.makeText(this, "Password and confirm password must match", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        showLoading();
+//        ServiceManager.getInstance().getUserService().register(mEdtEmail.getText().toString(),
+//                mEdtName.getText().toString(),
+//                mEdtPassword.getText().toString()).enqueue(new RestCallback<User>() {
+//            @Override
+//            public void onSuccess(String message, User user) {
+//                StorageManager.saveUser(user);
+//                login();
+//            }
+//
+//            @Override
+//            public void onFailure(String message) {
+//                hideLoading();
+//                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        RegisterAvatarActivity.start(this);
     }
 
     @Override
