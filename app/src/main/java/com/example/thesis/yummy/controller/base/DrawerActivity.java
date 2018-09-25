@@ -142,7 +142,7 @@ public abstract class DrawerActivity extends BaseActivity {
         protected void convert(BaseViewHolder helper, ItemMenu item) {
             helper.setImageResource(R.id.imgIcon, item.mIcon);
             helper.setText(R.id.txtText, item.mText);
-            helper.setBackgroundColor(R.id.rootLayout, item.mIsSelected ? mContext.getResources().getColor(R.color.colorPrimaryDark) : mContext.getResources().getColor(R.color.colorPrimary));
+            helper.setBackgroundColor(R.id.rootLayout, item.mIsSelected ? mContext.getResources().getColor(R.color.colorPrimary) : mContext.getResources().getColor(R.color.colorPrimaryDark));
             helper.setVisible(R.id.lineView, item.mIsSelected);
         }
     }

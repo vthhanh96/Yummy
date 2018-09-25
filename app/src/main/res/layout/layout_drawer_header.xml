@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/dimen_16dp"
+    android:layout_marginTop="@dimen/dimen_32dp">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imgAvatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/dimen_32dp" />
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/txtName"

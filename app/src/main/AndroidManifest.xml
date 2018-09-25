@@ -34,6 +34,8 @@
         <activity android:name=".controller.post.EditPostActivity" />
         <activity android:name=".controller.profile.ProfileActivity" />
         <activity android:name=".controller.profile.EditProfileActivity" />
+        <activity android:name=".controller.register.RegisterActivity" />
+        <activity android:name=".controller.register.RegisterGenderActivity" />
 
     </application>
 </manifest>

@@ -20,4 +20,8 @@ public interface UserService {
 
     @GET("me")
     Call<RestResponse<User>> getUserInfo();
+
+    @FormUrlEncoded
+    @POST("register")
+    Call<RestResponse<User>> register(@Field("email") String email, @Field("fullName") String fullName, @Field("password") String password);
 }

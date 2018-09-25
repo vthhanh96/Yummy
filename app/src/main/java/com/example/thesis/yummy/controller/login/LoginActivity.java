@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.home.HomeActivity;
+import com.example.thesis.yummy.controller.register.RegisterActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.auth.AuthClient;
@@ -79,7 +80,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void register() {
-
+        RegisterActivity.start(this);
     }
 
     private void getUserInfo() {

@@ -4,7 +4,7 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="56dp"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorPrimary">
 
     <View
         android:id="@+id/lineView"

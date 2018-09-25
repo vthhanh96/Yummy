@@ -17,4 +17,10 @@
     <string name="comment">Comment</string>
     <string name="delete_post_success">Delete post success</string>
     <string name="profile">Profile</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="next">Next</string>
+    <string name="gender">Gender</string>
 </resources>
