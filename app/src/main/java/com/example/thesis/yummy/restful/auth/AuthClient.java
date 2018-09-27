@@ -43,4 +43,32 @@ public class AuthClient {
             }
         });
     }
+
+    public static void register(String email, String name, String password, final AuthCallBack callBack) {
+        ServiceManager.getInstance().getUserService().register(email, name, password).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if(response.isSuccessful()) {
+                    if(response.body() != null) {
+                        if(response.body().mSuccess) {
+                            StorageManager.saveAccessToken(response.body().mToken);
+                            StorageManager.saveUser(response.body().mUser);
+                            callBack.onAuthorized();
+                        }else {
+                            callBack.onUnauthorized(response.body().mMessage);
+                        }
+                    } else {
+                        callBack.onUnauthorized(Application.mContext.getString(R.string.unauthorized));
+                    }
+                } else {
+                    callBack.onUnauthorized(Application.mContext.getString(R.string.unauthorized));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                callBack.onUnauthorized(t.getMessage());
+            }
+        });
+    }
 }

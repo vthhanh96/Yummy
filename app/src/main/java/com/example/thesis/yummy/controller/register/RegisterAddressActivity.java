@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -44,6 +46,10 @@ public class RegisterAddressActivity extends BaseActivity {
 
     @OnClick(R.id.btnNext)
     public void nextButtonClicked() {
+        User user = StorageManager.getUser();
+        if(user == null) return;
+        user.mAddress = mTxtAddress.getText().toString().trim();
+        StorageManager.saveUser(user);
         RegisterCharacteristicActivity.start(this);
     }
 
@@ -64,7 +70,6 @@ public class RegisterAddressActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

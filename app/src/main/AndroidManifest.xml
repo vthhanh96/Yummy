@@ -39,6 +39,7 @@
         <activity android:name=".controller.register.RegisterAvatarActivity" />
         <activity android:name=".controller.register.RegisterAddressActivity" />
         <activity android:name=".controller.register.RegisterCharacteristicActivity" />
+        <activity android:name=".controller.register.RegisterBirthdayActivity" />
 
     </application>
 </manifest>

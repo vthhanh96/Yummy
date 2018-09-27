@@ -23,5 +23,5 @@ public interface UserService {
 
     @FormUrlEncoded
     @POST("register")
-    Call<RestResponse<User>> register(@Field("email") String email, @Field("fullName") String fullName, @Field("password") String password);
+    Call<LoginResponse> register(@Field("email") String email, @Field("fullName") String fullName, @Field("password") String password);
 }

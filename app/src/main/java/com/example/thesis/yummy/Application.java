@@ -2,6 +2,7 @@ package com.example.thesis.yummy;
 
 import android.content.Context;
 
+import com.cloudinary.android.MediaManager;
 import com.orhanobut.hawk.Hawk;
 
 
@@ -18,6 +19,7 @@ public class Application extends android.app.Application {
 
     private void init() {
         initStorage();
+        MediaManager.init(this);
     }
 
     private void initStorage() {

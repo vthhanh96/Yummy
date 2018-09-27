@@ -19,6 +19,7 @@ import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.view.DrawerFooterLayout;
 import com.example.thesis.yummy.view.DrawerHeaderLayout;
 
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ public abstract class DrawerActivity extends BaseActivity {
             }
         });
         mMenuAdapter.addHeaderView(headerLayout);
+        mMenuAdapter.addFooterView(new DrawerFooterLayout(this));
 
         mMenuRecyclerView.setAdapter(mMenuAdapter);
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));

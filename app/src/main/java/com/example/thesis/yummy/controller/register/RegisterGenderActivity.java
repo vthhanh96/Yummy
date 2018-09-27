@@ -24,7 +24,6 @@ public class RegisterGenderActivity extends BaseActivity {
     @BindView(R.id.imgFemaleChecked) ImageView mImgFemaleChecked;
 
     private boolean mIsMale;
-    private User mUser;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, RegisterGenderActivity.class);
@@ -47,7 +46,11 @@ public class RegisterGenderActivity extends BaseActivity {
 
     @OnClick(R.id.btnNext)
     public void next() {
-        RegisterAddressActivity.start(this);
+        User user = StorageManager.getUser();
+        if(user == null) return;
+        user.mGender = mIsMale ? "1" : "0";
+        StorageManager.saveUser(user);
+        RegisterBirthdayActivity.start(this);
     }
 
     @Override
@@ -64,20 +67,14 @@ public class RegisterGenderActivity extends BaseActivity {
 
     private void init() {
         initToolbar();
-        initData();
     }
 
     private void initToolbar() {
-        mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-    }
-
-    private void initData() {
-        mUser = StorageManager.getUser();
     }
 
     @Override

@@ -27,4 +27,10 @@
     <string name="address">Address</string>
     <string name="characteristic">Characteristic</string>
     <string name="favorite_food">Favorite Food</string>
+    <string name="logout">Logout</string>
+    <string name="enter_full_name">Enter full name</string>
+    <string name="enter_confirm_password">Enter confirm password</string>
+    <string name="enter_password_error">Password and confirm password must match</string>
+    <string name="birthday">Birthday</string>
+
 </resources>

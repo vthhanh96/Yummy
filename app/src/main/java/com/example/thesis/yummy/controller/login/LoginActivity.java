@@ -1,5 +1,7 @@
 package com.example.thesis.yummy.controller.login;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
@@ -24,6 +26,11 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.edtEmail) AppCompatEditText mEdtEmail;
     @BindView(R.id.edtPassword) AppCompatEditText mEdtPassword;
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, LoginActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected int getLayoutId() {

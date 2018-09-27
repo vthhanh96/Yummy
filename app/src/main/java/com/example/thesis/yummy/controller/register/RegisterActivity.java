@@ -34,44 +34,43 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.btnRegister)
     public void register() {
-//        if (TextUtils.isEmpty(mEdtName.getText())) {
-//            Toast.makeText(this, "Enter full name", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if (TextUtils.isEmpty(mEdtEmail.getText())) {
-//            Toast.makeText(this, "Enter email", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if (TextUtils.isEmpty(mEdtPassword.getText())) {
-//            Toast.makeText(this, "Enter password", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if (TextUtils.isEmpty(mEdtConfirmPassword.getText())) {
-//            Toast.makeText(this, "Enter confirm password", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        if (!mEdtPassword.getText().toString().trim().equals(mEdtConfirmPassword.getText().toString().trim())) {
-//            Toast.makeText(this, "Password and confirm password must match", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        showLoading();
-//        ServiceManager.getInstance().getUserService().register(mEdtEmail.getText().toString(),
-//                mEdtName.getText().toString(),
-//                mEdtPassword.getText().toString()).enqueue(new RestCallback<User>() {
-//            @Override
-//            public void onSuccess(String message, User user) {
-//                StorageManager.saveUser(user);
-//                login();
-//            }
-//
-//            @Override
-//            public void onFailure(String message) {
-//                hideLoading();
-//                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-        RegisterAvatarActivity.start(this);
+        if (TextUtils.isEmpty(mEdtName.getText())) {
+            Toast.makeText(this, R.string.enter_full_name, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(mEdtEmail.getText())) {
+            Toast.makeText(this, R.string.enter_email, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(mEdtPassword.getText())) {
+            Toast.makeText(this, R.string.enter_password, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(mEdtConfirmPassword.getText())) {
+            Toast.makeText(this, R.string.enter_confirm_password, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!mEdtPassword.getText().toString().trim().equals(mEdtConfirmPassword.getText().toString().trim())) {
+            Toast.makeText(this, R.string.enter_password_error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        showLoading();
+        AuthClient.register(mEdtEmail.getText().toString(),
+                mEdtName.getText().toString(),
+                mEdtPassword.getText().toString(), new AuthClient.AuthCallBack() {
+                    @Override
+                    public void onAuthorized() {
+                        hideLoading();
+                        RegisterAvatarActivity.start(RegisterActivity.this);
+                    }
+
+                    @Override
+                    public void onUnauthorized(String message) {
+                        hideLoading();
+                        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
@@ -83,21 +82,6 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-    }
-
-    private void login() {
-        AuthClient.login(mEdtEmail.getText().toString(), mEdtPassword.getText().toString(), new AuthClient.AuthCallBack() {
-            @Override
-            public void onAuthorized() {
-                hideLoading();
-            }
-
-            @Override
-            public void onUnauthorized(String message) {
-                hideLoading();
-                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
 }
