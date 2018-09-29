@@ -3,7 +3,7 @@ package com.example.thesis.yummy.restful.model;
 import com.squareup.moshi.Json;
 
 public class User extends Base{
-    @Json(name = "_id") public Integer mId;
+    @Json(name = "id") public Integer mId;
     @Json(name = "phone") public String mPhone;
     @Json(name = "email") public String mEmail;
     @Json(name = "fullName") public String mFullName;

@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_HOME_PAGE;
+import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_NOTIFICATION_PAGE;
 
 public abstract class DrawerActivity extends BaseActivity {
 
@@ -57,6 +58,7 @@ public abstract class DrawerActivity extends BaseActivity {
     private void setUpListDrawer() {
         mMenuItems = new ArrayList<>();
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_HOME_PAGE, "Home", R.drawable.ic_home, getNavId() == NAV_DRAWER_ID_HOME_PAGE));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_NOTIFICATION_PAGE, "Notification", R.drawable.ic_notification, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
     }
 
     private void initRecyclerView() {
@@ -93,6 +95,8 @@ public abstract class DrawerActivity extends BaseActivity {
             case NAV_DRAWER_ID_HOME_PAGE:
                 if(this instanceof HomeActivity) return;
                 HomeActivity.start(this);
+                break;
+            case NAV_DRAWER_ID_NOTIFICATION_PAGE:
                 break;
         }
     }

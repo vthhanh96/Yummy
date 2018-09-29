@@ -7,5 +7,6 @@ public class AppConstants {
 
     public static final int NAV_DRAWER_ID_HOME_PAGE = 1;
     public static final int NAV_DRAWER_ID_PROFILE_PAGE = 2;
+    public static final int NAV_DRAWER_ID_NOTIFICATION_PAGE = 3;
 
 }

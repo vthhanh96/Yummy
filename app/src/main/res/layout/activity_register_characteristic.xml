@@ -1,57 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        app:title="Characteristic"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/characteristic"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_margin="@dimen/dimen_16dp"/>
+        app:title="Characteristic" />
 
     <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/edtSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginEnd="@dimen/dimen_16dp"
-        app:backgroundTint="#dddddd"/>
+        android:layout_margin="@dimen/dimen_16dp"
+        android:background="@drawable/bg_corner_5dp_stroke_grey"
+        android:padding="@dimen/dimen_8dp"
+        android:textSize="16sp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/favorite_food"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_margin="@dimen/dimen_16dp"/>
-
-    <android.support.v7.widget.AppCompatEditText
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcvCharacteristics"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginEnd="@dimen/dimen_16dp"
-        app:backgroundTint="#dddddd"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <mehdi.sakout.fancybuttons.FancyButton
         android:id="@+id/btnNext"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_margin="@dimen/dimen_16dp"
         android:text="@string/next"
         fancy:fb_defaultColor="@color/colorPrimary"
-        android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginEnd="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_32dp"
-        fancy:fb_radius="@dimen/dimen_32dp"/>
+        fancy:fb_radius="@dimen/dimen_32dp" />
 </LinearLayout>

@@ -17,9 +17,11 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -37,6 +39,8 @@ import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.request.PostRequest;
 import com.example.thesis.yummy.utils.FileUtils;
 import com.example.thesis.yummy.utils.PermissionUtils;
+import com.example.thesis.yummy.utils.UploadImageListener;
+import com.example.thesis.yummy.utils.UploadImageUtils;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.SelectModeImageDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -79,21 +83,22 @@ public class EditPostActivity extends BaseActivity {
     @BindView(R.id.rcvCategories) RecyclerView mCategoriesRecyclerView;
     @BindView(R.id.loPlace) LinearLayout mPlaceLayout;
     @BindView(R.id.tvPlace) TextView mTvPlace;
-    @BindView(R.id.rcvImages) RecyclerView mImagesRecyclerView;
     @BindView(R.id.loAmount) LinearLayout mAmountLayout;
     @BindView(R.id.tvAmount) TextView mTvAmount;
     @BindView(R.id.loTime) LinearLayout mTimeLayout;
     @BindView(R.id.tvTime) TextView mTvTime;
     @BindView(R.id.edtContent) EditText mEdtContent;
+    @BindView(R.id.imgPost) ImageView mImgPost;
+    @BindView(R.id.imageLayout) FrameLayout mImageLayout;
 
     private CategoryAdapter mCategoryAdapter;
     private Location mLocation = new Location("");
     private File mFile;
     private Uri mImageUri;
-    private ImageAdapter mImageAdapter;
     private Date mTime;
     private int mAmount;
     private Post mPost;
+    private String mImageUrl;
 
     public static void start(Context context, Post post) {
         Intent starter = new Intent(context, EditPostActivity.class);
@@ -130,6 +135,16 @@ public class EditPostActivity extends BaseActivity {
         showDateTimePickerDialog();
     }
 
+    @OnClick(R.id.btnDeleteImage)
+    public void deleteImage() {
+        if(mImageUrl != null) {
+            mImageUrl = "";
+        }
+        mFile = null;
+        mImageUri = null;
+        mImageLayout.setVisibility(View.GONE);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_edit_post;
@@ -147,7 +162,6 @@ public class EditPostActivity extends BaseActivity {
         getExtras();
         initData();
         initCategoryRecyclerView();
-        initImageRecyclerView();
     }
 
     private void getExtras() {
@@ -177,6 +191,12 @@ public class EditPostActivity extends BaseActivity {
         mLocation = new Location("");
         mLocation.setLongitude(mPost.mLocation.mCoordinates.get(0));
         mLocation.setLatitude(mPost.mLocation.mCoordinates.get(1));
+
+        if(TextUtils.isEmpty(mPost.mImage)) {
+            mImageUrl = mPost.mImage;
+            Glide.with(getApplicationContext()).load(mImageUrl).into(mImgPost);
+            mImageLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initTopBar() {
@@ -191,7 +211,12 @@ public class EditPostActivity extends BaseActivity {
 
             @Override
             public void onRightClick() {
-                updatePost();
+                showLoading();
+                if(mImageUri != null) {
+                    uploadImage();
+                } else {
+                    updatePost();
+                }
             }
         });
     }
@@ -205,22 +230,6 @@ public class EditPostActivity extends BaseActivity {
         mCategoriesRecyclerView.setAdapter(mCategoryAdapter);
         mCategoriesRecyclerView.setLayoutManager(flowLayoutManager);
 
-    }
-
-    private void initImageRecyclerView() {
-        mImageAdapter = new ImageAdapter();
-        mImageAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if(view.getId() == R.id.imgDelete) {
-                    mImageAdapter.remove(position);
-                    updateImages();
-                }
-            }
-        });
-
-        mImagesRecyclerView.setAdapter(mImageAdapter);
-        mImagesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void updateCategory() {
@@ -285,12 +294,8 @@ public class EditPostActivity extends BaseActivity {
     }
 
     private void updateImages() {
-        if(mImageAdapter.getData().isEmpty()) {
-            mImagesRecyclerView.setVisibility(View.GONE);
-        } else {
-            mImagesRecyclerView.setVisibility(View.VISIBLE);
-        }
-        mImageAdapter.notifyDataSetChanged();
+        Glide.with(getApplicationContext()).load(mImageUri).into(mImgPost);
+        mImageLayout.setVisibility(View.VISIBLE);
     }
 
     private void showNumberPickerDialog() {
@@ -356,15 +361,30 @@ public class EditPostActivity extends BaseActivity {
         mTimeLayout.setVisibility(View.VISIBLE);
     }
 
+    private void uploadImage() {
+        UploadImageUtils.uploadImage(mImageUri, new UploadImageListener() {
+            @Override
+            public void uploadSuccess(String url) {
+                mImageUrl = url;
+                uploadImage();
+            }
+
+            @Override
+            public void uploadFailure(String err) {
+                hideLoading();
+                Toast.makeText(EditPostActivity.this, err, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void updatePost() {
-        showLoading();
         PostRequest.updatePost(mPost.mId,
                 mEdtContent.getText().toString(),
                 mLocation.getLatitude(),
                 mLocation.getLongitude(),
                 mTvPlace.getText().toString(),
                 mCategoryAdapter.getData(),
-                mTime, mAmount, new RestCallback<Post>() {
+                mTime, mAmount, mImageUrl, new RestCallback<Post>() {
                     @Override
                     public void onSuccess(String message, Post post) {
                         hideLoading();
@@ -421,7 +441,6 @@ public class EditPostActivity extends BaseActivity {
                 break;
             case REQUEST_CODE_TAKE_PICTURE:
                 if(mFile == null) return;
-                mImageAdapter.addData(mImageUri);
                 updateImages();
                 break;
             case REQUEST_CODE_GET_IMAGE:
@@ -429,7 +448,6 @@ public class EditPostActivity extends BaseActivity {
                     return;
                 mFile = new File(FileUtils.getPath(this, data.getData()));
                 mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
-                mImageAdapter.addData(mImageUri);
                 updateImages();
                 break;
         }
@@ -445,21 +463,6 @@ public class EditPostActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder helper, Category item) {
             helper.setText(R.id.txtCategoryName, item.mName);
-        }
-    }
-
-    private class ImageAdapter extends BaseQuickAdapter<Uri, BaseViewHolder> {
-
-        public ImageAdapter() {
-            super(R.layout.layout_image_item, new ArrayList<Uri>());
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Uri item) {
-            ImageView imageView = helper.getView(R.id.imgPost);
-            Glide.with(getApplicationContext()).load(item).into(imageView);
-
-            helper.addOnClickListener(R.id.imgDelete);
         }
     }
 }
