@@ -90,7 +90,7 @@ public class CommentActivity extends BaseActivity {
     private void initTopBar() {
         mTopBar.setTitle(getString(R.string.comment));
         mTopBar.setImageViewLeft(TopBarView.LEFT_BACK);
-        mTopBar.setImageViewRight(R.drawable.ic_comment);
+        mTopBar.setImageViewRight(R.drawable.ic_add);
         mTopBar.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
             public void onLeftClick() {
@@ -137,7 +137,7 @@ public class CommentActivity extends BaseActivity {
 
             @Override
             public void onFailure(String message) {
-
+                hideLoading();
             }
         });
     }

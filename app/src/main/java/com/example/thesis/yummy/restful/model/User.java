@@ -10,7 +10,7 @@ public class User extends Base{
     @Json(name = "password") public String mPassword;
     @Json(name = "avatar") public String mAvatar;
     @Json(name = "birthday") public String mBirthDay;
-    @Json(name = "gender") public String mGender;
+    @Json(name = "gender") public Integer mGender;
     @Json(name = "address") public String mAddress;
     @Json(name = "latLngAdress") public String mLatLngAddress;
     @Json(name = "myCharacter") public String mCharacter;

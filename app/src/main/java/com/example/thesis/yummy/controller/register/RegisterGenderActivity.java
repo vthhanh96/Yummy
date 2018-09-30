@@ -7,9 +7,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 
@@ -46,11 +49,21 @@ public class RegisterGenderActivity extends BaseActivity {
 
     @OnClick(R.id.btnNext)
     public void next() {
-        User user = StorageManager.getUser();
-        if(user == null) return;
-        user.mGender = mIsMale ? "1" : "0";
-        StorageManager.saveUser(user);
-        RegisterBirthdayActivity.start(this);
+        showLoading();
+        ServiceManager.getInstance().getUserService().updateGender(mIsMale ? 1 : 0).enqueue(new RestCallback<User>() {
+            @Override
+            public void onSuccess(String message, User user) {
+                hideLoading();
+                StorageManager.saveUser(user);
+                RegisterBirthdayActivity.start(RegisterGenderActivity.this);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(RegisterGenderActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Post extends Base {
-    @Json(name = "_id") public Integer mId;
+    @Json(name = "id") public Integer mId;
     @Json(name = "creator") public User mCreator;
     @Json(name = "categories") public List<Category> mCategories;
     @Json(name = "isActive") public Boolean mIsActive;

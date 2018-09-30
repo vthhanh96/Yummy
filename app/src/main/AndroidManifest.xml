@@ -30,14 +30,18 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="CLOUDINARY_URL"
+            android:value="cloudinary://644779138511211:ELDLC1yakqdT3O13lHFhElY4bGA@netficcloud"/>
 
-        <activity android:name=".controller.login.LoginActivity">
+        <activity android:name=".controller.loading.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".controller.login.LoginActivity"/>
         <activity android:name=".controller.home.HomeActivity" />
         <activity android:name=".controller.post.AddPostActivity" />
         <activity android:name=".controller.post.CategoryActivity" />
@@ -52,6 +56,7 @@
         <activity android:name=".controller.register.RegisterAddressActivity" />
         <activity android:name=".controller.register.RegisterCharacteristicActivity" />
         <activity android:name=".controller.register.RegisterBirthdayActivity" />
+
 
     </application>
 </manifest>

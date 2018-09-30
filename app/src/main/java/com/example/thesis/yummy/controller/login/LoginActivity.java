@@ -75,7 +75,10 @@ public class LoginActivity extends BaseActivity {
         AuthClient.login(mEdtEmail.getText().toString(), mEdtPassword.getText().toString(), new AuthClient.AuthCallBack() {
             @Override
             public void onAuthorized() {
-                getUserInfo();
+                hideLoading();
+                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                finish();
+                HomeActivity.start(LoginActivity.this);
             }
 
             @Override
@@ -88,24 +91,5 @@ public class LoginActivity extends BaseActivity {
 
     private void register() {
         RegisterActivity.start(this);
-    }
-
-    private void getUserInfo() {
-        ServiceManager.getInstance().getUserService().getUserInfo().enqueue(new RestCallback<User>() {
-            @Override
-            public void onSuccess(String message, User user) {
-                hideLoading();
-                StorageManager.saveUser(user);
-                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                HomeActivity.start(LoginActivity.this);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                hideLoading();
-                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
-                HomeActivity.start(LoginActivity.this);
-            }
-        });
     }
 }

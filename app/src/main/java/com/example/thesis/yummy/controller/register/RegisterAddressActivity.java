@@ -8,10 +8,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.restful.request.UserRequest;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -46,11 +50,21 @@ public class RegisterAddressActivity extends BaseActivity {
 
     @OnClick(R.id.btnNext)
     public void nextButtonClicked() {
-        User user = StorageManager.getUser();
-        if(user == null) return;
-        user.mAddress = mTxtAddress.getText().toString().trim();
-        StorageManager.saveUser(user);
-        RegisterCharacteristicActivity.start(this);
+        showLoading();
+        UserRequest.updateAddress(mTxtAddress.getText().toString().trim(), mLocation.getLatitude(), mLocation.getLongitude(), new RestCallback<User>() {
+            @Override
+            public void onSuccess(String message, User user) {
+                hideLoading();
+                StorageManager.saveUser(user);
+                RegisterCharacteristicActivity.start(RegisterAddressActivity.this);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(RegisterAddressActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

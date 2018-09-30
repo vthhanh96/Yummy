@@ -35,6 +35,6 @@
             android:textColor="@color/white"
             android:layout_marginStart="@dimen/dimen_16dp"
             android:layout_marginEnd="@dimen/dimen_16dp"
-            android:textSize="20sp"/>
+            android:textSize="18sp"/>
     </LinearLayout>
 </RelativeLayout>

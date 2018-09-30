@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
-import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.FileUtils;
@@ -125,17 +126,30 @@ public class RegisterAvatarActivity extends BaseActivity {
             @Override
             public void uploadSuccess(String url) {
                 hideLoading();
-                User user = StorageManager.getUser();
-                if(user == null) return;
-                user.mAvatar = url;
-                StorageManager.saveUser(user);
-                RegisterGenderActivity.start(RegisterAvatarActivity.this);
+                updateAvatar(url);
             }
 
             @Override
             public void uploadFailure(String err) {
                 hideLoading();
                 Toast.makeText(RegisterAvatarActivity.this, err, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateAvatar(String avatarUrl) {
+        ServiceManager.getInstance().getUserService().updateAvatar(avatarUrl).enqueue(new RestCallback<User>() {
+            @Override
+            public void onSuccess(String message, User user) {
+                hideLoading();
+                StorageManager.saveUser(user);
+                RegisterGenderActivity.start(RegisterAvatarActivity.this);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(RegisterAvatarActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }

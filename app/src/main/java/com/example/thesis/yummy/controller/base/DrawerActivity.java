@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.home.HomeActivity;
+import com.example.thesis.yummy.controller.login.LoginActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_HOME_PAGE;
+import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_LOGOUT;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_NOTIFICATION_PAGE;
 
 public abstract class DrawerActivity extends BaseActivity {
@@ -59,6 +61,7 @@ public abstract class DrawerActivity extends BaseActivity {
         mMenuItems = new ArrayList<>();
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_HOME_PAGE, "Home", R.drawable.ic_home, getNavId() == NAV_DRAWER_ID_HOME_PAGE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_NOTIFICATION_PAGE, "Notification", R.drawable.ic_notification, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_LOGOUT, "Logout", R.drawable.ic_logout, getNavId() == NAV_DRAWER_ID_LOGOUT));
     }
 
     private void initRecyclerView() {
@@ -80,11 +83,11 @@ public abstract class DrawerActivity extends BaseActivity {
             public void onClick(View view) {
                 closeDrawer();
                 if(DrawerActivity.this instanceof ProfileActivity) return;
+                finish();
                 ProfileActivity.start(DrawerActivity.this);
             }
         });
         mMenuAdapter.addHeaderView(headerLayout);
-        mMenuAdapter.addFooterView(new DrawerFooterLayout(this));
 
         mMenuRecyclerView.setAdapter(mMenuAdapter);
         mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -94,9 +97,15 @@ public abstract class DrawerActivity extends BaseActivity {
         switch (itemMenu.mKey) {
             case NAV_DRAWER_ID_HOME_PAGE:
                 if(this instanceof HomeActivity) return;
+                finish();
                 HomeActivity.start(this);
                 break;
             case NAV_DRAWER_ID_NOTIFICATION_PAGE:
+                break;
+            case NAV_DRAWER_ID_LOGOUT:
+                finish();
+                StorageManager.deleteAll();
+                LoginActivity.start(this);
                 break;
         }
     }
