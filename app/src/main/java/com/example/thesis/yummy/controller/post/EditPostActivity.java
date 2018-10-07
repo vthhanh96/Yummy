@@ -173,7 +173,11 @@ public class EditPostActivity extends BaseActivity {
 
         if(mPost == null) return;
         if(mPost.mCreator != null) {
-            Glide.with(getApplicationContext()).load(mPost.mCreator.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+            if(TextUtils.isEmpty(mPost.mCreator.mAvatar)) {
+                mImgAvatar.setImageResource(R.drawable.ic_default_avatar);
+            } else {
+                Glide.with(getApplicationContext()).load(mPost.mCreator.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+            }
             mTvName.setText(mPost.mCreator.mFullName);
         }
 

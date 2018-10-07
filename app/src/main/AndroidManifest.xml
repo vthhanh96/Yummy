@@ -56,6 +56,10 @@
         <activity android:name=".controller.register.RegisterAddressActivity" />
         <activity android:name=".controller.register.RegisterCharacteristicActivity" />
         <activity android:name=".controller.register.RegisterBirthdayActivity" />
+        <activity android:name=".controller.profile.ProfileReviewActivity" />
+        <activity android:name=".controller.profile.ProfileFavoriteActivity" />
+        <activity android:name=".controller.profile.ProfilePostActivity" />
+        <activity android:name=".controller.profile.ProfileHistoryActivity" />
 
 
     </application>

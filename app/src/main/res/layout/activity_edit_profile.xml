@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <com.example.thesis.yummy.view.TopBarView
         android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,8 +23,8 @@
 
             <FrameLayout
                 android:id="@+id/loAvatar"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dimen_32dp">
 
@@ -40,89 +40,169 @@
                     android:layout_gravity="end|bottom"
                     android:background="?attr/selectableItemBackground"
                     android:scaleType="centerInside"
-                    android:src="@drawable/ic_camera_edit_profile"/>
+                    android:src="@drawable/ic_camera_edit_profile" />
             </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Full Name"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_32dp"/>
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/email"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:layout_marginStart="@dimen/dimen_16dp">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="0dp"
+                    android:textColor="#777777"
+                    app:backgroundTint="#dddddd" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginBottom="@dimen/dimen_8dp"
+                    android:layout_marginEnd="@dimen/dimen_8dp"
+                    android:src="@drawable/ic_locked" />
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/full_name"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
+                android:layout_marginStart="@dimen/dimen_16dp"
                 android:layout_marginTop="@dimen/dimen_8dp"
                 android:inputType="text"
                 android:textColor="@color/black"
-                app:backgroundTint="#dddddd"/>
+                app:backgroundTint="#dddddd" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Email"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"/>
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:text="@string/gender"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_height="40dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_8dp"
-                android:textColor="@color/black"
-                app:backgroundTint="#dddddd"
-                android:inputType="textEmailAddress"/>
+                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_8dp">
+
+                <Spinner
+                    android:id="@+id/genderSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:dropDownVerticalOffset="40dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#dddddd" />
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phone"
+                android:layout_margin="@dimen/dimen_16dp"
+                android:text="@string/date_of_birth"
                 android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"/>
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginBottom="@dimen/dimen_16dp"
                 android:layout_marginEnd="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_8dp"
-                android:textColor="@color/black"
-                android:inputType="phone"
-                app:backgroundTint="#dddddd"/>
+                android:layout_marginStart="@dimen/dimen_16dp">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/edtDateOfBirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="0dp"
+                    android:textColor="#777777"
+                    android:textSize="16sp"
+                    app:backgroundTint="#dddddd" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/btnBirthday"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginBottom="@dimen/dimen_8dp"
+                    android:layout_marginEnd="@dimen/dimen_8dp"
+                    android:src="@drawable/ic_calendar" />
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Address"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="16sp"
+                android:layout_marginBottom="@dimen/dimen_8dp"
                 android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_16dp"/>
+                android:text="@string/address"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dimen_16dp"
-                android:layout_marginEnd="@dimen/dimen_16dp"
-                android:layout_marginTop="@dimen/dimen_8dp"
                 android:layout_marginBottom="@dimen/dimen_32dp"
-                android:textColor="@color/black"
-                app:backgroundTint="#dddddd"/>
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:layout_marginStart="@dimen/dimen_16dp">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/edtAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="0dp"
+                    android:textColor="#777777"
+                    android:textSize="16sp"
+                    app:backgroundTint="#dddddd" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/btnAddress"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginBottom="@dimen/dimen_8dp"
+                    android:layout_marginEnd="@dimen/dimen_8dp"
+                    android:src="@drawable/ic_marker" />
+            </FrameLayout>
         </LinearLayout>
 
 

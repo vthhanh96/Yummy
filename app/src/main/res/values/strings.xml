@@ -32,5 +32,16 @@
     <string name="enter_confirm_password">Enter confirm password</string>
     <string name="enter_password_error">Password and confirm password must match</string>
     <string name="birthday">Birthday</string>
+    <string name="favorite">Favorite</string>
+    <string name="post">Post</string>
+    <string name="history">History</string>
+    <string name="review">Review</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="choose_date_of_birth">Choose date of birth</string>
+    <string name="enter_address">Enter Address</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="people_join_in">Người tham gia</string>
 
 </resources>

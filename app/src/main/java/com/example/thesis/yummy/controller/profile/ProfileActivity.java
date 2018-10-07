@@ -3,13 +3,9 @@ package com.example.thesis.yummy.controller.profile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,11 +17,9 @@ import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_PROFILE_PAGE;
 
@@ -35,14 +29,27 @@ public class ProfileActivity extends DrawerActivity {
     @BindView(R.id.imgAvatar) ImageView mImgAvatar;
     @BindView(R.id.txtName) TextView mTxtName;
     @BindView(R.id.txtBirthday) TextView mTxtBirthday;
-    @BindView(R.id.viewPager) ViewPager mViewPager;
-    @BindView(R.id.tabLayout) TabLayout mTabLayout;
 
     private User mUser;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, ProfileActivity.class);
         context.startActivity(starter);
+    }
+
+    @OnClick(R.id.postLayout)
+    public void openMyPost() {
+        ProfilePostActivity.start(this);
+    }
+
+    @OnClick(R.id.historyLayout)
+    public void openHistory() {
+        ProfileHistoryActivity.start(this);
+    }
+
+    @OnClick(R.id.reviewLayout)
+    public void openReview() {
+        ProfileReviewActivity.start(this);
     }
 
     @Override
@@ -65,8 +72,6 @@ public class ProfileActivity extends DrawerActivity {
     private void init() {
         initTopBar();
         initData();
-        initViewPager();
-        initTabLayout();
     }
 
     private void initTopBar() {
@@ -88,52 +93,15 @@ public class ProfileActivity extends DrawerActivity {
 
     private void initData() {
         mUser = StorageManager.getUser();
-        if(mUser == null) return;
-        Glide.with(getApplicationContext()).load(mUser.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        if (mUser == null) return;
+        if (TextUtils.isEmpty(mUser.mAvatar)) {
+            mImgAvatar.setImageResource(R.drawable.ic_default_avatar);
+        } else {
+            Glide.with(getApplicationContext()).load(mUser.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        }
         mTxtName.setText(mUser.mFullName);
-//        mTxtBirthday.setText(mUser.mBirthDay);
-    }
-
-    private void initViewPager() {
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new ProfileMyPostFragment());
-        fragments.add(new ProfileHistoryFragment());
-        fragments.add(new ProfileCharacteristicFragment());
-
-        mViewPager.setAdapter(new ProfileFragmentPagerAdapter(getSupportFragmentManager(), fragments));
-        mViewPager.setOffscreenPageLimit(fragments.size());
-    }
-
-    private void initTabLayout() {
-        mTabLayout.setupWithViewPager(mViewPager);
-        String[] tabNamesIds = {"My Post", "History", "Characteristic"};
-
-        for (int i = 0; i < tabNamesIds.length; i++) {
-            TabLayout.Tab tab = mTabLayout.getTabAt(i);
-            if (tab == null) {
-                return;
-            }
-            tab.setText(tabNamesIds[i]);
-        }
-    }
-
-    private class ProfileFragmentPagerAdapter extends FragmentPagerAdapter {
-
-        private List<Fragment> mFragments;
-
-        public ProfileFragmentPagerAdapter(FragmentManager fm, @NonNull List<Fragment> fragments) {
-            super(fm);
-            mFragments = fragments;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
+        if(mUser.mBirthDay != null) {
+            mTxtBirthday.setText(DateFormat.format("dd MMMM yyyy", mUser.mBirthDay));
         }
     }
 }

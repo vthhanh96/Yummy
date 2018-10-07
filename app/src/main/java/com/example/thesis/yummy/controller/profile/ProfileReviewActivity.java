@@ -1,19 +1,18 @@
 package com.example.thesis.yummy.controller.profile;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.model.Comment;
+import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
 
@@ -21,29 +20,51 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
-public class ProfileCharacteristicFragment extends Fragment {
+public class ProfileReviewActivity extends BaseActivity {
 
-    @BindView(R.id.rcvCharacteristics) RecyclerView mCharacteristicsRecyclerView;
+    @BindView(R.id.topBar) TopBarView mTopBar;
+    @BindView(R.id.rcvCharacters) RecyclerView mCharacterRecyclerView;
     @BindView(R.id.rcvComments) RecyclerView mCommentRecyclerView;
 
     private CharacteristicAdapter mCharacterAdapter;
     private CommentAdapter mCommentAdapter;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile_characteristic, container, false);
+    public static void start(Context context) {
+        Intent starter = new Intent(context, ProfileReviewActivity.class);
+        context.startActivity(starter);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
+    protected int getLayoutId() {
+        return R.layout.activity_profile_review;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
         init();
     }
 
     private void init() {
+        initTopBar();
         initRecyclerView();
+    }
+
+    private void initTopBar() {
+        mTopBar.setImageViewLeft(TopBarView.LEFT_BACK);
+        mTopBar.setTitle(getString(R.string.review));
+        mTopBar.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
+            @Override
+            public void onLeftClick() {
+                finish();
+            }
+
+            @Override
+            public void onRightClick() {
+
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -52,9 +73,9 @@ public class ProfileCharacteristicFragment extends Fragment {
         mCharacterAdapter.addData(new CharacterItem("Hòa đồng", 3.5f));
         mCharacterAdapter.addData(new CharacterItem("Thân thiện", 3.0f));
 
-        mCharacteristicsRecyclerView.setAdapter(mCharacterAdapter);
-        mCharacteristicsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        mCharacteristicsRecyclerView.setNestedScrollingEnabled(false);
+        mCharacterRecyclerView.setAdapter(mCharacterAdapter);
+        mCharacterRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mCharacterRecyclerView.setNestedScrollingEnabled(false);
 
         mCommentAdapter = new CommentAdapter();
         mCommentAdapter.addData(new Comment());
@@ -63,7 +84,7 @@ public class ProfileCharacteristicFragment extends Fragment {
         mCommentAdapter.addData(new Comment());
 
         mCommentRecyclerView.setAdapter(mCommentAdapter);
-        mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mCommentRecyclerView.setNestedScrollingEnabled(false);
     }
 

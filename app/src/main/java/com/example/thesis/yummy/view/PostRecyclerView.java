@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -231,7 +232,11 @@ public class PostRecyclerView extends RecyclerView {
 
             if (item.mCreator != null) {
                 ImageView imgAvatar = helper.getView(R.id.imgAvatar);
-                Glide.with(mContext.getApplicationContext()).load(item.mCreator.mAvatar).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+                if(TextUtils.isEmpty(item.mCreator.mAvatar)) {
+                    imgAvatar.setImageResource(R.drawable.ic_default_avatar);
+                } else {
+                    Glide.with(mContext.getApplicationContext()).load(item.mCreator.mAvatar).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
+                }
                 helper.setText(R.id.txtName, item.mCreator.mFullName);
             }
 //            helper.setText(R.id.tvTimeCreated, DateUtils.getTimeAgo(mContext, item.getCreatedDate()));

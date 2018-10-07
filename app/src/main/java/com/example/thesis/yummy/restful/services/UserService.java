@@ -44,4 +44,7 @@ public interface UserService {
 
     @POST("editUser")
     Call<RestResponse<User>> updateAddress(@Body Map<String, Object> params);
+
+    @POST("editUser")
+    Call<RestResponse<User>> updateProfile(@Body Map<String, Object> params);
 }

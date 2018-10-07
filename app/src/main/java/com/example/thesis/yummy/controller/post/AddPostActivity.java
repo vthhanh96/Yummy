@@ -18,6 +18,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
@@ -164,7 +165,11 @@ public class AddPostActivity extends BaseActivity {
     private void initData() {
         mUser = StorageManager.getUser();
         if(mUser == null) return;
-        Glide.with(getApplicationContext()).load(mUser.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        if(TextUtils.isEmpty(mUser.mAvatar)) {
+            mImgAvatar.setImageResource(R.drawable.ic_default_avatar);
+        } else {
+            Glide.with(getApplicationContext()).load(mUser.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        }
         mTvName.setText(mUser.mFullName);
     }
 
@@ -395,7 +400,7 @@ public class AddPostActivity extends BaseActivity {
                 updateCategory();
                 break;
             case PLACE_AUTOCOMPLETE_REQUEST_CODE:
-                final Place place = PlacePicker.getPlace(data, this);
+                final Place place = PlacePicker.getPlace(this, data);
 
                 if (place != null) {
                     mPlaceLayout.setVisibility(View.VISIBLE);

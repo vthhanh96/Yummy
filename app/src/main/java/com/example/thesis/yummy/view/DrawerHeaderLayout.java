@@ -2,6 +2,7 @@ package com.example.thesis.yummy.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -48,7 +49,11 @@ public class DrawerHeaderLayout extends LinearLayout {
     private void initData() {
         User user = StorageManager.getUser();
         if(user == null) return;
-        Glide.with(getContext().getApplicationContext()).load(user.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        if(TextUtils.isEmpty(user.mAvatar)) {
+            mImgAvatar.setImageResource(R.drawable.ic_default_avatar);
+        } else {
+            Glide.with(getContext().getApplicationContext()).load(user.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+        }
         mTvName.setText(user.mFullName);
     }
 }
