@@ -43,5 +43,6 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="people_join_in">Người tham gia</string>
+    <string name="notification">Notification</string>
 
 </resources>

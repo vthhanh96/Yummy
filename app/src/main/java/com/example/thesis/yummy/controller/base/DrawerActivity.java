@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.controller.login.LoginActivity;
+import com.example.thesis.yummy.controller.notification.NotificationActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
@@ -101,6 +102,9 @@ public abstract class DrawerActivity extends BaseActivity {
                 HomeActivity.start(this);
                 break;
             case NAV_DRAWER_ID_NOTIFICATION_PAGE:
+                if(this instanceof NotificationActivity) return;
+                finish();
+                NotificationActivity.start(this);
                 break;
             case NAV_DRAWER_ID_LOGOUT:
                 finish();

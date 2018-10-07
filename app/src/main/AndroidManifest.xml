@@ -60,6 +60,7 @@
         <activity android:name=".controller.profile.ProfileFavoriteActivity" />
         <activity android:name=".controller.profile.ProfilePostActivity" />
         <activity android:name=".controller.profile.ProfileHistoryActivity" />
+        <activity android:name=".controller.notification.NotificationActivity" />
 
 
     </application>
