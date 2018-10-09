@@ -61,6 +61,8 @@
         <activity android:name=".controller.profile.ProfilePostActivity" />
         <activity android:name=".controller.profile.ProfileHistoryActivity" />
         <activity android:name=".controller.notification.NotificationActivity" />
+        <activity android:name=".controller.search.SearchActivity" />
+        <activity android:name=".controller.search.SearchResultActivity" />
 
 
     </application>

@@ -24,4 +24,9 @@ public class User extends Base{
     public User(Integer id) {
         mId = id;
     }
+
+    public User(Integer id, String fullName) {
+        mId = id;
+        mFullName = fullName;
+    }
 }

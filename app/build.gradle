@@ -68,4 +68,6 @@ dependencies {
 
     implementation group: 'com.cloudinary', name: 'cloudinary-android', version: '1.20.0'
 
+    implementation 'com.github.nkzawa:socket.io-client:0.3.0'
+
 }

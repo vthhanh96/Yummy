@@ -14,9 +14,16 @@ import com.example.thesis.yummy.controller.post.AddPostActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
+import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.socket.SocketManager;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.PostRecyclerView;
 import com.example.thesis.yummy.view.TopBarView;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.Gson;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +31,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_HOME_PAGE;
+import static com.example.thesis.yummy.AppConstants.SOCKET_BASE_URL;
 
 public class HomeActivity extends DrawerActivity {
 
@@ -33,6 +41,13 @@ public class HomeActivity extends DrawerActivity {
     @BindView(R.id.btnCreatePost) FloatingActionButton mCreatePostButton;
 
     private int mPageNumber = 0;
+
+    private Socket mSocket;
+    {
+        try {
+            mSocket = IO.socket(SOCKET_BASE_URL);
+        } catch (URISyntaxException e) {}
+    }
 
     public static void start(Context context) {
         Intent starter = new Intent(context, HomeActivity.class);
@@ -61,10 +76,15 @@ public class HomeActivity extends DrawerActivity {
     }
 
     private void init() {
+        initSocket();
         initTopBar();
         initRecyclerView();
         initRefreshLayout();
         getPosts();
+    }
+
+    private void initSocket() {
+
     }
 
     private void initTopBar() {

@@ -27,6 +27,7 @@ public class AuthClient {
                             StorageManager.saveAccessToken(response.body().mToken);
                             StorageManager.saveUser(response.body().mUser);
                             StorageManager.saveExpireIn(response.body().mExpiresIn);
+                            Application.initSocket();
                             callBack.onAuthorized();
                         }else {
                             callBack.onUnauthorized(response.body().mMessage);
@@ -56,6 +57,7 @@ public class AuthClient {
                             StorageManager.saveAccessToken(response.body().mToken);
                             StorageManager.saveUser(response.body().mUser);
                             StorageManager.saveExpireIn(response.body().mExpiresIn);
+                            Application.initSocket();
                             callBack.onAuthorized();
                         }else {
                             callBack.onUnauthorized(response.body().mMessage);
@@ -73,6 +75,11 @@ public class AuthClient {
                 callBack.onUnauthorized(t.getMessage());
             }
         });
+    }
+
+    public static void logout() {
+        StorageManager.deleteAll();
+        Application.clearSocket();
     }
 
     public static boolean isExpireToken() {

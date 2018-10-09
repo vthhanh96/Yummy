@@ -44,5 +44,10 @@
     <string name="female">Female</string>
     <string name="people_join_in">Người tham gia</string>
     <string name="notification">Notification</string>
-
+    <string name="food">Food</string>
+    <string name="content">Content</string>
+    <string name="search">Search</string>
+    <string name="quick_search">Quick Search</string>
+    <string name="home">Home</string>
+    <string name="suggestions">Suggestions</string>
 </resources>
