@@ -52,4 +52,6 @@
     <string name="suggestions">Suggestions</string>
     <string name="send_request">Send Request</string>
     <string name="meeting">Meeting</string>
+    <string name="place">Place</string>
+    <string name="time">Time</string>
 </resources>
