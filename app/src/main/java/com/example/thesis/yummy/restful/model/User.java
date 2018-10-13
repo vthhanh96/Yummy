@@ -15,11 +15,13 @@ public class User extends Base{
     @Json(name = "gender") public Integer mGender;
     @Json(name = "address") public String mAddress;
     @Json(name = "latLngAdress") public Location mLatLngAddress;
-    @Json(name = "myCharacter") public String mCharacter;
-    @Json(name = "myStyle") public String mStyle;
-    @Json(name = "targetCharacter") public String mTargetCharacter;
-    @Json(name = "targetStyle") public String mTargetStyle;
-    @Json(name = "targetFood") public String mTargetFood;
+//    @Json(name = "myCharacter") public String mCharacter;
+//    @Json(name = "myStyle") public String mStyle;
+//    @Json(name = "targetCharacter") public String mTargetCharacter;
+//    @Json(name = "targetStyle") public String mTargetStyle;
+//    @Json(name = "targetFood") public String mTargetFood;
+
+    public boolean mIsSelected;
 
     public User(Integer id) {
         mId = id;

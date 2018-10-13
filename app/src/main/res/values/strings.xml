@@ -50,4 +50,6 @@
     <string name="quick_search">Quick Search</string>
     <string name="home">Home</string>
     <string name="suggestions">Suggestions</string>
+    <string name="send_request">Send Request</string>
+    <string name="meeting">Meeting</string>
 </resources>

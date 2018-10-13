@@ -63,6 +63,7 @@
         <activity android:name=".controller.notification.NotificationActivity" />
         <activity android:name=".controller.search.SearchActivity" />
         <activity android:name=".controller.search.SearchResultActivity" />
+        <activity android:name=".controller.meeting.MeetingActivity" />
 
 
     </application>
