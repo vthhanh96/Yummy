@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -234,6 +235,11 @@ public class PostDetailActivity extends BaseActivity {
         boolean isCreator = !(mUser == null || !mUser.mId.equals(post.mCreator.mId));
         SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
         dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
+            @Override
+            public void createMeeting(boolean isCreator) {
+                ListPeopleInterestedPostActivity.start(mContext, mPostId, isCreator);
+            }
+
             @Override
             public void editPost() {
                 EditPostActivity.start(PostDetailActivity.this, post);

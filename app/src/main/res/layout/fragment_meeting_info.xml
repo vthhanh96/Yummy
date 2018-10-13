@@ -26,6 +26,7 @@
             android:textSize="16sp"/>
 
         <TextView
+            android:id="@+id/placeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Nha hang 5 sao ABC XYZ"
@@ -64,6 +65,7 @@
             android:textSize="16sp"/>
 
         <TextView
+            android:id="@+id/timeTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="18:30"
@@ -82,4 +84,16 @@
         android:layout_marginEnd="@dimen/dimen_16dp"/>
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:text="@string/people_in_the_group"
+        android:layout_margin="@dimen/dimen_16dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/joinedPeopleRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

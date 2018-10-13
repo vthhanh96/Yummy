@@ -4,6 +4,7 @@ import com.example.thesis.yummy.restful.RestResponse;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.restful.model.Post;
+import com.example.thesis.yummy.restful.model.User;
 
 import java.util.List;
 import java.util.Map;
@@ -54,4 +55,6 @@ public interface PostService {
     @DELETE("post/{postId}/comment/{commentId}")
     Call<RestResponse<Base>> deleteComment(@Path("postId") int postId, @Path("commentId") int commentId);
 
+    @GET("post/{postId}/interested")
+    Call<RestResponse<List<User>>> getInterestedPeople(@Path("postId") int postId);
 }

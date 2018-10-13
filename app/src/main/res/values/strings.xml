@@ -54,4 +54,7 @@
     <string name="meeting">Meeting</string>
     <string name="place">Place</string>
     <string name="time">Time</string>
+    <string name="people_in_the_group">People in the group</string>
+    <string name="create_meeting">Create Meeting</string>
+    <string name="select">Select</string>
 </resources>

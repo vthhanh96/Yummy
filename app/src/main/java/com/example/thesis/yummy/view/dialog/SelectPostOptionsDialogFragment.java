@@ -61,6 +61,13 @@ public class SelectPostOptionsDialogFragment extends BaseCustomDialogFragment {
         lsvEditPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (array[position].equals("Tạo cuộc hẹn")) {
+                    if (mListener != null) {
+                        mListener.createMeeting(mIsCreator);
+                    }
+                    step = 1;
+                    dismiss();
+                }
                 if (array[position].equals("Chỉnh sửa bài viết")) {
                     if (mListener != null) {
                         mListener.editPost();
@@ -108,6 +115,8 @@ public class SelectPostOptionsDialogFragment extends BaseCustomDialogFragment {
     }
 
     public interface SelectPostOptionsListener {
+        void createMeeting(boolean isCreator);
+
         void editPost();
 
         void deletePost();

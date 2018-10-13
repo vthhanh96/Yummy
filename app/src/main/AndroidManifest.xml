@@ -65,6 +65,7 @@
         <activity android:name=".controller.search.SearchResultActivity" />
         <activity android:name=".controller.meeting.MeetingActivity" />
         <activity android:name=".controller.meeting.MeetingDetailActivity" />
+        <activity android:name=".controller.post.ListPeopleInterestedPostActivity" />
 
 
     </application>

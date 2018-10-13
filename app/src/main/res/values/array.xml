@@ -6,6 +6,7 @@
     </string-array>
 
     <string-array name="post_options_creator">
+        <item>"Tạo cuộc hẹn"</item>
         <item>"Chỉnh sửa bài viết"</item>
         <item>"Xóa bài viết"</item>
     </string-array>

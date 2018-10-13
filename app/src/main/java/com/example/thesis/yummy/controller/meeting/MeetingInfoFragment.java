@@ -4,15 +4,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.thesis.yummy.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MeetingInfoFragment extends Fragment {
+
+    @BindView(R.id.placeTextView) TextView mPlaceTextView;
+    @BindView(R.id.timeTextView) TextView mTimeTextView;
+    @BindView(R.id.joinedPeopleRecyclerView) RecyclerView mPeopleRecyclerView;
 
     @Nullable
     @Override

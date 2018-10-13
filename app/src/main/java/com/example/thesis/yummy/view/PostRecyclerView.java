@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.post.CommentActivity;
 import com.example.thesis.yummy.controller.post.EditPostActivity;
+import com.example.thesis.yummy.controller.post.ListPeopleInterestedPostActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestError;
@@ -160,6 +161,11 @@ public class PostRecyclerView extends RecyclerView {
         boolean isCreator = !(mUser == null || !mUser.mId.equals(post.mCreator.mId));
         SelectPostOptionsDialogFragment dialogFragment = SelectPostOptionsDialogFragment.getNewInstance(isCreator);
         dialogFragment.setPostOptionsListener(new SelectPostOptionsDialogFragment.SelectPostOptionsListener() {
+            @Override
+            public void createMeeting(boolean isCreator) {
+                ListPeopleInterestedPostActivity.start(getContext(), post.mId, isCreator);
+            }
+
             @Override
             public void editPost() {
                 EditPostActivity.start(getContext(), post);
