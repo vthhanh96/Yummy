@@ -156,6 +156,13 @@
                     android:layout_marginTop="@dimen/dimen_8dp"
                     android:textColor="@color/black"
                     android:textSize="14sp"/>
+
+                <com.example.thesis.yummy.view.LinkPreviewLayout
+                    android:id="@+id/linkPreviewLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginTop="@dimen/dimen_16dp"/>
             </LinearLayout>
 
             <View

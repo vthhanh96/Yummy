@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -44,7 +45,9 @@ import com.example.thesis.yummy.utils.FileUtils;
 import com.example.thesis.yummy.utils.PermissionUtils;
 import com.example.thesis.yummy.utils.UploadImageListener;
 import com.example.thesis.yummy.utils.UploadImageUtils;
+import com.example.thesis.yummy.view.LinkPreviewLayout;
 import com.example.thesis.yummy.view.TopBarView;
+import com.example.thesis.yummy.view.dialog.InputDialog;
 import com.example.thesis.yummy.view.dialog.SelectModeImageDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -69,6 +72,9 @@ import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.ponnamkarthik.richlinkpreview.MetaData;
+import io.github.ponnamkarthik.richlinkpreview.ResponseListener;
+import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 
 public class AddPostActivity extends BaseActivity {
 
@@ -92,6 +98,7 @@ public class AddPostActivity extends BaseActivity {
     @BindView(R.id.edtContent) EditText mEdtContent;
     @BindView(R.id.imgPost) ImageView mImgPost;
     @BindView(R.id.imageLayout) FrameLayout mImageLayout;
+    @BindView(R.id.linkPreviewLayout) LinkPreviewLayout mLinkPreviewLayout;
 
     private User mUser;
     private List<Category> mSelectedCategories;
@@ -102,6 +109,7 @@ public class AddPostActivity extends BaseActivity {
     private Date mTime;
     private int mAmount;
     private String mImageUrl;
+    private String mLinkUrl;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, AddPostActivity.class);
@@ -147,6 +155,11 @@ public class AddPostActivity extends BaseActivity {
         mFile = null;
         mImageUri = null;
         mImageLayout.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.btnAttachLink)
+    public void attachLink() {
+        showEnterLinkDialog();
     }
 
     @Override
@@ -349,13 +362,49 @@ public class AddPostActivity extends BaseActivity {
         });
     }
 
+    private void showEnterLinkDialog() {
+        InputDialog inputDialog = new InputDialog(this);
+        inputDialog.setContentInput(mLinkUrl);
+        inputDialog.setListener(new InputDialog.InputDialogListener() {
+            @Override
+            public void onCancelClick() {
+
+            }
+
+            @Override
+            public void onDoneClick(String content) {
+                RichPreview richPreview = new RichPreview(new ResponseListener() {
+                    @Override
+                    public void onData(MetaData metaData) {
+                        if(metaData == null) return;
+
+                        mLinkUrl = metaData.getUrl();
+                        mLinkPreviewLayout.setVisibility(View.VISIBLE);
+                        mLinkPreviewLayout.setMetaData(metaData);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        mLinkUrl = null;
+                        mLinkPreviewLayout.setVisibility(View.GONE);
+                    }
+                });
+
+                if(URLUtil.isValidUrl(content)) {
+                    richPreview.getPreview(content);
+                }
+            }
+        });
+        inputDialog.show();
+    }
+
     private void addPost() {
         PostRequest.createPost(mEdtContent.getText().toString(),
                 mLocation.getLatitude(),
                 mLocation.getLongitude(),
                 mTvPlace.getText().toString(),
                 mCategoryAdapter.getData(),
-                mTime, mAmount, mImageUrl, new RestCallback<Post>() {
+                mTime, mAmount, mImageUrl, mLinkUrl, new RestCallback<Post>() {
                     @Override
                     public void onSuccess(String message, Post post) {
                         hideLoading();

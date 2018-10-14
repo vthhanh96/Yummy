@@ -22,13 +22,13 @@ import com.example.thesis.yummy.controller.post.EditPostActivity;
 import com.example.thesis.yummy.controller.post.ListPeopleInterestedPostActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.restful.RestCallback;
-import com.example.thesis.yummy.restful.RestError;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.utils.DateUtils;
 import com.example.thesis.yummy.view.dialog.QuestionDialog;
 import com.example.thesis.yummy.view.dialog.SelectPostOptionsDialogFragment;
 import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
@@ -36,6 +36,10 @@ import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.ponnamkarthik.richlinkpreview.MetaData;
+import io.github.ponnamkarthik.richlinkpreview.ResponseListener;
+import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 
 public class PostRecyclerView extends RecyclerView {
 
@@ -233,7 +237,7 @@ public class PostRecyclerView extends RecyclerView {
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Post item) {
+        protected void convert(final BaseViewHolder helper, Post item) {
             if (item == null) return;
 
             if (item.mCreator != null) {
@@ -245,7 +249,9 @@ public class PostRecyclerView extends RecyclerView {
                 }
                 helper.setText(R.id.txtName, item.mCreator.mFullName);
             }
-//            helper.setText(R.id.tvTimeCreated, DateUtils.getTimeAgo(mContext, item.getCreatedDate()));
+            if(item.mExpiresTime != null) {
+                helper.setText(R.id.tvTimeCreated, getContext().getString(R.string.time_remain, DateUtils.getTimeFuture(item.mExpiresTime)));
+            }
 
             RecyclerView rcvCategories = helper.getView(R.id.rcvCategories);
             if (item.mCategories != null && !item.mCategories.isEmpty()) {
@@ -259,7 +265,7 @@ public class PostRecyclerView extends RecyclerView {
                 rcvCategories.setVisibility(GONE);
             }
 
-            helper.setText(R.id.txtAmount, String.valueOf(item.mAmount));
+            helper.setText(R.id.txtAmount, mContext.getString(R.string.post_amount, item.mAmount));
             helper.setText(R.id.txtPlace, item.mPlace);
 
             if (item.mTime != null) {
@@ -280,6 +286,25 @@ public class PostRecyclerView extends RecyclerView {
                 helper.setText(R.id.txtComment, mContext.getString(R.string.comment_amount, item.mComments.size()));
             } else {
                 helper.setText(R.id.txtComment, mContext.getString(R.string.comment_amount, 0));
+            }
+
+            RichPreview richPreview = new RichPreview(new ResponseListener() {
+                @Override
+                public void onData(MetaData metaData) {
+                    if(metaData == null) return;
+
+                    LinkPreviewLayout linkPreviewLayout = helper.getView(R.id.linkPreviewLayout);
+                    linkPreviewLayout.setVisibility(View.VISIBLE);
+                    linkPreviewLayout.setMetaData(metaData);
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
+            if(!TextUtils.isEmpty(item.mLink)) {
+                richPreview.getPreview(item.mLink);
             }
 
             helper.addOnClickListener(R.id.loInterest);

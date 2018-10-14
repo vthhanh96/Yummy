@@ -196,7 +196,7 @@ public class PostDetailActivity extends BaseActivity {
             mCategoryRecycler.setVisibility(GONE);
         }
 
-        mTvAmount.setText(String.valueOf(mPost.mAmount));
+        mTvAmount.setText(getString(R.string.post_amount, mPost.mAmount));
         mTvPlace.setText(mPost.mPlace);
         mTvContent.setText(mPost.mContent);
 
@@ -431,6 +431,7 @@ public class PostDetailActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, Category item) {
+            if(item == null) return;
             helper.setText(R.id.txtCategoryName, item.mName);
         }
     }

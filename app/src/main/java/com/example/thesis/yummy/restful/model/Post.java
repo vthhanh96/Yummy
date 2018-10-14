@@ -19,4 +19,6 @@ public class Post extends Base {
     @Json(name = "interested_people") public List<User> mInterestedPeople;
     @Json(name = "joined_people") public List<User> mJoinPeople;
     @Json(name = "image") public String mImage;
+    @Json(name = "link") public String mLink;
+    @Json(name = "expires_time") public Date mExpiresTime;
 }

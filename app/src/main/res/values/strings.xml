@@ -58,4 +58,6 @@
     <string name="create_meeting">Create Meeting</string>
     <string name="select">Select</string>
     <string name="select_user">Select user</string>
+    <string name="post_amount">%d người</string>
+    <string name="time_remain">Còn %s</string>
 </resources>
