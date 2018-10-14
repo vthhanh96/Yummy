@@ -5,7 +5,7 @@ import com.squareup.moshi.Json;
 import java.util.Date;
 
 public class User extends Base{
-    @Json(name = "id") public Integer mId;
+    @Json(name = "_id") public Integer mId;
     @Json(name = "phone") public String mPhone;
     @Json(name = "email") public String mEmail;
     @Json(name = "fullName") public String mFullName;

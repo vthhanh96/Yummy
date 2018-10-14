@@ -8,11 +8,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.view.MultipleImageCircleView;
@@ -58,6 +61,7 @@ public class MeetingActivity extends DrawerActivity {
     private void init() {
         initTopBar();
         initRecyclerView();
+        getMeetings();
     }
 
     private void initTopBar() {
@@ -81,12 +85,29 @@ public class MeetingActivity extends DrawerActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Meeting item = mAdapter.getItem(position);
+                if(item == null) return;
 
+                MeetingDetailActivity.start(MeetingActivity.this, item.mId);
             }
         });
 
         mMeetingRecyclerView.setAdapter(mAdapter);
         mMeetingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void getMeetings() {
+        ServiceManager.getInstance().getMeetingService().getMeetings().enqueue(new RestCallback<List<Meeting>>() {
+            @Override
+            public void onSuccess(String message, List<Meeting> meetings) {
+                mAdapter.setNewData(meetings);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(MeetingActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private class MeetingAdapter extends BaseQuickAdapter<Meeting, BaseViewHolder> {
@@ -107,7 +128,7 @@ public class MeetingActivity extends DrawerActivity {
                 }
             }
 
-            imageCircleView.setImages((String[]) images.toArray());
+            imageCircleView.setImages(images);
 
             helper.setText(R.id.placeTextView, item.mPlace);
 

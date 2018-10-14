@@ -12,13 +12,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class ListPeopleInterestedPostActivity extends BaseActivity {
@@ -47,6 +51,38 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
     private UserAdapter mUserAdapter;
     private int mPostID;
     private boolean mIsCreator;
+
+    @OnClick(R.id.createMeetingButton)
+    public void createMeeting() {
+        List<Integer> selectedUsers = new ArrayList<>();
+        for (User user : mUserAdapter.getData()) {
+            if(user.mIsSelected) {
+                selectedUsers.add(user.mId);
+            }
+        }
+
+        if(selectedUsers.isEmpty()) {
+            Toast.makeText(this, R.string.select_user, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        selectedUsers.add(StorageManager.getUser().mId);
+        showLoading();
+        ServiceManager.getInstance().getMeetingService().createMeeting(mPostID, selectedUsers).enqueue(new RestCallback<Meeting>() {
+            @Override
+            public void onSuccess(String message, Meeting meeting) {
+                hideLoading();
+                finish();
+                Toast.makeText(ListPeopleInterestedPostActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(ListPeopleInterestedPostActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     protected int getLayoutId() {
@@ -91,18 +127,14 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
 
     private void initRecyclerView() {
         mUserAdapter = new UserAdapter();
-        mUserAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mUserAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 User item = mUserAdapter.getItem(position);
                 if(item == null) return;
 
-                switch (view.getId()) {
-                    case R.id.selectButton:
-                        item.mIsSelected = true;
-                        mUserAdapter.notifyDataSetChanged();
-                        break;
-                }
+                item.mIsSelected = !item.mIsSelected;
+                mUserAdapter.notifyDataSetChanged();
             }
         });
 
@@ -118,6 +150,11 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
         ServiceManager.getInstance().getPostService().getInterestedPeople(mPostID).enqueue(new RestCallback<List<User>>() {
             @Override
             public void onSuccess(String message, List<User> users) {
+                for (User user : users) {
+                    if(user.mId.equals(StorageManager.getUser().mId)) {
+                        users.remove(user);
+                    }
+                }
                 mUserAdapter.setNewData(users);
             }
 
@@ -139,17 +176,14 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
             if(item == null) return;
 
             helper.setText(R.id.nameTextView, item.mFullName);
-            if(TextUtils.isEmpty(item.mAvatar)) {
+            if(!TextUtils.isEmpty(item.mAvatar)) {
                 ImageView imageView = helper.getView(R.id.avatarImageView);
-                Glide.with(mContext.getApplicationContext()).load(item.mAvatar).into(imageView);
+                Glide.with(mContext.getApplicationContext()).load(item.mAvatar).apply(RequestOptions.circleCropTransform()).into(imageView);
             }
 
-            if(mIsCreator) {
-                helper.setVisible(R.id.checkedImageView, item.mIsSelected);
-                helper.setVisible(R.id.selectButton, !item.mIsSelected);
-            }
+            helper.setVisible(R.id.checkbox, mIsCreator);
 
-            helper.addOnClickListener(R.id.selectButton);
+            helper.setChecked(R.id.checkbox, item.mIsSelected);
         }
     }
 }

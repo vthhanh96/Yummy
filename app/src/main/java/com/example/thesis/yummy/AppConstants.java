@@ -13,4 +13,9 @@ public class AppConstants {
     public static final int NAV_DRAWER_ID_LOGOUT = 5;
     public static final int NAV_DRAWER_ID_MEETING = 6;
 
+
+    //TYPE NOTIFICATION
+    public static final int NOTIFICATION_POST = 1;
+    public static final int NOTIFICATION_MEETING = 2;
+
 }

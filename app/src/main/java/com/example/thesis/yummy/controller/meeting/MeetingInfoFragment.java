@@ -21,6 +21,14 @@ public class MeetingInfoFragment extends Fragment {
     @BindView(R.id.timeTextView) TextView mTimeTextView;
     @BindView(R.id.joinedPeopleRecyclerView) RecyclerView mPeopleRecyclerView;
 
+    private int mMeetingID;
+
+    public static MeetingInfoFragment newInstance(int meetingID) {
+        MeetingInfoFragment instance = new MeetingInfoFragment();
+        instance.mMeetingID = meetingID;
+        return instance;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

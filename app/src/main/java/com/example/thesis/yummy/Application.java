@@ -1,6 +1,7 @@
 package com.example.thesis.yummy;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.cloudinary.android.MediaManager;
 import com.example.thesis.yummy.restful.auth.AuthClient;
@@ -51,17 +52,7 @@ public class Application extends android.app.Application {
                 @Override
                 public void run() {
                     JSONObject data = (JSONObject) args[0];
-//                    String username;
-//                    String message;
-//                    try {
-//                        username = data.getString("username");
-//                        message = data.getString("message");
-//                    } catch (JSONException e) {
-//                        return;
-//                    }
-//
-//                    // add the message to view
-//                    addMessage(username, message);
+                    Toast.makeText(mContext, data.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

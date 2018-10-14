@@ -55,6 +55,6 @@ public interface PostService {
     @DELETE("post/{postId}/comment/{commentId}")
     Call<RestResponse<Base>> deleteComment(@Path("postId") int postId, @Path("commentId") int commentId);
 
-    @GET("post/{postId}/interested")
+    @GET("post/{postId}/interested_list")
     Call<RestResponse<List<User>>> getInterestedPeople(@Path("postId") int postId);
 }

@@ -51,9 +51,9 @@ public class MultipleImageCircleView extends FrameLayout {
         ButterKnife.bind(this, view);
     }
 
-    public void setImages(String... images) {
+    public void setImages(List<String> images) {
         mImages.clear();
-        mImages.addAll(Arrays.asList(images));
+        mImages.addAll(images);
         showImage();
     }
 

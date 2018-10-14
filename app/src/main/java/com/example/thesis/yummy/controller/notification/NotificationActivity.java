@@ -6,16 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Notification;
 import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +59,7 @@ public class NotificationActivity extends DrawerActivity {
     private void init() {
         initTopBar();
         initRecyclerView();
+        getNotifications();
     }
 
     private void initTopBar() {
@@ -83,13 +89,20 @@ public class NotificationActivity extends DrawerActivity {
 
         mNotificationRecyclerView.setAdapter(mAdapter);
         mNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
+    private void getNotifications() {
+        ServiceManager.getInstance().getNotificationService().getNotifications().enqueue(new RestCallback<List<Notification>>() {
+            @Override
+            public void onSuccess(String message, List<Notification> notifications) {
+                mAdapter.setNewData(notifications);
+            }
 
-        mAdapter.addData(new Notification("ABC da chap nhan yeu cau cua ban"));
-        mAdapter.addData(new Notification("ABC da chap nhan yeu cau cua ban"));
-        mAdapter.addData(new Notification("ABC da chap nhan yeu cau cua ban"));
-        mAdapter.addData(new Notification("ABC da chap nhan yeu cau cua ban"));
-        mAdapter.addData(new Notification("ABC da chap nhan yeu cau cua ban"));
+            @Override
+            public void onFailure(String message) {
+                Toast.makeText(NotificationActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private class NotificationAdapter extends BaseQuickAdapter<Notification, BaseViewHolder>{
@@ -103,6 +116,10 @@ public class NotificationActivity extends DrawerActivity {
             if(item == null) return;
 
             helper.setText(R.id.contentTextView, item.mContent);
+
+            if(item.mCreatedDate != null) {
+                helper.setText(R.id.timeTextView, DateFormat.format("dd MMM yyyy", item.mCreatedDate));
+            }
         }
     }
 }

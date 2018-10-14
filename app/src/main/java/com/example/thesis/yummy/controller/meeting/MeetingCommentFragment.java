@@ -31,6 +31,13 @@ public class MeetingCommentFragment extends Fragment {
     @BindView(R.id.createCommentButton) FloatingActionButton mCreateCommentButton;
 
     private CommentAdapter mCommentAdapter;
+    private int mMeetingID;
+
+    public static MeetingCommentFragment newInstance(int meetingID) {
+        MeetingCommentFragment instance = new MeetingCommentFragment();
+        instance.mMeetingID = meetingID;
+        return instance;
+    }
 
     @Nullable
     @Override
