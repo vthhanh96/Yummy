@@ -11,6 +11,7 @@ public class Notification extends Base {
     @Json(name = "content") public String mContent;
     @Json(name = "created_date") public Date mCreatedDate;
     @Json(name = "type") public Integer mType;
+    @Json(name = "image") public String mImage;
 
     public Notification(String content) {
         mContent = content;

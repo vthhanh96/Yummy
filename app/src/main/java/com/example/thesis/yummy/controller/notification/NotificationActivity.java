@@ -6,10 +6,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
@@ -119,6 +123,11 @@ public class NotificationActivity extends DrawerActivity {
 
             if(item.mCreatedDate != null) {
                 helper.setText(R.id.timeTextView, DateFormat.format("dd MMM yyyy", item.mCreatedDate));
+            }
+
+            if(!TextUtils.isEmpty(item.mImage)) {
+                ImageView imageView = helper.getView(R.id.avatarImageView);
+                Glide.with(mContext.getApplicationContext()).load(item.mImage).apply(RequestOptions.circleCropTransform()).into(imageView);
             }
         }
     }

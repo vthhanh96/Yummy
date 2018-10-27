@@ -11,25 +11,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.thesis.yummy.Application;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.utils.DateUtils;
+import com.example.thesis.yummy.view.dialog.InputDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MeetingCommentFragment extends Fragment {
 
     @BindView(R.id.commentRecyclerView) RecyclerView mCommentRecyclerView;
     @BindView(R.id.createCommentButton) FloatingActionButton mCreateCommentButton;
 
+    private MeetingDetailListener mListener;
     private CommentAdapter mCommentAdapter;
     private int mMeetingID;
 
@@ -37,6 +45,11 @@ public class MeetingCommentFragment extends Fragment {
         MeetingCommentFragment instance = new MeetingCommentFragment();
         instance.mMeetingID = meetingID;
         return instance;
+    }
+
+    @OnClick(R.id.createCommentButton)
+    public void createComment() {
+        openInputDialog();
     }
 
     @Nullable
@@ -48,8 +61,13 @@ public class MeetingCommentFragment extends Fragment {
         return view;
     }
 
+    public void setMeetingDetailListener(MeetingDetailListener listener) {
+        mListener = listener;
+    }
+
     private void init() {
         initRecyclerView();
+        getMeetingComments();
     }
 
     private void initRecyclerView() {
@@ -73,7 +91,43 @@ public class MeetingCommentFragment extends Fragment {
             }
         });
 
+    }
 
+    public void getMeetingComments() {
+        ServiceManager.getInstance().getMeetingService().getMeetingComments(mMeetingID).enqueue(new RestCallback<List<Comment>>() {
+            @Override
+            public void onSuccess(String message, List<Comment> comments) {
+                mCommentAdapter.setNewData(comments);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                if(getContext() == null) return;
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void openInputDialog() {
+        InputDialog inputDialog = new InputDialog(getContext());
+        inputDialog.setListener(new InputDialog.InputDialogListener() {
+            @Override
+            public void onCancelClick() {
+
+            }
+
+            @Override
+            public void onDoneClick(String content) {
+                createMeetingComment(content);
+            }
+        });
+        inputDialog.show();
+    }
+
+    private void createMeetingComment(String content) {
+        if(mListener != null) {
+            mListener.onCreateComment(content);
+        }
     }
 
     public class CommentAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
@@ -97,6 +151,6 @@ public class MeetingCommentFragment extends Fragment {
 
     @Override
     public String toString() {
-        return "Comment";
+        return Application.mContext.getString(R.string.comment);
     }
 }

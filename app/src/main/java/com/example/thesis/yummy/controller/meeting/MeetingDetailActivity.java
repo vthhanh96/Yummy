@@ -10,9 +10,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
@@ -21,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MeetingDetailActivity extends BaseActivity {
+public class MeetingDetailActivity extends BaseActivity implements MeetingDetailListener {
 
     private static final String ARG_KEY_MEETING_ID = "ARG_KEY_MEETING_ID";
 
@@ -36,6 +40,25 @@ public class MeetingDetailActivity extends BaseActivity {
     @BindView(R.id.viewPager) ViewPager mViewPager;
 
     private int mMeetingID;
+    private MeetingCommentFragment mMeetingCommentFragment;
+
+    @Override
+    public void onCreateComment(String content) {
+        showLoading();
+        ServiceManager.getInstance().getMeetingService().createMeetingComment(mMeetingID, content).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                mMeetingCommentFragment.getMeetingComments();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(MeetingDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     protected int getLayoutId() {
@@ -61,7 +84,7 @@ public class MeetingDetailActivity extends BaseActivity {
     }
 
     private void initTopBar() {
-        mTopBarView.setTitle("Meeting Detail");
+        mTopBarView.setTitle(getString(R.string.meeting_detail));
         mTopBarView.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
@@ -79,7 +102,10 @@ public class MeetingDetailActivity extends BaseActivity {
     private void initViewPager() {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(MeetingInfoFragment.newInstance(mMeetingID));
-        fragments.add(MeetingCommentFragment.newInstance(mMeetingID));
+
+        mMeetingCommentFragment = MeetingCommentFragment.newInstance(mMeetingID);
+        mMeetingCommentFragment.setMeetingDetailListener(this);
+        fragments.add(mMeetingCommentFragment);
 
         mViewPager.setAdapter(new MeetingViewPagerAdapter(getSupportFragmentManager(), fragments));
         mViewPager.setOffscreenPageLimit(2);
@@ -88,6 +114,8 @@ public class MeetingDetailActivity extends BaseActivity {
     private void initTabLayout() {
         mTabLayout.setupWithViewPager(mViewPager);
     }
+
+
 
     private class MeetingViewPagerAdapter extends FragmentPagerAdapter {
 
