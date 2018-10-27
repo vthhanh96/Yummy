@@ -66,6 +66,9 @@
         <activity android:name=".controller.meeting.MeetingActivity" />
         <activity android:name=".controller.meeting.MeetingDetailActivity" />
         <activity android:name=".controller.post.ListPeopleInterestedPostActivity" />
+        <activity android:name=".controller.notification.ReceiveRequestNotificationActivity" />
+        <activity android:name=".controller.notification.RatingNotificationActivity" />
+        <activity android:name=".controller.rating.RatingActivity" />
 
 
     </application>

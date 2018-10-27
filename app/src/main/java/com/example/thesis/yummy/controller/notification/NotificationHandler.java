@@ -20,6 +20,5 @@ public class NotificationHandler {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(100, builder.build());
-
     }
 }
