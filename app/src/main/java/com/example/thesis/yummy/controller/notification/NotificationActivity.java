@@ -18,9 +18,14 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.meeting.MeetingDetailActivity;
+import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Notification;
+import com.example.thesis.yummy.restful.model.NotificationData;
+import com.example.thesis.yummy.restful.model.NotificationMeetingData;
+import com.example.thesis.yummy.restful.model.NotificationPostData;
 import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
@@ -30,6 +35,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_NOTIFICATION_PAGE;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_MEETING;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_POST;
 
 public class NotificationActivity extends DrawerActivity {
 
@@ -87,7 +94,21 @@ public class NotificationActivity extends DrawerActivity {
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Notification notification = mAdapter.getItem(position);
+                if(notification == null || notification.notificationData == null || notification.notificationData.mType == null) return;
 
+                switch (notification.notificationData.mType) {
+                    case NOTIFICATION_POST:
+                        NotificationPostData postData = (NotificationPostData) notification.notificationData;
+                        if(postData.mPost == null) return;
+                        PostDetailActivity.start(NotificationActivity.this, postData.mPost.mId);
+                        break;
+                    case NOTIFICATION_MEETING:
+                        NotificationMeetingData meetingData = (NotificationMeetingData) notification.notificationData;
+                        if(meetingData.mMeeting == null) return;
+                        MeetingDetailActivity.start(NotificationActivity.this, meetingData.mMeeting.mId);
+                        break;
+                }
             }
         });
 
@@ -119,7 +140,7 @@ public class NotificationActivity extends DrawerActivity {
         protected void convert(BaseViewHolder helper, Notification item) {
             if(item == null) return;
 
-            helper.setText(R.id.contentTextView, item.mContent);
+            helper.setText(R.id.contentTextView, item.mTitle);
 
             if(item.mCreatedDate != null) {
                 helper.setText(R.id.timeTextView, DateFormat.format("dd MMM yyyy", item.mCreatedDate));

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.cloudinary.android.MediaManager;
+import com.example.thesis.yummy.controller.notification.NotificationHandler;
 import com.example.thesis.yummy.restful.auth.AuthClient;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.socket.SocketManager;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_NORMAL;
 import static com.example.thesis.yummy.AppConstants.SOCKET_BASE_URL;
 
 
@@ -48,13 +50,12 @@ public class Application extends android.app.Application {
     private static Emitter.Listener onEventNotificationListener = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            ThreadUtils.getInstance().runOnUIThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject data = (JSONObject) args[0];
-                    Toast.makeText(mContext, data.toString(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            JSONObject data = (JSONObject) args[0];
+            if(data == null) return;
+
+            if(data.has(NOTIFICATION_TYPE_NORMAL)) {
+                NotificationHandler.createNotification(mContext, data.optString(NOTIFICATION_TYPE_NORMAL));
+            }
         }
     };
 
