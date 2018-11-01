@@ -71,4 +71,7 @@
     <string name="ok">OK</string>
     <string name="add_comment">Thêm nhận xét</string>
     <string name="rating_message">Bạn chưa đánh giá</string>
+    <string name="average_rating">Điểm  đánh  giá trung bình</string>
+    <string name="all_reviews">Tất cả đánh giá</string>
+    <string name="rate">Đánh giá</string>
 </resources>

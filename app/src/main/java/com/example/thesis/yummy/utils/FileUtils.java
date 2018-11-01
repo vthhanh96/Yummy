@@ -58,7 +58,7 @@ public class FileUtils {
 
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"),
+                        Uri.parse("mContent://downloads/public_downloads"),
                         Long.valueOf(id));
 
                 return getDataColumn(context, contentUri, null, null);
@@ -82,7 +82,7 @@ public class FileUtils {
                 return getDataColumn(context, contentUri, selection,
                         selectionArgs);
             }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("mContent".equalsIgnoreCase(uri.getScheme())) {
 
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
@@ -132,7 +132,7 @@ public class FileUtils {
     }
 
     private static boolean isGooglePhotosUri(Uri uri) {
-        return "com.google.android.apps.photos.content".equals(uri
+        return "com.google.android.apps.photos.mContent".equals(uri
                 .getAuthority());
     }
 }

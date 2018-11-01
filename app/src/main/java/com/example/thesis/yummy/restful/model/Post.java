@@ -10,7 +10,7 @@ public class Post extends Base {
     @Json(name = "creator") public User mCreator;
     @Json(name = "categories") public List<Category> mCategories;
     @Json(name = "isActive") public Boolean mIsActive;
-    @Json(name = "content") public String mContent;
+    @Json(name = "mContent") public String mContent;
     @Json(name = "place") public String mPlace;
     @Json(name = "location") public Location mLocation;
     @Json(name = "amount") public Integer mAmount;

@@ -45,12 +45,12 @@ public interface PostService {
 
     @FormUrlEncoded
     @POST("post/{postId}/comment")
-    Call<RestResponse<Comment>> createComment(@Path("postId") int postId, @Field("content") String content);
+    Call<RestResponse<Comment>> createComment(@Path("postId") int postId, @Field("mContent") String content);
 
     @PUT("post/{postId}/comment/{commentId}")
     Call<RestResponse<Comment>> editComment(@Path("postId") int postId,
                                             @Path("commentId") int commentId,
-                                            @Field("content") String content);
+                                            @Field("mContent") String content);
 
     @DELETE("post/{postId}/comment/{commentId}")
     Call<RestResponse<Base>> deleteComment(@Path("postId") int postId, @Path("commentId") int commentId);

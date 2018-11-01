@@ -29,7 +29,7 @@ public interface MeetingService {
     @FormUrlEncoded
     @POST("meeting/{meetingId}/add_comment")
     Call<RestResponse<Base>> createMeetingComment(@Path("meetingId") int meetingId,
-                                                  @Field("content") String content);
+                                                  @Field("mContent") String content);
 
     @GET("meeting/{meetingId}")
     Call<RestResponse<Meeting>> getMeetingDetail(@Path("meetingId") int meetingId);

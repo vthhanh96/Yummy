@@ -20,7 +20,7 @@ public class PostRequest {
         }
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("content", content);
+        params.put("mContent", content);
         params.put("place", place);
         params.put("categories", categoriesId);
         params.put("time", time);
@@ -44,7 +44,7 @@ public class PostRequest {
         }
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("content", content);
+        params.put("mContent", content);
         params.put("place", place);
         params.put("categories", categoriesId);
         params.put("time", time);

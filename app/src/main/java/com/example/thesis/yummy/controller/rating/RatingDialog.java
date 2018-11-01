@@ -23,7 +23,7 @@ public class RatingDialog extends Dialog {
     private RatingDialogListener mListener;
     private Context mContext;
 
-    interface RatingDialogListener {
+    public interface RatingDialogListener {
         void onRating(Float rating, String comment);
     }
 
