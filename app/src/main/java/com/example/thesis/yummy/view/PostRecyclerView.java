@@ -21,6 +21,7 @@ import com.example.thesis.yummy.controller.post.CommentActivity;
 import com.example.thesis.yummy.controller.post.EditPostActivity;
 import com.example.thesis.yummy.controller.post.ListPeopleInterestedPostActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
+import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -96,6 +97,7 @@ public class PostRecyclerView extends RecyclerView {
                         openOptionsPopup(post, view);
                         break;
                     case R.id.imgAvatar:
+                        ProfileActivity.start(getContext(), post.mCreator.mId);
                         break;
                 }
             }

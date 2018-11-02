@@ -52,5 +52,6 @@
         android:layout_margin="@dimen/dimen_16dp"
         app:fb_defaultColor="@color/colorPrimary"
         app:fb_radius="5dp"
-        android:text="@string/rate"/>
+        android:text="@string/rate"
+        android:visibility="gone"/>
 </LinearLayout>

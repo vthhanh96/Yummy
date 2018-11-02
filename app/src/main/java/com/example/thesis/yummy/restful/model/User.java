@@ -15,6 +15,9 @@ public class User extends Base{
     @Json(name = "gender") public Integer mGender;
     @Json(name = "address") public String mAddress;
     @Json(name = "latLngAdress") public Location mLatLngAddress;
+    @Json(name = "count_people_evaluate") public Integer mCountPeopleEvaluate;
+    @Json(name = "main_point") public Double mMainPoint;
+    @Json(name = "trust_point") public Long mTrustPoint;
 //    @Json(name = "myCharacter") public String mCharacter;
 //    @Json(name = "myStyle") public String mStyle;
 //    @Json(name = "targetCharacter") public String mTargetCharacter;

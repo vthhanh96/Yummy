@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
@@ -25,15 +27,27 @@ import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_PROFILE_PAGE;
 
 public class ProfileActivity extends DrawerActivity {
 
+    private static final String ARG_KEY_USER_ID = "ARG_KEY_USER_ID";
+    private static final String ARG_KEY_LEFT_BACK = "ARG_KEY_LEFT_BACK";
+
     @BindView(R.id.topBar) TopBarView mTopBarView;
     @BindView(R.id.imgAvatar) ImageView mImgAvatar;
     @BindView(R.id.txtName) TextView mTxtName;
     @BindView(R.id.txtBirthday) TextView mTxtBirthday;
 
-    private User mUser;
+    private boolean mIsMyProfile = false;
+    private boolean mIsLeftBack = false;
+    private int mUserId;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, ProfileActivity.class);
+        context.startActivity(starter);
+    }
+
+    public static void start(Context context, int id) {
+        Intent starter = new Intent(context, ProfileActivity.class);
+        starter.putExtra(ARG_KEY_USER_ID, id);
+        starter.putExtra(ARG_KEY_LEFT_BACK, true);
         context.startActivity(starter);
     }
 
@@ -70,18 +84,33 @@ public class ProfileActivity extends DrawerActivity {
     }
 
     private void init() {
+        getExtras();
         initTopBar();
         initData();
     }
 
+    private void getExtras() {
+        mUserId = getIntent().getIntExtra(ARG_KEY_USER_ID, -1);
+        if(mUserId == StorageManager.getUser().mId) {
+            mIsMyProfile = true;
+        }
+        mIsLeftBack = getIntent().getBooleanExtra(ARG_KEY_LEFT_BACK, false);
+    }
+
     private void initTopBar() {
-        mTopBarView.setImageViewLeft(TopBarView.LEFT_MENU);
-        mTopBarView.setImageViewRight(R.drawable.ic_edit);
-        mTopBarView.setTitle(getString(R.string.profile));
+        mTopBarView.setImageViewLeft(mIsLeftBack ? TopBarView.LEFT_BACK : TopBarView.LEFT_MENU);
+        if(mIsMyProfile) {
+            mTopBarView.setTitle(getString(R.string.profile));
+            mTopBarView.setImageViewRight(R.drawable.ic_edit);
+        }
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
             public void onLeftClick() {
-                openDrawer();
+                if(mIsLeftBack) {
+                    finish();
+                } else {
+                    openDrawer();
+                }
             }
 
             @Override
@@ -92,16 +121,37 @@ public class ProfileActivity extends DrawerActivity {
     }
 
     private void initData() {
-        mUser = StorageManager.getUser();
-        if (mUser == null) return;
-        if (TextUtils.isEmpty(mUser.mAvatar)) {
+        if(mIsMyProfile) {
+            fillData(StorageManager.getUser());
+        } else {
+            getUserInfo();
+        }
+    }
+
+    private void getUserInfo() {
+        ServiceManager.getInstance().getUserService().getUserInfo().enqueue(new RestCallback<User>() {
+            @Override
+            public void onSuccess(String message, User user) {
+                fillData(user);
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
+    }
+
+    private void fillData(User user) {
+        if (user == null) return;
+        if (TextUtils.isEmpty(user.mAvatar)) {
             mImgAvatar.setImageResource(R.drawable.ic_default_avatar);
         } else {
-            Glide.with(getApplicationContext()).load(mUser.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+            Glide.with(getApplicationContext()).load(user.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
         }
-        mTxtName.setText(mUser.mFullName);
-        if(mUser.mBirthDay != null) {
-            mTxtBirthday.setText(DateFormat.format("dd MMMM yyyy", mUser.mBirthDay));
+        mTxtName.setText(user.mFullName);
+        if(user.mBirthDay != null) {
+            mTxtBirthday.setText(DateFormat.format("dd MMMM yyyy", user.mBirthDay));
         }
     }
 }

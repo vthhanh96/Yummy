@@ -94,6 +94,12 @@ public class PostDetailActivity extends BaseActivity {
         interested();
     }
 
+    @OnClick(R.id.imgAvatar)
+    public void openProfile() {
+        if(mPost == null || mPost.mCreator == null) return;
+        ProfileActivity.start(mContext, mPost.mCreator.mId);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_post_detail;
@@ -152,8 +158,11 @@ public class PostDetailActivity extends BaseActivity {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Comment comment = mAdapter.getItem(position);
+                if(comment == null || comment.mCreator == null) return;
+
                 if(view.getId() == R.id.imgAvatar) {
-//                    ProfileDetailActivity.start(mContext, mAdapter.getData().get(position).getCreator().mId);
+                    ProfileActivity.start(mContext, comment.mCreator.mId);
                 }
             }
         });
