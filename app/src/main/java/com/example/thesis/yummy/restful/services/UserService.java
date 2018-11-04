@@ -18,6 +18,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface UserService {
 
@@ -25,8 +26,8 @@ public interface UserService {
     @POST("login")
     Call<LoginResponse> login(@Field("email") String email, @Field("password") String password);
 
-    @GET("me")
-    Call<RestResponse<User>> getUserInfo();
+    @GET("{user_id}")
+    Call<RestResponse<User>> getUserInfo(@Path("user_id") int userId);
 
     @FormUrlEncoded
     @POST("register")

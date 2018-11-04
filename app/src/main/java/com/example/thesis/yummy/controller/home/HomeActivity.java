@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 
@@ -36,18 +41,8 @@ import static com.example.thesis.yummy.AppConstants.SOCKET_BASE_URL;
 public class HomeActivity extends DrawerActivity {
 
     @BindView(R.id.topBar) TopBarView mTopBarView;
-    @BindView(R.id.rcvPosts) PostRecyclerView mPostRecyclerView;
-    @BindView(R.id.refreshLayout) SwipeRefreshLayout mRefreshLayout;
-    @BindView(R.id.btnCreatePost) FloatingActionButton mCreatePostButton;
-
-    private int mPageNumber = 0;
-
-    private Socket mSocket;
-    {
-        try {
-            mSocket = IO.socket(SOCKET_BASE_URL);
-        } catch (URISyntaxException e) {}
-    }
+    @BindView(R.id.tabLayout) TabLayout mTabLayout;
+    @BindView(R.id.viewPager) ViewPager mViewPager;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, HomeActivity.class);
@@ -64,11 +59,6 @@ public class HomeActivity extends DrawerActivity {
         return R.layout.activity_home;
     }
 
-    @OnClick(R.id.btnCreatePost)
-    public void createPost() {
-        AddPostActivity.start(this);
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,15 +66,9 @@ public class HomeActivity extends DrawerActivity {
     }
 
     private void init() {
-        initSocket();
         initTopBar();
-        initRecyclerView();
-        initRefreshLayout();
-        getPosts();
-    }
-
-    private void initSocket() {
-
+        initViewPager();
+        initTabLayout();
     }
 
     private void initTopBar() {
@@ -103,61 +87,41 @@ public class HomeActivity extends DrawerActivity {
         });
     }
 
-    private void initRecyclerView() {
-        mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-                if (dy<0 && !mCreatePostButton.isShown())
-                    mCreatePostButton.show();
-                else if(dy>0 && mCreatePostButton.isShown())
-                    mCreatePostButton.hide();
-            }
+    private void initViewPager() {
+        PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        pagerAdapter.mFragments.add(new ListPostFragment());
+        pagerAdapter.mFragments.add(new ListPostFragment());
 
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-
-
-        mPostRecyclerView.setLoadMoreEnable(new PostRecyclerView.OnPostRecyclerViewLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                getPosts();
-            }
-        });
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setOffscreenPageLimit(pagerAdapter.mFragments.size());
     }
 
-    private void initRefreshLayout() {
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPageNumber = 0;
-                mPostRecyclerView.setNewData(new ArrayList<Post>());
-                getPosts();
+    private void initTabLayout() {
+        mTabLayout.setupWithViewPager(mViewPager);
+        String[] tabNames = new String[] {"Bài viết gần đây", "Bài viết đã đăng ký"};
+        for (int i = 0; i < tabNames.length; i ++) {
+            if(mTabLayout.getTabAt(i) != null) {
+                mTabLayout.getTabAt(i).setText(tabNames[i]);
             }
-        });
+        }
     }
 
-    private void getPosts() {
-        ServiceManager.getInstance().getPostService().getAllPost(mPageNumber).enqueue(new RestCallback<List<Post>>() {
-            @Override
-            public void onSuccess(String message, List<Post> posts) {
-                mRefreshLayout.setRefreshing(false);
-                if(posts == null || posts.isEmpty()) {
-                    mPostRecyclerView.loadMoreEnd();
-                    return;
-                }
-                mPageNumber++;
-                mPostRecyclerView.loadMoreComplete();
-                mPostRecyclerView.addData(posts);
-            }
+    private class PagerAdapter extends FragmentPagerAdapter{
 
-            @Override
-            public void onFailure(String message) {
-                mRefreshLayout.setRefreshing(false);
-                mPostRecyclerView.loadMoreFail();
-            }
-        });
+        List<Fragment> mFragments = new ArrayList<>();
+
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragments.size();
+        }
     }
 }

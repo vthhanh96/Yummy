@@ -63,7 +63,13 @@ public class ProfileActivity extends DrawerActivity {
 
     @OnClick(R.id.reviewLayout)
     public void openReview() {
-        ProfileReviewActivity.start(this);
+        int userId;
+        if(mUserId == -1) {
+            userId = StorageManager.getUser().mId;
+        } else {
+            userId = mUserId;
+        }
+        ProfileReviewActivity.start(this, userId);
     }
 
     @Override
@@ -90,7 +96,7 @@ public class ProfileActivity extends DrawerActivity {
     }
 
     private void getExtras() {
-        mUserId = getIntent().getIntExtra(ARG_KEY_USER_ID, -1);
+        mUserId = getIntent().getIntExtra(ARG_KEY_USER_ID, StorageManager.getUser().mId);
         if(mUserId == StorageManager.getUser().mId) {
             mIsMyProfile = true;
         }
@@ -129,7 +135,7 @@ public class ProfileActivity extends DrawerActivity {
     }
 
     private void getUserInfo() {
-        ServiceManager.getInstance().getUserService().getUserInfo().enqueue(new RestCallback<User>() {
+        ServiceManager.getInstance().getUserService().getUserInfo(mUserId).enqueue(new RestCallback<User>() {
             @Override
             public void onSuccess(String message, User user) {
                 fillData(user);

@@ -35,16 +35,20 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 public class ProfileReviewActivity extends BaseActivity {
 
+    private static final String ARG_KEY_USER_ID = "ARG_KEY_USER_ID";
+
     @BindView(R.id.topBar) TopBarView mTopBar;
     @BindView(R.id.reviewsRecyclerView) RecyclerView mReviewsRecyclerView;
     @BindView(R.id.ratingBar) MaterialRatingBar mRatingBar;
     @BindView(R.id.rateButton) FancyButton mRateButton;
 
     private ReviewAdapter mReviewAdapter;
+    private int mUserId;
     private User mUser;
 
-    public static void start(Context context) {
+    public static void start(Context context, int userId) {
         Intent starter = new Intent(context, ProfileReviewActivity.class);
+        starter.putExtra(ARG_KEY_USER_ID, userId);
         context.startActivity(starter);
     }
 
@@ -66,9 +70,15 @@ public class ProfileReviewActivity extends BaseActivity {
     }
 
     private void init() {
+        getExtras();
         initTopBar();
         initRecyclerView();
+        showLoading();
         getUserInfo();
+    }
+
+    private void getExtras() {
+        mUserId = getIntent().getIntExtra(ARG_KEY_USER_ID, -1);
     }
 
     private void initTopBar() {
@@ -96,8 +106,7 @@ public class ProfileReviewActivity extends BaseActivity {
     }
 
     private void getUserInfo() {
-        showLoading();
-        ServiceManager.getInstance().getUserService().getUserInfo().enqueue(new RestCallback<User>() {
+        ServiceManager.getInstance().getUserService().getUserInfo(mUserId).enqueue(new RestCallback<User>() {
             @Override
             public void onSuccess(String message, User user) {
                 if(user == null) return;
@@ -117,7 +126,7 @@ public class ProfileReviewActivity extends BaseActivity {
         ServiceManager.getInstance().getRatingService().getListRatingProfile(mUser.mId).enqueue(new RestCallback<List<Rating>>() {
             @Override
             public void onSuccess(String message, List<Rating> ratings) {
-                mReviewAdapter.addData(ratings);
+                mReviewAdapter.setNewData(ratings);
                 checkRating();
             }
 
@@ -160,8 +169,7 @@ public class ProfileReviewActivity extends BaseActivity {
         ServiceManager.getInstance().getRatingService().createRatingProfile(comment, (int)(rating * 2), mUser.mId).enqueue(new RestCallback<Rating>() {
             @Override
             public void onSuccess(String message, Rating rating) {
-                mReviewAdapter.addData(rating);
-                mRateButton.setVisibility(View.GONE);
+                getUserInfo();
             }
 
             @Override
@@ -180,7 +188,7 @@ public class ProfileReviewActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder helper, Rating item) {
             MaterialRatingBar materialRatingBar = helper.getView(R.id.ratingBar);
-            materialRatingBar.setRating(item.mPoint);
+            materialRatingBar.setRating(item.mPoint / 2.0f);
             helper.setText(R.id.commentTextView, item.mContent);
 
             if(item.mCreator != null) {
