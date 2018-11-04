@@ -26,6 +26,8 @@ import com.example.thesis.yummy.restful.model.Notification;
 import com.example.thesis.yummy.restful.model.NotificationData;
 import com.example.thesis.yummy.restful.model.NotificationMeetingData;
 import com.example.thesis.yummy.restful.model.NotificationPostData;
+import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
@@ -117,7 +119,9 @@ public class NotificationActivity extends DrawerActivity {
     }
 
     private void getNotifications() {
-        ServiceManager.getInstance().getNotificationService().getNotifications().enqueue(new RestCallback<List<Notification>>() {
+        User user = StorageManager.getUser();
+        if(user == null) return;
+        ServiceManager.getInstance().getNotificationService().getNotifications(user.mId).enqueue(new RestCallback<List<Notification>>() {
             @Override
             public void onSuccess(String message, List<Notification> notifications) {
                 mAdapter.setNewData(notifications);

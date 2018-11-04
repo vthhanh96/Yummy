@@ -97,7 +97,7 @@ public class MeetingActivity extends DrawerActivity {
     }
 
     private void getMeetings() {
-        ServiceManager.getInstance().getMeetingService().getMeetings().enqueue(new RestCallback<List<Meeting>>() {
+        ServiceManager.getInstance().getMeetingService().getMeetings(false).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
                 mAdapter.setNewData(meetings);

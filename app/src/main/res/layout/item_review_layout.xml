@@ -38,7 +38,8 @@
             android:minWidth="24dp"
             android:minHeight="24dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/dimen_16dp"/>
+            android:layout_marginEnd="@dimen/dimen_16dp"
+            android:isIndicator="true"/>
 
         <TextView
             android:id="@+id/commentTextView"

@@ -3,11 +3,13 @@ package com.example.thesis.yummy.restful.services;
 
 import com.example.thesis.yummy.restful.RestResponse;
 import com.example.thesis.yummy.restful.model.Location;
+import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.restful.response.LoginResponse;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -47,4 +49,8 @@ public interface UserService {
 
     @POST("editUser")
     Call<RestResponse<User>> updateProfile(@Body Map<String, Object> params);
+
+    @FormUrlEncoded
+    @POST("listpostuser")
+    Call<RestResponse<List<Post>>> getListPostOfUser(@Field("user_id") int userId, @Field("page") int page);
 }

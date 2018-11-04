@@ -57,4 +57,5 @@ public interface PostService {
 
     @GET("post/{postId}/interested_list")
     Call<RestResponse<List<User>>> getInterestedPeople(@Path("postId") int postId);
+
 }

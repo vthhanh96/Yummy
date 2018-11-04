@@ -69,6 +69,7 @@
         <activity android:name=".controller.notification.ReceiveRequestNotificationActivity" />
         <activity android:name=".controller.notification.RatingNotificationActivity" />
         <activity android:name=".controller.rating.RatingActivity" />
+        <activity android:name=".controller.profile.ProfileReviewDetailActivity" />
 
 
     </application>

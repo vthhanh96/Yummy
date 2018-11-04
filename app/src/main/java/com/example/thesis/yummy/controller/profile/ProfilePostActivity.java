@@ -10,6 +10,8 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
+import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.PostRecyclerView;
 import com.example.thesis.yummy.view.TopBarView;
 
@@ -74,7 +76,9 @@ public class ProfilePostActivity extends BaseActivity {
     }
 
     private void getMyPost() {
-        ServiceManager.getInstance().getPostService().getAllPost(mPageNumber).enqueue(new RestCallback<List<Post>>() {
+        User user = StorageManager.getUser();
+        if(user == null) return;
+        ServiceManager.getInstance().getUserService().getListPostOfUser(user.mId, mPageNumber).enqueue(new RestCallback<List<Post>>() {
             @Override
             public void onSuccess(String message, List<Post> posts) {
                 if(posts == null || posts.isEmpty()) {

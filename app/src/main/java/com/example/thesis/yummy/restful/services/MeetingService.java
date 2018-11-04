@@ -4,6 +4,7 @@ import com.example.thesis.yummy.restful.RestResponse;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.restful.model.Meeting;
+import com.example.thesis.yummy.restful.model.Rating;
 
 import java.util.List;
 
@@ -20,8 +21,9 @@ public interface MeetingService {
     @POST("meeting/create_meeting")
     Call<RestResponse<Meeting>> createMeeting(@Field("postId") int postId, @Field("joined_people")List<Integer> mJoinedPeople);
 
-    @GET("meeting")
-    Call<RestResponse<List<Meeting>>> getMeetings();
+    @FormUrlEncoded
+    @POST("meeting/list_status")
+    Call<RestResponse<List<Meeting>>> getMeetings(@Field("status") boolean status);
 
     @GET("meeting/{meetingId}/list_comment")
     Call<RestResponse<List<Comment>>> getMeetingComments(@Path("meetingId") int meetingId);
@@ -33,4 +35,7 @@ public interface MeetingService {
 
     @GET("meeting/{meetingId}")
     Call<RestResponse<Meeting>> getMeetingDetail(@Path("meetingId") int meetingId);
+
+    @GET("meeting/{meeting_id}/list_rating")
+    Call<RestResponse<List<Rating>>> getMeetingRating(@Path("meeting_id") int meetingId);
 }

@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 
@@ -17,12 +18,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
-import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,6 +57,7 @@ public class ProfileHistoryActivity extends BaseActivity {
     private void init() {
         initTopBar();
         initRecyclerView();
+        getMeetingHistory();
     }
 
     private void initTopBar() {
@@ -75,45 +78,51 @@ public class ProfileHistoryActivity extends BaseActivity {
 
     private void initRecyclerView() {
         mAdapter = new TimelineAdapter();
-
-        List<User> users = new ArrayList<>();
-        User user = StorageManager.getUser();
-        users.add(user);
-        users.add(user);
-        users.add(user);
-
-        Calendar calendar = Calendar.getInstance();
-
-        mAdapter.addData(new HistoryItem(calendar.getTime(), users, "Nha Hang Huong Cau", 4.0f));
-        mAdapter.addData(new HistoryItem(calendar.getTime(), users, "Nha Hang Huong Cau", 4.0f));
-        mAdapter.addData(new HistoryItem(calendar.getTime(), users, "Nha Hang Huong Cau", 4.0f));
-        mAdapter.addData(new HistoryItem(calendar.getTime(), users, "Nha Hang Huong Cau", 4.0f));
-        mAdapter.addData(new HistoryItem(calendar.getTime(), users, "Nha Hang Huong Cau", 4.0f));
-        mAdapter.addData(new HistoryItem(calendar.getTime(), users, "Nha Hang Huong Cau", 4.0f));
-        mAdapter.addData(new HistoryItem(calendar.getTime(), users, "Nha Hang Huong Cau", 4.0f));
+        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Meeting item = mAdapter.getItem(position);
+                if(item == null) return;
+                ProfileReviewDetailActivity.start(ProfileHistoryActivity.this, item.mId);
+            }
+        });
 
         mHistoryRecyclerView.setAdapter(mAdapter);
         mHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private class TimelineAdapter extends BaseQuickAdapter<HistoryItem, BaseViewHolder> {
+    private void getMeetingHistory() {
+        ServiceManager.getInstance().getMeetingService().getMeetings(false).enqueue(new RestCallback<List<Meeting>>() {
+            @Override
+            public void onSuccess(String message, List<Meeting> meetings) {
+                mAdapter.addData(meetings);
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
+    }
+
+    private class TimelineAdapter extends BaseQuickAdapter<Meeting, BaseViewHolder> {
 
         public TimelineAdapter() {
-            super(R.layout.item_history, new ArrayList<HistoryItem>());
+            super(R.layout.item_history, new ArrayList<Meeting>());
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, HistoryItem item) {
+        protected void convert(BaseViewHolder helper, Meeting item) {
             if(item == null) return;
             helper.setText(R.id.dateTextView, DateFormat.format("dd MMM yyyy", item.mTime));
             helper.setText(R.id.placeTextView, item.mPlace);
 
             RatingBar ratingBar = helper.getView(R.id.ratingBar);
-            ratingBar.setRating(item.mRating);
+//            ratingBar.setRating(item.mRating);
 
             RecyclerView recyclerView = helper.getView(R.id.rcvPeople);
             PeopleAdapter adapter = new PeopleAdapter();
-            adapter.addData(item.mUsers);
+            adapter.addData(item.mJoinedPeople);
 
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));

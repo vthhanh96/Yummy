@@ -74,4 +74,5 @@
     <string name="average_rating">Điểm  đánh  giá trung bình</string>
     <string name="all_reviews">Tất cả đánh giá</string>
     <string name="rate">Đánh giá</string>
+    <string name="review_detail">Đánh giá chi tiết</string>
 </resources>
