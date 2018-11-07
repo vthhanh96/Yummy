@@ -24,11 +24,6 @@ public class RatingNotificationActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.rateLaterButton)
-    public void rateLater() {
-
-    }
-
     @OnClick(R.id.ratingButton)
     public void rating() {
         RatingActivity.start(this);

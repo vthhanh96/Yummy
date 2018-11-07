@@ -29,10 +29,12 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 public class ProfileReviewDetailActivity extends BaseActivity {
 
     private static final String ARG_KEY_MEETING_ID = "ARG_KEY_MEETING_ID";
+    private static final String ARG_KEY_USER_ID = "ARG_KEY_USER_ID";
 
-    public static void start(Context context, int meetingId) {
+    public static void start(Context context, int meetingId, int userId) {
         Intent starter = new Intent(context, ProfileReviewDetailActivity.class);
         starter.putExtra(ARG_KEY_MEETING_ID, meetingId);
+        starter.putExtra(ARG_KEY_USER_ID, userId);
         context.startActivity(starter);
     }
 
@@ -41,6 +43,7 @@ public class ProfileReviewDetailActivity extends BaseActivity {
 
     private ReviewAdapter mAdapter;
     private int mMeetingId;
+    private int mUserId;
 
     @Override
     protected int getLayoutId() {
@@ -63,6 +66,7 @@ public class ProfileReviewDetailActivity extends BaseActivity {
 
     private void getExtras() {
         mMeetingId = getIntent().getIntExtra(ARG_KEY_MEETING_ID, -1);
+        mUserId = getIntent().getIntExtra(ARG_KEY_USER_ID, -1);
     }
 
     private void initTopBar() {
@@ -89,7 +93,7 @@ public class ProfileReviewDetailActivity extends BaseActivity {
     }
 
     private void getReviewDetail() {
-        ServiceManager.getInstance().getMeetingService().getMeetingRating(mMeetingId).enqueue(new RestCallback<List<Rating>>() {
+        ServiceManager.getInstance().getMeetingService().getMeetingRating(mMeetingId, mUserId).enqueue(new RestCallback<List<Rating>>() {
             @Override
             public void onSuccess(String message, List<Rating> ratings) {
                 mAdapter.setNewData(ratings);

@@ -20,7 +20,7 @@ public interface RatingService {
 
     @FormUrlEncoded
     @POST("user/is_had_rating")
-    Call<RestResponse<Base>> checkRatingPeople(@Field("people_evaluate") int id);
+    Call<RestResponse<Base>> checkRatingPeople(@Field("people_evaluate") Integer id);
 
     @FormUrlEncoded
     @POST("rate/rating_people")

@@ -16,6 +16,7 @@ import com.example.thesis.yummy.controller.post.AddPostActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
+import com.example.thesis.yummy.restful.request.PostRequest;
 import com.example.thesis.yummy.view.PostRecyclerView;
 
 import java.util.ArrayList;
@@ -27,12 +28,19 @@ import butterknife.OnClick;
 
 public class ListPostFragment extends Fragment {
 
+    public static ListPostFragment newInstance(boolean isInterested) {
+        ListPostFragment fragment = new ListPostFragment();
+        fragment.mIsInterested = isInterested;
+        return fragment;
+    }
+
     @BindView(R.id.rcvPosts) PostRecyclerView mPostRecyclerView;
     @BindView(R.id.btnCreatePost) FloatingActionButton mCreatePostButton;
     @BindView(R.id.refreshLayout) SwipeRefreshLayout mRefreshLayout;
 
     private int mPageNumber = 0;
-
+    private boolean mIsInterested = false;
+    private boolean mIsLoaded = false;
 
     @OnClick(R.id.btnCreatePost)
     public void createPost() {
@@ -51,6 +59,14 @@ public class ListPostFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser && !mIsLoaded) {
+            getPosts();
+        }
     }
 
     private void init() {
@@ -95,7 +111,7 @@ public class ListPostFragment extends Fragment {
     }
 
     private void getPosts() {
-        ServiceManager.getInstance().getPostService().getAllPost(mPageNumber).enqueue(new RestCallback<List<Post>>() {
+        PostRequest.getListPost(mPageNumber, mIsInterested, new RestCallback<List<Post>>() {
             @Override
             public void onSuccess(String message, List<Post> posts) {
                 mRefreshLayout.setRefreshing(false);

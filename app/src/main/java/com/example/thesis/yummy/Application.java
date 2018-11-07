@@ -37,6 +37,12 @@ public class Application extends android.app.Application {
         init();
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        clearSocket();
+    }
+
     private void init() {
         initStorage();
         MediaManager.init(this);

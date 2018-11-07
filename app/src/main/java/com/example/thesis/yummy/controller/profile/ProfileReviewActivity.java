@@ -138,7 +138,7 @@ public class ProfileReviewActivity extends BaseActivity {
     }
 
     private void checkRating() {
-        ServiceManager.getInstance().getRatingService().checkRatingPeople(mUser.mId).enqueue(new RestCallback<Base>() {
+        ServiceManager.getInstance().getRatingService().checkRatingPeople(mUserId).enqueue(new RestCallback<Base>() {
             @Override
             public void onSuccess(String message, Base base) {
                 hideLoading();

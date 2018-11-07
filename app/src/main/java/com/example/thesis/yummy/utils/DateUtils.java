@@ -1,6 +1,7 @@
 package com.example.thesis.yummy.utils;
 
 import android.content.Context;
+import android.text.format.DateFormat;
 
 import java.util.Date;
 
@@ -52,7 +53,7 @@ public class DateUtils {
         }
 
         long now = new Date().getTime();
-        if(time <= 0 || time < now) return "";
+        if(time <= 0 || time < now) return DateFormat.format("dd/MM/yyyy", date).toString();
 
         final long diff = time - now;
         if (diff < MINUTE_MILLIS) {

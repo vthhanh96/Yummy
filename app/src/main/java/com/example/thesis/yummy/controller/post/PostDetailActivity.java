@@ -192,7 +192,10 @@ public class PostDetailActivity extends BaseActivity {
             Glide.with(mContext.getApplicationContext()).load(mPost.mCreator.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
             mTvName.setText(mPost.mCreator.mFullName);
         }
-//        mTvTimeCreated.setText(DateUtils.getTimeAgo(mContext, mPost.getCreatedDate()));
+
+        if(mPost.mTime != null) {
+            mTvTimeCreated.setText(DateUtils.getTimeFuture(mPost.mTime));
+        }
 
         if(mPost.mCategories != null && !mPost.mCategories.isEmpty()) {
             FlowLayoutManager flowLayoutManager = new FlowLayoutManager();

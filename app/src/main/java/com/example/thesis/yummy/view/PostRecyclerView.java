@@ -251,8 +251,8 @@ public class PostRecyclerView extends RecyclerView {
                 }
                 helper.setText(R.id.txtName, item.mCreator.mFullName);
             }
-            if(item.mExpiresTime != null) {
-                helper.setText(R.id.tvTimeCreated, getContext().getString(R.string.time_remain, DateUtils.getTimeFuture(item.mExpiresTime)));
+            if(item.mTime != null) {
+                helper.setText(R.id.tvTimeCreated, getContext().getString(R.string.time_remain, DateUtils.getTimeFuture(item.mTime)));
             }
 
             RecyclerView rcvCategories = helper.getView(R.id.rcvCategories);

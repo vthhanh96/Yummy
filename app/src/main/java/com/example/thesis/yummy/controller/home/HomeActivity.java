@@ -89,8 +89,8 @@ public class HomeActivity extends DrawerActivity {
 
     private void initViewPager() {
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        pagerAdapter.mFragments.add(new ListPostFragment());
-        pagerAdapter.mFragments.add(new ListPostFragment());
+        pagerAdapter.mFragments.add(ListPostFragment.newInstance(false));
+        pagerAdapter.mFragments.add(ListPostFragment.newInstance(true));
 
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOffscreenPageLimit(pagerAdapter.mFragments.size());

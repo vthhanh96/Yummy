@@ -22,9 +22,11 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface PostService {
-    @GET("post")
+
+    @POST("post/{page}/list")
     Call<RestResponse<List<Post>>> getAllPost(
-            @Query("page") int pageNumber
+            @Path("page") int pageNumber,
+            @Body Map<String, Object> params
     );
 
     @POST("post/{postId}/interested")
@@ -45,12 +47,12 @@ public interface PostService {
 
     @FormUrlEncoded
     @POST("post/{postId}/comment")
-    Call<RestResponse<Comment>> createComment(@Path("postId") int postId, @Field("mContent") String content);
+    Call<RestResponse<Comment>> createComment(@Path("postId") int postId, @Field("content") String content);
 
     @PUT("post/{postId}/comment/{commentId}")
     Call<RestResponse<Comment>> editComment(@Path("postId") int postId,
                                             @Path("commentId") int commentId,
-                                            @Field("mContent") String content);
+                                            @Field("content") String content);
 
     @DELETE("post/{postId}/comment/{commentId}")
     Call<RestResponse<Base>> deleteComment(@Path("postId") int postId, @Path("commentId") int commentId);

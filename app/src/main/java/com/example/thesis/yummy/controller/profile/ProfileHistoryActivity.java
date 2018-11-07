@@ -32,13 +32,17 @@ import butterknife.ButterKnife;
 
 public class ProfileHistoryActivity extends BaseActivity {
 
+    private static final String ARG_KEY_USER_ID = "ARG_KEY_USER_ID";
+
     @BindView(R.id.topBar) TopBarView mTopBarView;
     @BindView(R.id.rcvHistory) RecyclerView mHistoryRecyclerView;
 
     private TimelineAdapter mAdapter;
+    private int mUserId;
 
-    public static void start(Context context) {
+    public static void start(Context context, int userId) {
         Intent starter = new Intent(context, ProfileHistoryActivity.class);
+        starter.putExtra(ARG_KEY_USER_ID, userId);
         context.startActivity(starter);
     }
 
@@ -55,9 +59,14 @@ public class ProfileHistoryActivity extends BaseActivity {
     }
 
     private void init() {
+        getExtras();
         initTopBar();
         initRecyclerView();
         getMeetingHistory();
+    }
+
+    private void getExtras() {
+        mUserId = getIntent().getIntExtra(ARG_KEY_USER_ID, -1);
     }
 
     private void initTopBar() {
@@ -83,7 +92,7 @@ public class ProfileHistoryActivity extends BaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Meeting item = mAdapter.getItem(position);
                 if(item == null) return;
-                ProfileReviewDetailActivity.start(ProfileHistoryActivity.this, item.mId);
+                ProfileReviewDetailActivity.start(ProfileHistoryActivity.this, item.mId, mUserId);
             }
         });
 
@@ -92,7 +101,7 @@ public class ProfileHistoryActivity extends BaseActivity {
     }
 
     private void getMeetingHistory() {
-        ServiceManager.getInstance().getMeetingService().getMeetings(false).enqueue(new RestCallback<List<Meeting>>() {
+        ServiceManager.getInstance().getMeetingService().getMeetings(true).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
                 mAdapter.addData(meetings);

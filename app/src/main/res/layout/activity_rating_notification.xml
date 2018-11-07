@@ -15,12 +15,12 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="60dp"
             android:layout_marginStart="@dimen/dimen_16dp"
             android:layout_marginEnd="@dimen/dimen_16dp"
             app:cardCornerRadius="5dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/colorPrimaryDark">
+            app:cardBackgroundColor="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/rating_meeting"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_gravity="center"
@@ -47,38 +47,34 @@
                     android:layout_marginBottom="@dimen/dimen_16dp"
                     android:gravity="center"
                     android:textSize="16sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     tools:text="Ban da ket thuc 1 cuoc hen. Ban hay danh gia cho cuoc hen nay nhe."/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/dimen_16dp">
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/rejectButton"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/reject"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="@color/md_red_500"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/rateLaterButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/rating_later"
-                        android:background="?attr/selectableItemBackground"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp"
+                        android:textAllCaps="false"/>
 
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/ratingButton"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/rating_now"
-                        android:background="?attr/selectableItemBackground"
+                        android:textAllCaps="false"
+                        android:background="@color/colorPrimary"
                         android:textColor="@color/white"
                         android:textSize="16sp"/>
                 </LinearLayout>
@@ -86,8 +82,8 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/ic_star"
             android:layout_gravity="center_horizontal"/>
     </FrameLayout>

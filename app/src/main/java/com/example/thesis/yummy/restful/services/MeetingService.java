@@ -36,6 +36,7 @@ public interface MeetingService {
     @GET("meeting/{meetingId}")
     Call<RestResponse<Meeting>> getMeetingDetail(@Path("meetingId") int meetingId);
 
-    @GET("meeting/{meeting_id}/list_rating")
-    Call<RestResponse<List<Rating>>> getMeetingRating(@Path("meeting_id") int meetingId);
+    @GET("meeting/{meeting_id}/list_rating/{user_id}")
+    Call<RestResponse<List<Rating>>> getMeetingRating(@Path("meeting_id") int meetingId,
+                                                      @Path("user_id") int userId);
 }

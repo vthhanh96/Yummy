@@ -58,7 +58,13 @@ public class ProfileActivity extends DrawerActivity {
 
     @OnClick(R.id.historyLayout)
     public void openHistory() {
-        ProfileHistoryActivity.start(this);
+        int userId;
+        if(mUserId == -1) {
+            userId = StorageManager.getUser().mId;
+        } else {
+            userId = mUserId;
+        }
+        ProfileHistoryActivity.start(this, userId);
     }
 
     @OnClick(R.id.reviewLayout)

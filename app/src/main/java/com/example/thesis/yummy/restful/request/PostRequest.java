@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PostRequest {
 
@@ -57,5 +58,12 @@ public class PostRequest {
         params.put("location", coordinate);
 
         ServiceManager.getInstance().getPostService().updatePost(postId, params).enqueue(callback);
+    }
+
+    public static void getListPost(int pageNumber, boolean isInterested, RestCallback<List<Post>> callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("flag", isInterested);
+
+        ServiceManager.getInstance().getPostService().getAllPost(pageNumber, params).enqueue(callback);
     }
 }
