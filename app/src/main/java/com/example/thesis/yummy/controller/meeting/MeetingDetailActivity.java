@@ -35,6 +35,12 @@ public class MeetingDetailActivity extends BaseActivity implements MeetingDetail
         context.startActivity(starter);
     }
 
+    public static Intent getMeetingDetailIntent(Context context, int meetingID) {
+        Intent intent = new Intent(context, MeetingDetailActivity.class);
+        intent.putExtra(ARG_KEY_MEETING_ID, meetingID);
+        return intent;
+    }
+
     @BindView(R.id.topBar) TopBarView mTopBarView;
     @BindView(R.id.tabLayout) TabLayout mTabLayout;
     @BindView(R.id.viewPager) ViewPager mViewPager;

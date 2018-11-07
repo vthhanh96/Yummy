@@ -62,6 +62,12 @@ public class PostDetailActivity extends BaseActivity {
         context.startActivity(starter);
     }
 
+    public static Intent getPostDetailIntent(Context context, Integer postId) {
+        Intent intent = new Intent(context, PostDetailActivity.class);
+        intent.putExtra(ARG_KEY_POST_ID, postId);
+        return intent;
+    }
+
     @BindView(R.id.topBar) TopBarView mTopBar;
     @BindView(R.id.rcvComments) RecyclerView mCommentRecycler;
     @BindView(R.id.imgAvatar) ImageView mImgAvatar;
