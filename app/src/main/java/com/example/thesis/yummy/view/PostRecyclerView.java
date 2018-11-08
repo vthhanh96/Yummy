@@ -3,6 +3,7 @@ package com.example.thesis.yummy.view;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -276,12 +277,24 @@ public class PostRecyclerView extends RecyclerView {
 
             helper.setText(R.id.txtContent, item.mContent);
 
-            helper.setImageResource(R.id.imgInterested, isInterested(item.mInterestedPeople) ? R.drawable.ic_interested_color : R.drawable.ic_interested);
-
-            if (item.mInterestedPeople != null) {
-                helper.setText(R.id.txtInterested, mContext.getString(R.string.interested, item.mInterestedPeople.size()));
+            if(item.mCreator.mId.equals(mUser.mId)) {
+                helper.setGone(R.id.imgInterested, false);
+                if (item.mInterestedPeople != null) {
+                    helper.setText(R.id.txtInterested, mContext.getString(R.string.registered_amount, item.mInterestedPeople.size()));
+                } else {
+                    helper.setText(R.id.txtInterested, mContext.getString(R.string.registered_amount, 0));
+                }
             } else {
-                helper.setText(R.id.txtInterested, mContext.getString(R.string.interested, 0));
+                helper.addOnClickListener(R.id.loInterest);
+                if(isInterested(item.mInterestedPeople)) {
+                    helper.setTextColor(R.id.txtInterested, ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    helper.setGone(R.id.imgInterested, true);
+                    helper.setText(R.id.txtInterested, R.string.registered);
+                } else {
+                    helper.setTextColor(R.id.txtInterested, ContextCompat.getColor(getContext(), R.color.grey));
+                    helper.setGone(R.id.imgInterested, false);
+                    helper.setText(R.id.txtInterested, mContext.getString(R.string.register));
+                }
             }
 
             if (item.mComments != null) {
@@ -309,7 +322,6 @@ public class PostRecyclerView extends RecyclerView {
                 richPreview.getPreview(item.mLink);
             }
 
-            helper.addOnClickListener(R.id.loInterest);
             helper.addOnClickListener(R.id.loComment);
             helper.addOnClickListener(R.id.btnMenuPost);
             helper.addOnClickListener(R.id.imgAvatar);

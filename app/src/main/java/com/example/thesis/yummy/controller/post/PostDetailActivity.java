@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -97,6 +98,7 @@ public class PostDetailActivity extends BaseActivity {
 
     @OnClick(R.id.loInterest)
     public void onInterestedLayoutClicked() {
+        if(mPost.mCreator.mId.equals(mUser.mId)) return;
         interested();
     }
 
@@ -218,12 +220,23 @@ public class PostDetailActivity extends BaseActivity {
         mTvPlace.setText(mPost.mPlace);
         mTvContent.setText(mPost.mContent);
 
-        mImgInterested.setImageResource(isInterested(mPost.mInterestedPeople) ? R.drawable.ic_interested_color : R.drawable.ic_interested);
-
-        if(mPost.mInterestedPeople != null) {
-            mTvInterested.setText(mContext.getString(R.string.interested, mPost.mInterestedPeople.size()));
+        if(mPost.mCreator.mId.equals(mUser.mId)) {
+            mImgInterested.setVisibility(View.GONE);
+            if (mPost.mInterestedPeople != null) {
+                mTvInterested.setText(mContext.getString(R.string.registered_amount, mPost.mInterestedPeople.size()));
+            } else {
+                mTvInterested.setText(mContext.getString(R.string.registered_amount, 0));
+            }
         } else {
-            mTvInterested.setText(mContext.getString(R.string.interested, 0));
+            if(isInterested(mPost.mInterestedPeople)) {
+                mTvInterested.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                mImgInterested.setVisibility(View.VISIBLE);
+                mTvInterested.setText(R.string.registered);
+            } else {
+                mTvInterested.setTextColor(ContextCompat.getColor(this, R.color.grey));
+                mImgInterested.setVisibility(View.GONE);
+                mTvInterested.setText(R.string.register);
+            }
         }
 
         if(mPost.mComments != null) {
@@ -320,11 +333,14 @@ public class PostDetailActivity extends BaseActivity {
         ServiceManager.getInstance().getPostService().interested(mPostId).enqueue(new RestCallback<Post>() {
             @Override
             public void onSuccess(String message, Post post) {
-                mImgInterested.setImageResource(isInterested(post.mInterestedPeople) ? R.drawable.ic_interested_color : R.drawable.ic_interested);
-                if(post.mInterestedPeople != null) {
-                    mTvInterested.setText(mContext.getString(R.string.interested, post.mInterestedPeople.size()));
+                if(isInterested(mPost.mInterestedPeople)) {
+                    mTvInterested.setTextColor(ContextCompat.getColor(PostDetailActivity.this, R.color.colorPrimary));
+                    mImgInterested.setVisibility(View.VISIBLE);
+                    mTvInterested.setText(R.string.registered);
                 } else {
-                    mTvInterested.setText(mContext.getString(R.string.interested, 0));
+                    mTvInterested.setTextColor(ContextCompat.getColor(PostDetailActivity.this, R.color.colorPrimary));
+                    mImgInterested.setVisibility(View.GONE);
+                    mTvInterested.setText(R.string.register);
                 }
             }
 

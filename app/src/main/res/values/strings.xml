@@ -11,7 +11,7 @@
     <string name="loading">Loading…</string>
     <string name="login_success">Đăng nhập thành công</string>
     <string name="unauthorized">Unauthorized</string>
-    <string name="interested">Quan tâm (%d)</string>
+    <string name="registered_amount">%d người đăng ký</string>
     <string name="comment_amount">Bình luận (%d)</string>
     <string name="new_post">Bài viết mới</string>
     <string name="comment">Bình luận</string>
@@ -75,4 +75,5 @@
     <string name="all_reviews">Tất cả đánh giá</string>
     <string name="rate">Đánh giá</string>
     <string name="review_detail">Đánh giá chi tiết</string>
+    <string name="registered">Đã đăng ký</string>
 </resources>
