@@ -17,6 +17,7 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
+import com.example.thesis.yummy.restful.request.MeetingRequest;
 import com.example.thesis.yummy.view.TopBarView;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class MeetingDetailActivity extends BaseActivity implements MeetingDetail
     @Override
     public void onCreateComment(String content) {
         showLoading();
-        ServiceManager.getInstance().getMeetingService().createMeetingComment(mMeetingID, content).enqueue(new RestCallback<Base>() {
+        MeetingRequest.createComment(mMeetingID, content, new RestCallback<Base>() {
             @Override
             public void onSuccess(String message, Base base) {
                 hideLoading();

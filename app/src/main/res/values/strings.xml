@@ -76,4 +76,5 @@
     <string name="rate">Đánh giá</string>
     <string name="review_detail">Đánh giá chi tiết</string>
     <string name="registered">Đã đăng ký</string>
+    <string name="confirm_log_out_message">Bạn có chắc chắn muốn đăng xuất?</string>
 </resources>

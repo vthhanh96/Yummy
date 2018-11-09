@@ -1,7 +1,6 @@
 package com.example.thesis.yummy;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.cloudinary.android.MediaManager;
 import com.example.thesis.yummy.controller.notification.NotificationHandler;
@@ -9,7 +8,6 @@ import com.example.thesis.yummy.restful.auth.AuthClient;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.socket.SocketManager;
 import com.example.thesis.yummy.storage.StorageManager;
-import com.example.thesis.yummy.utils.ThreadUtils;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
@@ -57,9 +55,9 @@ public class Application extends android.app.Application {
         @Override
         public void call(final Object... args) {
             JSONObject data = (JSONObject) args[0];
-            if(data == null) return;
+            if (data == null) return;
 
-            if(data.has(NOTIFICATION_TYPE_NORMAL)) {
+            if (data.has(NOTIFICATION_TYPE_NORMAL)) {
                 NotificationHandler.createNotification(mContext, data.optString(NOTIFICATION_TYPE_NORMAL));
             }
         }
@@ -67,12 +65,13 @@ public class Application extends android.app.Application {
 
     public static void initSocket() {
         User user = StorageManager.getUser();
-        if(user == null) return;
-        if(AuthClient.isExpireToken()) return;
+        if (user == null) return;
+        if (AuthClient.isExpireToken()) return;
 
         try {
             mSocket = IO.socket(SOCKET_BASE_URL);
-        } catch (URISyntaxException e) {}
+        } catch (URISyntaxException e) {
+        }
 
         User data = new User(user.mId, user.mFullName);
         mSocket.connect();
@@ -82,7 +81,7 @@ public class Application extends android.app.Application {
     }
 
     public static void clearSocket() {
-        if(mSocket == null) return;
+        if (mSocket == null) return;
         mSocket.disconnect();
         mSocket.off();
         mSocket = null;

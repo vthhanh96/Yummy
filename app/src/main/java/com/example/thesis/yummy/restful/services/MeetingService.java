@@ -7,8 +7,10 @@ import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.Rating;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -28,10 +30,9 @@ public interface MeetingService {
     @GET("meeting/{meetingId}/list_comment")
     Call<RestResponse<List<Comment>>> getMeetingComments(@Path("meetingId") int meetingId);
 
-    @FormUrlEncoded
     @POST("meeting/{meetingId}/add_comment")
     Call<RestResponse<Base>> createMeetingComment(@Path("meetingId") int meetingId,
-                                                  @Field("mContent") String content);
+                                                  @Body Map<String, String> params);
 
     @GET("meeting/{meetingId}")
     Call<RestResponse<Meeting>> getMeetingDetail(@Path("meetingId") int meetingId);

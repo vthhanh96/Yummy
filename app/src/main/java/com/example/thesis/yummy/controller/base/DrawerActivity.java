@@ -26,6 +26,8 @@ import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.DrawerFooterLayout;
 import com.example.thesis.yummy.view.DrawerHeaderLayout;
+import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,9 +120,7 @@ public abstract class DrawerActivity extends BaseActivity {
                 SearchActivity.start(this);
                 break;
             case NAV_DRAWER_ID_LOGOUT:
-                finish();
-                AuthClient.logout();
-                LoginActivity.start(this);
+                showConfirmLogoutDialog();
                 break;
             case NAV_DRAWER_ID_MEETING:
                 if(this instanceof MeetingActivity) return;
@@ -165,6 +165,29 @@ public abstract class DrawerActivity extends BaseActivity {
         if (mDrawerLayout != null) {
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
+    }
+
+    private void showConfirmLogoutDialog() {
+        final QuestionDialog questionDialog = new QuestionDialog(getString(R.string.confirm_log_out_message));
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                logout();
+            }
+        });
+        questionDialog.show(getSupportFragmentManager(), DrawerActivity.class.getName());
+
+    }
+
+    private void logout() {
+        finish();
+        AuthClient.logout();
+        LoginActivity.start(this);
     }
 
     private class MenuAdapter extends BaseQuickAdapter<ItemMenu, BaseViewHolder> {
