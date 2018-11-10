@@ -3,6 +3,7 @@ package com.example.thesis.yummy.controller.profile;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -34,6 +35,11 @@ public class ProfileActivity extends DrawerActivity {
     @BindView(R.id.imgAvatar) ImageView mImgAvatar;
     @BindView(R.id.txtName) TextView mTxtName;
     @BindView(R.id.txtBirthday) TextView mTxtBirthday;
+    @BindView(R.id.meetingAmountTextView) TextView mMeetingAmountTextView;
+    @BindView(R.id.trustPointTextView) TextView mTrustPointTextView;
+    @BindView(R.id.postAmountTextView) TextView mPostAmountTextView;
+    @BindView(R.id.historyAmountTextView) TextView mHistoryAmountTextView;
+    @BindView(R.id.reviewAmountTextView) TextView mReviewAmountTextView;
 
     private boolean mIsMyProfile = false;
     private boolean mIsLeftBack = false;
@@ -58,24 +64,12 @@ public class ProfileActivity extends DrawerActivity {
 
     @OnClick(R.id.historyLayout)
     public void openHistory() {
-        int userId;
-        if(mUserId == -1) {
-            userId = StorageManager.getUser().mId;
-        } else {
-            userId = mUserId;
-        }
-        ProfileHistoryActivity.start(this, userId);
+        ProfileHistoryActivity.start(this, mUserId);
     }
 
     @OnClick(R.id.reviewLayout)
     public void openReview() {
-        int userId;
-        if(mUserId == -1) {
-            userId = StorageManager.getUser().mId;
-        } else {
-            userId = mUserId;
-        }
-        ProfileReviewActivity.start(this, userId);
+        ProfileReviewActivity.start(this, mUserId);
     }
 
     @Override
@@ -133,11 +127,7 @@ public class ProfileActivity extends DrawerActivity {
     }
 
     private void initData() {
-        if(mIsMyProfile) {
-            fillData(StorageManager.getUser());
-        } else {
-            getUserInfo();
-        }
+        getUserInfo();
     }
 
     private void getUserInfo() {
@@ -165,5 +155,11 @@ public class ProfileActivity extends DrawerActivity {
         if(user.mBirthDay != null) {
             mTxtBirthday.setText(DateFormat.format("dd MMMM yyyy", user.mBirthDay));
         }
+
+        mMeetingAmountTextView.setText(String.valueOf(user.mMeetingAmount));
+        mTrustPointTextView.setText(String.valueOf(user.mTrustPoint));
+        mPostAmountTextView.setText(String.valueOf(user.mPostAmount));
+        mHistoryAmountTextView.setText(String.valueOf(user.mMeetingAmount));
+        mReviewAmountTextView.setText(String.valueOf(user.mCountPeopleEvaluate));
     }
 }

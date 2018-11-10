@@ -18,6 +18,8 @@ public class User extends Base{
     @Json(name = "count_people_evaluate") public Integer mCountPeopleEvaluate;
     @Json(name = "main_point") public Double mMainPoint;
     @Json(name = "trust_point") public Long mTrustPoint;
+    @Json(name = "count_post") public Integer mPostAmount;
+    @Json(name = "count_meeting") public Integer mMeetingAmount;
 //    @Json(name = "myCharacter") public String mCharacter;
 //    @Json(name = "myStyle") public String mStyle;
 //    @Json(name = "targetCharacter") public String mTargetCharacter;

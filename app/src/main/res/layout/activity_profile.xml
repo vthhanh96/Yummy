@@ -111,17 +111,17 @@
                         android:layout_marginBottom="@dimen/dimen_8dp">
 
                         <TextView
+                            android:id="@+id/meetingAmountTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:text="200"
                             android:textStyle="bold"
                             android:textSize="20sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Số cuộc hẹn"
+                            android:text="@string/meeting_amount"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -143,17 +143,17 @@
                         android:layout_marginBottom="@dimen/dimen_8dp">
 
                         <TextView
+                            android:id="@+id/trustPointTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:text="200"
                             android:textStyle="bold"
                             android:textSize="20sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Điểm tin cậy"
+                            android:text="@string/trust_point"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -228,9 +228,9 @@
                         android:textColor="@color/black"/>
 
                     <TextView
+                        android:id="@+id/postAmountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25"
                         android:textSize="14sp"
                         android:textColor="#777777"
                         android:layout_marginStart="@dimen/dimen_8dp"
@@ -271,9 +271,9 @@
                         android:textColor="@color/black"/>
 
                     <TextView
+                        android:id="@+id/historyAmountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25"
                         android:textSize="14sp"
                         android:textColor="#777777"
                         android:layout_marginStart="@dimen/dimen_8dp"
@@ -314,9 +314,9 @@
                         android:textColor="@color/black"/>
 
                     <TextView
+                        android:id="@+id/reviewAmountTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="25"
                         android:textSize="14sp"
                         android:textColor="#777777"
                         android:layout_marginStart="@dimen/dimen_8dp"
