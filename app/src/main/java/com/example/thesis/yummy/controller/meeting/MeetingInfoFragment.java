@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.Application;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Meeting;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MeetingInfoFragment extends Fragment {
 
@@ -37,6 +39,7 @@ public class MeetingInfoFragment extends Fragment {
     @BindView(R.id.joinedPeopleRecyclerView) RecyclerView mPeopleRecyclerView;
 
     private int mMeetingID;
+    private Meeting mMeeting;
     private UserAdapter mUserAdapter;
 
     public static MeetingInfoFragment newInstance(int meetingID) {
@@ -70,6 +73,7 @@ public class MeetingInfoFragment extends Fragment {
         ServiceManager.getInstance().getMeetingService().getMeetingDetail(mMeetingID).enqueue(new RestCallback<Meeting>() {
             @Override
             public void onSuccess(String message, Meeting meeting) {
+                mMeeting = meeting;
                 onGetDataSuccess(meeting);
             }
 

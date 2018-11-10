@@ -20,6 +20,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
@@ -106,6 +107,12 @@ public class PostDetailActivity extends BaseActivity {
     public void openProfile() {
         if(mPost == null || mPost.mCreator == null) return;
         ProfileActivity.start(mContext, mPost.mCreator.mId);
+    }
+
+    @OnClick(R.id.placeLayout)
+    public void openMap() {
+        if(mPost.mLocation == null || mPost.mLocation.mCoordinates == null || mPost.mLocation.mCoordinates.size() < 2) return;
+        MapActivity.start(this, mPost.mLocation.mCoordinates.get(1), mPost.mLocation.mCoordinates.get(0), mPost.mPlace);
     }
 
     @Override

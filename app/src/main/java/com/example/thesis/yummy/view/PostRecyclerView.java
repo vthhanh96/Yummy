@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.controller.post.CommentActivity;
 import com.example.thesis.yummy.controller.post.EditPostActivity;
 import com.example.thesis.yummy.controller.post.ListPeopleInterestedPostActivity;
@@ -99,6 +100,10 @@ public class PostRecyclerView extends RecyclerView {
                         break;
                     case R.id.imgAvatar:
                         ProfileActivity.start(getContext(), post.mCreator.mId);
+                        break;
+                    case R.id.placeLayout:
+                        if(post.mLocation == null || post.mLocation.mCoordinates == null || post.mLocation.mCoordinates.size() < 2) return;
+                        MapActivity.start(getContext(), post.mLocation.mCoordinates.get(1), post.mLocation.mCoordinates.get(0), post.mPlace);
                         break;
                 }
             }
@@ -325,6 +330,7 @@ public class PostRecyclerView extends RecyclerView {
             helper.addOnClickListener(R.id.loComment);
             helper.addOnClickListener(R.id.btnMenuPost);
             helper.addOnClickListener(R.id.imgAvatar);
+            helper.addOnClickListener(R.id.placeLayout);
         }
     }
 
