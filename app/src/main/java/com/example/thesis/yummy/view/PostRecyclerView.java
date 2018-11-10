@@ -258,7 +258,11 @@ public class PostRecyclerView extends RecyclerView {
                 helper.setText(R.id.txtName, item.mCreator.mFullName);
             }
             if(item.mTime != null) {
-                helper.setText(R.id.tvTimeCreated, getContext().getString(R.string.time_remain, DateUtils.getTimeFuture(item.mTime)));
+                if(item.mIsActive) {
+                    helper.setText(R.id.tvTimeCreated, getContext().getString(R.string.time_remain, DateUtils.getTimeFuture(item.mTime)));
+                } else {
+                    helper.setText(R.id.tvTimeCreated, DateUtils.getTimeFuture(item.mTime));
+                }
             }
 
             RecyclerView rcvCategories = helper.getView(R.id.rcvCategories);
@@ -290,7 +294,10 @@ public class PostRecyclerView extends RecyclerView {
                     helper.setText(R.id.txtInterested, mContext.getString(R.string.registered_amount, 0));
                 }
             } else {
-                helper.addOnClickListener(R.id.loInterest);
+                if(item.mIsActive) {
+                    helper.addOnClickListener(R.id.loInterest);
+                }
+
                 if(isInterested(item.mInterestedPeople)) {
                     helper.setTextColor(R.id.txtInterested, ContextCompat.getColor(getContext(), R.color.colorPrimary));
                     helper.setGone(R.id.imgInterested, true);
@@ -326,6 +333,8 @@ public class PostRecyclerView extends RecyclerView {
             if(!TextUtils.isEmpty(item.mLink)) {
                 richPreview.getPreview(item.mLink);
             }
+
+            helper.setVisible(R.id.btnMenuPost, item.mIsActive);
 
             helper.addOnClickListener(R.id.loComment);
             helper.addOnClickListener(R.id.btnMenuPost);

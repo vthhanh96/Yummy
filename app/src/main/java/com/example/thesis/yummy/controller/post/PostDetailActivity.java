@@ -10,7 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +85,8 @@ public class PostDetailActivity extends BaseActivity {
     @BindView(R.id.imgInterested) ImageView mImgInterested;
     @BindView(R.id.txtInterested) TextView mTvInterested;
     @BindView(R.id.txtComment) TextView mTvComment;
+    @BindView(R.id.btnMenuPost) ImageButton mMenuPostImageButton;
+    @BindView(R.id.loInterest) LinearLayout mInterestedLayout;
 
     private Post mPost;
     private String mToken;
@@ -254,6 +258,11 @@ public class PostDetailActivity extends BaseActivity {
 
         if(mPost.mTime != null) {
             mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm", mPost.mTime));
+        }
+
+        if(!mPost.mIsActive) {
+            mInterestedLayout.setEnabled(false);
+            mMenuPostImageButton.setVisibility(View.INVISIBLE);
         }
 
         mAdapter.setNewData(mPost.mComments);
