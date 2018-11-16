@@ -17,6 +17,7 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
+import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.restful.request.MeetingRequest;
 import com.example.thesis.yummy.view.TopBarView;
 
@@ -53,6 +54,42 @@ public class MeetingDetailActivity extends BaseActivity implements MeetingDetail
     public void onCreateComment(String content) {
         showLoading();
         MeetingRequest.createComment(mMeetingID, content, new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                mMeetingCommentFragment.getMeetingComments();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(MeetingDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onUpdateComment(String content, Comment comment) {
+        showLoading();
+        ServiceManager.getInstance().getMeetingService().updateComment(comment.mId, content).enqueue(new RestCallback<Comment>() {
+            @Override
+            public void onSuccess(String message, Comment comment) {
+                hideLoading();
+                mMeetingCommentFragment.getMeetingComments();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(MeetingDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onDeleteComment(Comment comment) {
+        showLoading();
+        ServiceManager.getInstance().getMeetingService().deleteComment(comment.mId).enqueue(new RestCallback<Base>() {
             @Override
             public void onSuccess(String message, Base base) {
                 hideLoading();

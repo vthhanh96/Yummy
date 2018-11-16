@@ -19,11 +19,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.Application;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.post.CommentActivity;
+import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Comment;
+import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.DateUtils;
 import com.example.thesis.yummy.view.dialog.InputDialog;
+import com.example.thesis.yummy.view.dialog.SelectCommentOptionsDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +77,29 @@ public class MeetingCommentFragment extends Fragment {
 
     private void initRecyclerView() {
         mCommentAdapter = new CommentAdapter();
+        mCommentAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Comment comment = mCommentAdapter.getItem(position);
+                if(comment == null) return false;
+                showCommentActionPopup(comment);
+                return false;
+            }
+        });
+
+        mCommentAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Comment comment = mCommentAdapter.getItem(position);
+                if(comment == null) return;
+                switch (view.getId()) {
+                    case R.id.imgAvatar:
+                        if(comment.mCreator == null) return;
+                        ProfileActivity.start(getContext(), comment.mCreator.mId);
+                        break;
+                }
+            }
+        });
 
         mCommentRecyclerView.setAdapter(mCommentAdapter);
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -127,6 +155,56 @@ public class MeetingCommentFragment extends Fragment {
     private void createMeetingComment(String content) {
         if(mListener != null) {
             mListener.onCreateComment(content);
+        }
+    }
+
+    private void showCommentActionPopup(final Comment comment) {
+        User user = StorageManager.getUser();
+        if(user != null && user.mId.equals(comment.mCreator.mId)) {
+            SelectCommentOptionsDialogFragment dialogFragment = new SelectCommentOptionsDialogFragment();
+            dialogFragment.setCommentOptionsListener(new SelectCommentOptionsDialogFragment.SelectCommentOptionsListener() {
+                @Override
+                public void editComment() {
+                    showEditCommentDialog(comment);
+                }
+
+                @Override
+                public void deleteComment() {
+                    onDeleteComment(comment);
+                }
+            });
+            dialogFragment.show(getChildFragmentManager(), "");
+        }
+    }
+
+    private void showEditCommentDialog(final Comment comment) {
+        if(getContext() == null) return;
+
+        InputDialog inputDialog = new InputDialog(getContext());
+        inputDialog.setListener(new InputDialog.InputDialogListener() {
+            @Override
+            public void onCancelClick() {
+
+            }
+
+            @Override
+            public void onDoneClick(String content) {
+                editComment(content, comment);
+            }
+        });
+        inputDialog.setContentInput(comment.mContent);
+        inputDialog.show();
+    }
+
+    private void editComment(String content, Comment comment) {
+        if(mListener != null) {
+            mListener.onUpdateComment(content, comment);
+        }
+    }
+
+    private void onDeleteComment(Comment comment) {
+        if(mListener != null) {
+            mListener.onDeleteComment(comment);
         }
     }
 

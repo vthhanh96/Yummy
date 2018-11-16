@@ -22,12 +22,17 @@ import butterknife.ButterKnife;
 
 public class ProfilePostActivity extends BaseActivity {
 
+    private static final String ARG_KEY_USER_ID = "ARG_KEY_USER_ID";
+
     @BindView(R.id.topBar) TopBarView mTopBar;
     @BindView(R.id.rcvPosts) PostRecyclerView mPostRecyclerView;
-    private int mPageNumber = 0;
 
-    public static void start(Context context) {
+    private int mPageNumber = 0;
+    private int mUserId;
+
+    public static void start(Context context, int userId) {
         Intent starter = new Intent(context, ProfilePostActivity.class);
+        starter.putExtra(ARG_KEY_USER_ID, userId);
         context.startActivity(starter);
     }
 
@@ -44,9 +49,14 @@ public class ProfilePostActivity extends BaseActivity {
     }
 
     private void init() {
+        getExtras();
         initTopBar();
         initRecyclerView();
         getMyPost();
+    }
+
+    private void getExtras() {
+        mUserId = getIntent().getIntExtra(ARG_KEY_USER_ID, -1);
     }
 
     private void initTopBar() {
@@ -76,9 +86,7 @@ public class ProfilePostActivity extends BaseActivity {
     }
 
     private void getMyPost() {
-        User user = StorageManager.getUser();
-        if(user == null) return;
-        ServiceManager.getInstance().getUserService().getListPostOfUser(user.mId, mPageNumber).enqueue(new RestCallback<List<Post>>() {
+        ServiceManager.getInstance().getUserService().getListPostOfUser(mUserId, mPageNumber).enqueue(new RestCallback<List<Post>>() {
             @Override
             public void onSuccess(String message, List<Post> posts) {
                 if(posts == null || posts.isEmpty()) {

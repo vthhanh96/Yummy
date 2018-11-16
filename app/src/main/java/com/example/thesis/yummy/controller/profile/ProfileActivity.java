@@ -59,7 +59,7 @@ public class ProfileActivity extends DrawerActivity {
 
     @OnClick(R.id.postLayout)
     public void openMyPost() {
-        ProfilePostActivity.start(this);
+        ProfilePostActivity.start(this, mUserId);
     }
 
     @OnClick(R.id.historyLayout)

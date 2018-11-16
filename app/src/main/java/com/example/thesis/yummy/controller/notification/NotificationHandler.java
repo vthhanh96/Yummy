@@ -32,7 +32,7 @@ public class NotificationHandler {
         JsonAdapter<Notification> jsonAdapter = ServiceGenerator.getMoshiWithoutType(Notification.class).adapter(Notification.class);
         try {
             Notification notification = jsonAdapter.fromJson(data);
-            if (notification == null) return;
+            if (notification == null || notification.notificationData == null) return;
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_notification)
