@@ -22,7 +22,9 @@ import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Rating;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
+import com.example.thesis.yummy.view.dialog.SelectReviewOptionsDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +101,15 @@ public class ProfileReviewActivity extends BaseActivity {
 
     private void initRecyclerView() {
         mReviewAdapter = new ReviewAdapter();
+        mReviewAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Rating rating = mReviewAdapter.getItem(position);
+                if(rating == null) return false;
+                showRatingActionPopup(rating);
+                return false;
+            }
+        });
 
         mReviewsRecyclerView.setAdapter(mReviewAdapter);
         mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -174,6 +185,69 @@ public class ProfileReviewActivity extends BaseActivity {
 
             @Override
             public void onFailure(String message) {
+                Toast.makeText(ProfileReviewActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showRatingActionPopup(final Rating rating) {
+        User user = StorageManager.getUser();
+        if(user != null && user.mId.equals(rating.mCreator.mId)) {
+            SelectReviewOptionsDialogFragment dialogFragment = new SelectReviewOptionsDialogFragment();
+            dialogFragment.setReviewOptionsListener(new SelectReviewOptionsDialogFragment.SelectReviewOptionsListener() {
+                @Override
+                public void editReview() {
+                    showEditRatingDialog(rating);
+                }
+
+                @Override
+                public void deleteReview() {
+                    onDeleteRating(rating);
+                }
+            });
+            dialogFragment.show(getSupportFragmentManager(), "");
+        }
+    }
+
+    private void showEditRatingDialog(final Rating currentRating) {
+        RatingDialog ratingDialog = new RatingDialog(this, getString(R.string.rate));
+        ratingDialog.setRatingDialogListener(new RatingDialog.RatingDialogListener() {
+            @Override
+            public void onRating(Float rating, String comment) {
+                updateRating(currentRating.mId, rating, comment);
+            }
+        });
+        ratingDialog.setRating(currentRating);
+        ratingDialog.show();
+    }
+
+    private void onDeleteRating(Rating rating) {
+        showLoading();
+        ServiceManager.getInstance().getRatingService().deleteRating(rating.mId).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                getUserInfo();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(ProfileReviewActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateRating(int ratingId, float point, String content) {
+        showLoading();
+        ServiceManager.getInstance().getRatingService().updateRatingProfile(ratingId, (int)(point * 2), content).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                getUserInfo();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
                 Toast.makeText(ProfileReviewActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });

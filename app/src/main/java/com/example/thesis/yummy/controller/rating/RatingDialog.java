@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.restful.model.Rating;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +29,8 @@ public class RatingDialog extends Dialog {
     }
 
     private String mTitle;
+    private Float mRating = 0f;
+    private String mComment = "";
 
     @OnClick(R.id.cancelButton)
     public void cancel() {
@@ -56,6 +59,11 @@ public class RatingDialog extends Dialog {
         mListener = listener;
     }
 
+    public void setRating(Rating rating) {
+        mRating = rating.mPoint / 2f;
+        mComment = rating.mContent;
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_rating_layout);
@@ -65,5 +73,7 @@ public class RatingDialog extends Dialog {
 
     private void init() {
         mTitleTextView.setText(mTitle);
+        mRatingBar.setRating(mRating);
+        mCommentTextView.setText(mComment);
     }
 }

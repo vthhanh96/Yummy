@@ -21,6 +21,11 @@
         <item>"Xóa bình luận"</item>
     </string-array>
 
+    <string-array name="dialog_select_review_options">
+        <item>"Chỉnh sửa đánh giá"</item>
+        <item>"Xóa đánh giá"</item>
+    </string-array>
+
     <string-array name="dialog_select_location_options">
         <item>"Vị trí hiện tại"</item>
         <item>"Tìm kiếm vị trí khác"</item>
