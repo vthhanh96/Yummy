@@ -13,11 +13,16 @@ import android.view.ViewGroup;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.post.AddPostActivity;
+import com.example.thesis.yummy.eventbus.EventInterestedPost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.request.PostRequest;
 import com.example.thesis.yummy.view.PostRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +74,16 @@ public class ListPostFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void init() {
         initRecyclerView();
         initRefreshLayout();
+        EventBus.getDefault().register(this);
     }
 
     private void initRefreshLayout() {
@@ -130,5 +142,14 @@ public class ListPostFragment extends Fragment {
                 mPostRecyclerView.loadMoreFail();
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onResetListPost(EventInterestedPost eventInterestedPost) {
+        if(eventInterestedPost.isInterested == mIsInterested) {
+            mPageNumber = 0;
+            mPostRecyclerView.setNewData(new ArrayList<Post>());
+            getPosts();
+        }
     }
 }

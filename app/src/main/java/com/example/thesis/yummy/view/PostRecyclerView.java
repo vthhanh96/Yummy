@@ -24,6 +24,7 @@ import com.example.thesis.yummy.controller.post.EditPostActivity;
 import com.example.thesis.yummy.controller.post.ListPeopleInterestedPostActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
+import com.example.thesis.yummy.eventbus.EventInterestedPost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -36,6 +37,8 @@ import com.example.thesis.yummy.view.dialog.QuestionDialog;
 import com.example.thesis.yummy.view.dialog.SelectPostOptionsDialogFragment;
 import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,8 +120,9 @@ public class PostRecyclerView extends RecyclerView {
         ServiceManager.getInstance().getPostService().interested(post.mId).enqueue(new RestCallback<Post>() {
             @Override
             public void onSuccess(String message, Post post) {
-                mPostAdapter.getData().get(position).mInterestedPeople = post.mInterestedPeople;
-                mPostAdapter.notifyDataSetChanged();
+                mPostAdapter.remove(position);
+
+                EventBus.getDefault().post(new EventInterestedPost(isInterested(post.mInterestedPeople)));
             }
 
             @Override
