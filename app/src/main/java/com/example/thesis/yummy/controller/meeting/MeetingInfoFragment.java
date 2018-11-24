@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -19,11 +20,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.Application;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.base.DrawerActivity;
 import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +70,15 @@ public class MeetingInfoFragment extends Fragment {
 
     private void initRecyclerView() {
         mUserAdapter = new UserAdapter();
+        mUserAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                User item = mUserAdapter.getItem(position);
+                if(item == null) return false;
+                showConfirmDialog(item);
+                return false;
+            }
+        });
 
         mPeopleRecyclerView.setAdapter(mUserAdapter);
         mPeopleRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -93,6 +108,49 @@ public class MeetingInfoFragment extends Fragment {
         }
 
         mUserAdapter.setNewData(meeting.mJoinedPeople);
+    }
+
+    private void showConfirmDialog(final User user) {
+        User currentUser = StorageManager.getUser();
+        if(currentUser == null) return;
+        if(!currentUser.mId.equals(mMeeting.mCreator.mId)) {
+            Toast.makeText(getContext(), R.string.error_kick_user_meeting, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(currentUser.mId.equals(user.mId)) {
+            return;
+        }
+
+        final QuestionDialog questionDialog = new QuestionDialog(getString(R.string.kick_user_confirm_question, user.mFullName));
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                removeUser(user);
+            }
+        });
+        questionDialog.show(getChildFragmentManager(), MeetingInfoFragment.class.getName());
+    }
+
+    private void removeUser(User user) {
+
+    }
+
+    private void showLoading() {
+        if(getActivity() != null) {
+            ((BaseActivity)getActivity()).showLoading();
+        }
+    }
+
+    private void hideLoading() {
+        if(getActivity() != null) {
+            ((BaseActivity)getActivity()).hideLoading();
+        }
     }
 
     @Override

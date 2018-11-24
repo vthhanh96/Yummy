@@ -20,6 +20,8 @@ import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.view.MultipleImageCircleView;
 import com.example.thesis.yummy.view.TopBarView;
+import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,16 @@ public class MeetingActivity extends DrawerActivity {
                 MeetingDetailActivity.start(MeetingActivity.this, item.mId);
             }
         });
+        mAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                Meeting item = mAdapter.getItem(position);
+                if(item == null) return false;
+
+                showConfirmDialog(item);
+                return false;
+            }
+        });
 
         mMeetingRecyclerView.setAdapter(mAdapter);
         mMeetingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -108,6 +120,26 @@ public class MeetingActivity extends DrawerActivity {
                 Toast.makeText(MeetingActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showConfirmDialog(final Meeting meeting) {
+        final QuestionDialog questionDialog = new QuestionDialog(getString(R.string.leave_meeting_confirm_question));
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                leaveMeeting(meeting);
+            }
+        });
+        questionDialog.show(getSupportFragmentManager(), MeetingActivity.class.getName());
+    }
+
+    private void leaveMeeting(Meeting meeting) {
+
     }
 
     private class MeetingAdapter extends BaseQuickAdapter<Meeting, BaseViewHolder> {

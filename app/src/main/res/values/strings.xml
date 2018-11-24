@@ -80,4 +80,7 @@
     <string name="meeting_amount">Số cuộc hẹn</string>
     <string name="trust_point">Điểm tin cậy</string>
     <string name="edit_rating">Chỉnh sửa đánh giá</string>
+    <string name="kick_user_confirm_question">Bạn có chắc chắn muốn kick %s ra khỏi nhóm?</string>
+    <string name="error_kick_user_meeting">Bạn không có quyền kick người này.</string>
+    <string name="leave_meeting_confirm_question">Bạn có chắc chắn muốn rời khỏi cuộc hẹn này?</string>
 </resources>

@@ -28,13 +28,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         mProgressDialog = new CustomProgressDialog(this, getString(R.string.loading));
     }
 
-    protected void showLoading() {
+    public void showLoading() {
         if(mProgressDialog != null) {
             mProgressDialog.show();
         }
     }
 
-    protected void hideLoading() {
+    public void hideLoading() {
         if(mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
