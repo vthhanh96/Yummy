@@ -21,6 +21,7 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Meeting;
+import com.example.thesis.yummy.restful.model.MeetingPoint;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.view.TopBarView;
 
@@ -127,7 +128,15 @@ public class ProfileHistoryActivity extends BaseActivity {
             helper.setText(R.id.placeTextView, item.mPlace);
 
             RatingBar ratingBar = helper.getView(R.id.ratingBar);
-//            ratingBar.setRating(item.mRating);
+            ratingBar.setRating(0);
+            if(item.mMeetingPoints != null) {
+                for (MeetingPoint meetingPoint : item.mMeetingPoints) {
+                    if(meetingPoint.mUser == null || meetingPoint.mPointSum == null || meetingPoint.mCountPeople == null || meetingPoint.mCountPeople == 0) continue;
+                    if(meetingPoint.mUser.mId == mUserId) {
+                        ratingBar.setRating((meetingPoint.mPointSum / meetingPoint.mCountPeople) / 2f);
+                    }
+                }
+            }
 
             RecyclerView recyclerView = helper.getView(R.id.rcvPeople);
             PeopleAdapter adapter = new PeopleAdapter();
