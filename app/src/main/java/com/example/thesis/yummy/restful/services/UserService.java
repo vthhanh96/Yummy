@@ -2,6 +2,7 @@ package com.example.thesis.yummy.restful.services;
 
 
 import com.example.thesis.yummy.restful.RestResponse;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Location;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
@@ -54,4 +55,13 @@ public interface UserService {
     @FormUrlEncoded
     @POST("listpostuser")
     Call<RestResponse<List<Post>>> getListPostOfUser(@Field("user_id") int userId, @Field("page") int page);
+
+    @FormUrlEncoded
+    @POST("forgotPassword")
+    Call<RestResponse<Base>> sendCodeForgotPassword(@Field("email") String email);
+
+    @FormUrlEncoded
+    @POST("changePass")
+    Call<RestResponse<Base>> changePassword(@Field("email") String email,
+                                            @Field("password") String password);
 }

@@ -83,4 +83,10 @@
     <string name="kick_user_confirm_question">Bạn có chắc chắn muốn kick %s ra khỏi nhóm?</string>
     <string name="error_kick_user_meeting">Bạn không có quyền kick người này.</string>
     <string name="leave_meeting_confirm_question">Bạn có chắc chắn muốn rời khỏi cuộc hẹn này?</string>
+    <string name="forgot_password_message">Chúng tôi cần bạn nhập email để gửi mã xác thực tạo mật khẩu mới</string>
+    <string name="send_code">Gửi mã xác thực</string>
+    <string name="enter_auth_code">Nhập mã xác thực</string>
+    <string name="reset_password">Đặt lại mật khẩu</string>
+    <string name="auth_code_not_match">Mã xác thực không đúng</string>
+    <string name="change_password_success">Đổi mật khẩu thành công</string>
 </resources>

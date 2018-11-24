@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.forgotpassword.ForgotPasswordActivity;
 import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.controller.register.RegisterActivity;
 import com.example.thesis.yummy.restful.RestCallback;
@@ -59,7 +60,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void forgotPassword() {
-
+        ForgotPasswordActivity.start(this);
     }
 
     private void login() {
