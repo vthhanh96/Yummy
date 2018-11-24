@@ -43,7 +43,6 @@ public class NotificationHandler {
                     .setContentTitle(context.getString(R.string.app_name))
                     .setContentText(notification.mTitle)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400})
                     .setSound(defaultSoundUri);
 
             Intent intent = new Intent(context, LoadingActivity.class);

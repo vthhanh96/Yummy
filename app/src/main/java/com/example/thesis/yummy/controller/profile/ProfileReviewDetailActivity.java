@@ -115,7 +115,7 @@ public class ProfileReviewDetailActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder helper, Rating item) {
             MaterialRatingBar materialRatingBar = helper.getView(R.id.ratingBar);
-            materialRatingBar.setRating(item.mPoint);
+            materialRatingBar.setRating(item.mPoint / 2f);
             helper.setText(R.id.commentTextView, item.mContent);
 
             if(item.mCreator != null) {

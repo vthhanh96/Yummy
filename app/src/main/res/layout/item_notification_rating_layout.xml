@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:minHeight="30dp"
                 android:minWidth="30dp"
-                android:clickable="false"/>
+                android:isIndicator="true"/>
         </LinearLayout>
 
         <TextView

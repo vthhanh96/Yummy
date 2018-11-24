@@ -16,4 +16,9 @@ public class Meeting extends Base {
     @Json(name = "time") public Date mTime;
     @Json(name = "place") public String mPlace;
     @Json(name = "created_date") public Date mCreatedDate;
+    @Json(name = "list_point_average") public List<MeetingPoint> mMeetingPoints;
+
+    public Meeting(int id) {
+        mId = id;
+    }
 }

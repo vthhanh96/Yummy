@@ -71,6 +71,7 @@
         <activity android:name=".controller.rating.RatingActivity" />
         <activity android:name=".controller.profile.ProfileReviewDetailActivity" />
         <activity android:name=".controller.home.MapActivity" />
+        <activity android:name=".controller.rating.RatingDetailActivity" />
 
 
     </application>

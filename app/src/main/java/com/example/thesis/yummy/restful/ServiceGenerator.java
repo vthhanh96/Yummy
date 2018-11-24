@@ -4,11 +4,15 @@ import com.example.thesis.yummy.AppConstants;
 import com.example.thesis.yummy.restful.adapter.CategoryAdapter;
 import com.example.thesis.yummy.restful.adapter.CommentAdapter;
 import com.example.thesis.yummy.restful.adapter.DateJsonAdapter;
+import com.example.thesis.yummy.restful.adapter.MeetingAdapter;
+import com.example.thesis.yummy.restful.adapter.MeetingPointAdapter;
 import com.example.thesis.yummy.restful.adapter.NotificationDataAdapter;
 import com.example.thesis.yummy.restful.adapter.UserAdapter;
 import com.example.thesis.yummy.restful.auth.AuthenticationInterceptor;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Comment;
+import com.example.thesis.yummy.restful.model.Meeting;
+import com.example.thesis.yummy.restful.model.MeetingPoint;
 import com.example.thesis.yummy.restful.model.NotificationData;
 import com.example.thesis.yummy.restful.model.User;
 import com.squareup.moshi.JsonAdapter;
@@ -59,6 +63,8 @@ public class ServiceGenerator {
         hashMap.put(User.class, new UserAdapter());
         hashMap.put(Category.class, new CategoryAdapter());
         hashMap.put(NotificationData.class, new NotificationDataAdapter());
+        hashMap.put(Meeting.class, new MeetingAdapter());
+        hashMap.put(MeetingPoint.class, new MeetingPointAdapter());
 
         for (Map.Entry<Type, JsonAdapter> entry : hashMap.entrySet()) {
             if(type != entry.getKey()) {

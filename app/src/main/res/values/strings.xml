@@ -79,4 +79,5 @@
     <string name="confirm_log_out_message">Bạn có chắc chắn muốn đăng xuất?</string>
     <string name="meeting_amount">Số cuộc hẹn</string>
     <string name="trust_point">Điểm tin cậy</string>
+    <string name="edit_rating">Chỉnh sửa đánh giá</string>
 </resources>

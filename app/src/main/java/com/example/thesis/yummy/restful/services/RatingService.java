@@ -38,4 +38,11 @@ public interface RatingService {
 
     @DELETE("rate/{ratingId}")
     Call<RestResponse<Base>> deleteRating(@Path("ratingId") int ratingId);
+
+    @FormUrlEncoded
+    @POST("rate/rating_meeting")
+    Call<RestResponse<Base>> createRatingMeeting(@Field("meeting") int meetingID,
+                                                 @Field("content") String content,
+                                                 @Field("point") int point,
+                                                 @Field("people_evaluate") int ratingUserID);
 }

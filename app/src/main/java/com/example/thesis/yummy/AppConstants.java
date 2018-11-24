@@ -21,5 +21,6 @@ public class AppConstants {
     public static final String NOTIFICATION_TYPE_NORMAL = "nomal";
     public static final String NOTIFICATION_TYPE_INVITE = "invite";
     public static final String NOTIFICATION_TYPE_RATING = "rating";
+    public static final String NOTIFICATION_RECONNECT_SOCKET = "connect_socket";
 
 }
