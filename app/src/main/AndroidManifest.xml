@@ -74,6 +74,9 @@
         <activity android:name=".controller.rating.RatingDetailActivity" />
         <activity android:name=".controller.forgotpassword.ForgotPasswordActivity" />
         <activity android:name=".controller.forgotpassword.ResetPasswordActivity" />
+        <activity android:name=".controller.search.SendRequestActivity" />
+        <activity android:name=".controller.notification.RejectRequestNotificationActivity" />
+        <activity android:name=".controller.notification.AcceptRequestNotificationActivity" />
 
 
     </application>

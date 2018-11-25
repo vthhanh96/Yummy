@@ -163,7 +163,7 @@ public class SearchActivity extends DrawerActivity {
                 User item = mUserAdapter.getItem(position);
                 if(item == null) return;
 
-
+                SendRequestActivity.start(SearchActivity.this, item);
             }
         });
         mUserAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {

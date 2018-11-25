@@ -96,4 +96,5 @@
     <string name="leave_meeting_reason">Lý do rời cuộc hẹn</string>
     <string name="trust_point_amount">Độ tin cậy: %d</string>
     <string name="review_point">Điểm đánh giá</string>
+    <string name="send_request_to">Gửi yêu cầu đến</string>
 </resources>
