@@ -89,4 +89,8 @@
     <string name="reset_password">Đặt lại mật khẩu</string>
     <string name="auth_code_not_match">Mã xác thực không đúng</string>
     <string name="change_password_success">Đổi mật khẩu thành công</string>
+    <string name="age">Tuổi</string>
+    <string name="search_condition">Giới tính: %s, Tuổi: %d - %d</string>
+    <string name="all">Tất cả</string>
+    <string name="select_age">Chọn độ tuổi</string>
 </resources>

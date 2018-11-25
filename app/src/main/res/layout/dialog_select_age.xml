@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_age"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/dimen_16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <biz.kasual.materialnumberpicker.MaterialNumberPicker
+            android:id="@+id/ageFromPicker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:npMinValue="1"
+            app:npMaxValue="100"
+            app:npDefaultValue="18"
+            app:npBackgroundColor="@color/white"
+            app:npSeparatorColor="#f5f5f5"
+            app:npTextColor="@color/black"
+            app:npTextSize="25sp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#dddddd"/>
+
+        <biz.kasual.materialnumberpicker.MaterialNumberPicker
+            android:id="@+id/ageToPicker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:npMinValue="1"
+            app:npMaxValue="100"
+            app:npDefaultValue="25"
+            app:npBackgroundColor="@color/white"
+            app:npSeparatorColor="#f5f5f5"
+            app:npTextColor="@color/black"
+            app:npTextSize="25sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textColor="@color/white"
+            android:background="?attr/selectableItemBackground"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/okButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ok"
+            android:textColor="@color/white"
+            android:background="?attr/selectableItemBackground"/>
+    </LinearLayout>
+</LinearLayout>

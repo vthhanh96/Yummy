@@ -1,6 +1,7 @@
 package com.example.thesis.yummy.restful.services;
 
 
+import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestResponse;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Location;
@@ -64,4 +65,11 @@ public interface UserService {
     @POST("changePass")
     Call<RestResponse<Base>> changePassword(@Field("email") String email,
                                             @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("search/{page}")
+    Call<RestResponse<List<User>>> searchUser(@Path("page") int pageNumber,
+                                              @Field("gender") int gender,
+                                              @Field("tuoiduoi") int ageFrom,
+                                              @Field("tuoitren") int ageTo);
 }
