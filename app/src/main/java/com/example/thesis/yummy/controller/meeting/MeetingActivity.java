@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -41,6 +42,7 @@ public class MeetingActivity extends DrawerActivity {
     }
 
     @BindView(R.id.topBar) TopBarView mTopBarView;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.meetingRecyclerView) RecyclerView mMeetingRecyclerView;
 
     private MeetingAdapter mAdapter;
@@ -64,6 +66,7 @@ public class MeetingActivity extends DrawerActivity {
 
     private void init() {
         initTopBar();
+        initSwipeRefreshLayout();
         initRecyclerView();
         getMeetings();
     }
@@ -80,6 +83,17 @@ public class MeetingActivity extends DrawerActivity {
             @Override
             public void onRightClick() {
 
+            }
+        });
+    }
+
+    private void initSwipeRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setNewData(new ArrayList<Meeting>());
+                getMeetings();
             }
         });
     }

@@ -20,6 +20,8 @@ import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -40,6 +42,7 @@ public class ProfileActivity extends DrawerActivity {
     @BindView(R.id.postAmountTextView) TextView mPostAmountTextView;
     @BindView(R.id.historyAmountTextView) TextView mHistoryAmountTextView;
     @BindView(R.id.reviewAmountTextView) TextView mReviewAmountTextView;
+    @BindView(R.id.reviewPointTextView) TextView mReviewPointTextView;
 
     private boolean mIsMyProfile = false;
     private boolean mIsLeftBack = false;
@@ -161,5 +164,8 @@ public class ProfileActivity extends DrawerActivity {
         mPostAmountTextView.setText(String.valueOf(user.mPostAmount));
         mHistoryAmountTextView.setText(String.valueOf(user.mMeetingAmount));
         mReviewAmountTextView.setText(String.valueOf(user.mCountPeopleEvaluate));
+        if(user.mCountPeopleEvaluate != 0) {
+            mReviewPointTextView.setText(String.format(Locale.getDefault(), "%.2f", (user.mMainPoint / user.mCountPeopleEvaluate) / 2f));
+        }
     }
 }

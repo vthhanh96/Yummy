@@ -66,10 +66,7 @@ public interface UserService {
     Call<RestResponse<Base>> changePassword(@Field("email") String email,
                                             @Field("password") String password);
 
-    @FormUrlEncoded
     @POST("search/{page}")
     Call<RestResponse<List<User>>> searchUser(@Path("page") int pageNumber,
-                                              @Field("gender") int gender,
-                                              @Field("tuoiduoi") int ageFrom,
-                                              @Field("tuoitren") int ageTo);
+                                              @Body Map<String, Object> params);
 }

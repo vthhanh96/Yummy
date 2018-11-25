@@ -79,49 +79,18 @@
                         android:layout_marginBottom="@dimen/dimen_8dp">
 
                         <TextView
+                            android:id="@+id/reviewPointTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:text="200"
+                            android:text="0"
                             android:textStyle="bold"
                             android:textSize="20sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Độ phù hợp"
-                            android:textColor="@color/white"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#80ffffff"
-                        android:layout_marginTop="@dimen/dimen_8dp"
-                        android:layout_marginBottom="@dimen/dimen_8dp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_marginTop="@dimen/dimen_8dp"
-                        android:layout_marginBottom="@dimen/dimen_8dp">
-
-                        <TextView
-                            android:id="@+id/meetingAmountTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:textSize="20sp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/meeting_amount"
+                            android:text="@string/review_point"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -148,12 +117,46 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textStyle="bold"
+                            android:text="0"
                             android:textSize="20sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/trust_point"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#80ffffff"
+                        android:layout_marginTop="@dimen/dimen_8dp"
+                        android:layout_marginBottom="@dimen/dimen_8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/dimen_8dp"
+                        android:layout_marginBottom="@dimen/dimen_8dp">
+
+                        <TextView
+                            android:id="@+id/meetingAmountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:text="0"
+                            android:textSize="20sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/meeting_amount"
                             android:textColor="@color/white"
                             android:textSize="16sp" />
                     </LinearLayout>

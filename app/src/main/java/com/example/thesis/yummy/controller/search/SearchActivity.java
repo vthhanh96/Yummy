@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,9 +25,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.AppConstants;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.restful.request.UserRequest;
 import com.example.thesis.yummy.view.SelectAgeDialog;
 import com.example.thesis.yummy.view.TopBarView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -74,7 +77,7 @@ public class SearchActivity extends DrawerActivity {
     private int mGender = 1;
     private int mAgeFrom = 18;
     private int mAgeTo = 25;
-    private int mPageNumber = 1;
+    private int mPageNumber = 0;
 
     @OnClick(R.id.searchImageButton)
     public void onSearchButtonClicked() {
@@ -145,6 +148,8 @@ public class SearchActivity extends DrawerActivity {
 
             @Override
             public void onRightClick() {
+                mPageNumber = 0;
+                mUserAdapter.setNewData(new ArrayList<User>());
                 searchUser();
             }
         });
@@ -158,13 +163,30 @@ public class SearchActivity extends DrawerActivity {
                 User item = mUserAdapter.getItem(position);
                 if(item == null) return;
 
-                item.mIsSelected = !item.mIsSelected;
-                mUserAdapter.notifyDataSetChanged();
+
+            }
+        });
+        mUserAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                User item = mUserAdapter.getItem(position);
+                if(item == null) return;
+
+                if(view.getId() == R.id.avatarImageView) {
+                    ProfileActivity.start(SearchActivity.this, item.mId);
+                }
             }
         });
 
         mUserRecyclerView.setAdapter(mUserAdapter);
         mUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mUserAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                searchUser();
+            }
+        }, mUserRecyclerView);
     }
 
     private void updateData() {
@@ -210,17 +232,28 @@ public class SearchActivity extends DrawerActivity {
     }
 
     private void searchUser() {
-        showSearchAnimation();
-        ServiceManager.getInstance().getUserService().searchUser(mPageNumber, mGender, mAgeFrom, mAgeTo).enqueue(new RestCallback<List<User>>() {
+        if(mPageNumber == 0) {
+            showSearchAnimation();
+        }
+        UserRequest.searchUsers(mPageNumber, mGender < 0 ? null : mGender, mAgeFrom, mAgeTo, 0f, 0f, new RestCallback<List<User>>() {
             @Override
             public void onSuccess(String message, List<User> users) {
                 hideSearchAnimation();
+                if(users == null || users.isEmpty()) {
+                    mUserAdapter.loadMoreEnd();
+                    return;
+                }
+
+                mUserAdapter.loadMoreComplete();
                 mUserAdapter.addData(users);
+                mUserRecyclerView.setVisibility(View.VISIBLE);
+                mPageNumber++;
             }
 
             @Override
             public void onFailure(String message) {
                 hideSearchAnimation();
+                mUserAdapter.loadMoreFail();
                 Toast.makeText(SearchActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -258,20 +291,27 @@ public class SearchActivity extends DrawerActivity {
     private class UserAdapter extends BaseQuickAdapter<User, BaseViewHolder> {
 
         public UserAdapter() {
-            super(R.layout.item_people_interested_layout, new ArrayList<User>());
+            super(R.layout.item_search_result_layout, new ArrayList<User>());
         }
 
         @Override
         protected void convert(BaseViewHolder helper, User item) {
             if(item == null) return;
+            ImageView imageView = helper.getView(R.id.avatarImageView);
+            Glide.with(mContext.getApplicationContext()).load(item.mAvatar).apply(RequestOptions.circleCropTransform()).into(imageView);
 
             helper.setText(R.id.nameTextView, item.mFullName);
-            if(!TextUtils.isEmpty(item.mAvatar)) {
-                ImageView imageView = helper.getView(R.id.avatarImageView);
-                Glide.with(mContext.getApplicationContext()).load(item.mAvatar).apply(RequestOptions.circleCropTransform()).into(imageView);
+            helper.setVisible(R.id.onlineImageView, item.mIsOnline);
+            helper.setText(R.id.trustPointTextView, getString(R.string.trust_point_amount, item.mTrustPoint));
+
+            RatingBar ratingBar = helper.getView(R.id.ratingBar);
+            if(item.mCountPeopleEvaluate != 0) {
+                ratingBar.setRating((float)(item.mMainPoint / item.mCountPeopleEvaluate) / 2 );
+            } else {
+                ratingBar.setRating(0);
             }
 
-            helper.setChecked(R.id.checkbox, item.mIsSelected);
+            helper.addOnClickListener(R.id.avatarImageView);
         }
     }
 }

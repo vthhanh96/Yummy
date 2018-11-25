@@ -91,7 +91,6 @@ public class SearchResultActivity extends BaseActivity {
             Glide.with(mContext.getApplicationContext()).load(item.mAvatar).into(imageView);
 
             helper.setText(R.id.nameTextView, item.mFullName);
-            helper.setVisible(R.id.checkedImageView, item.mIsSelected);
         }
     }
 }

@@ -123,7 +123,9 @@ public class ProfileReviewActivity extends BaseActivity {
                 if(user == null) return;
                 mUser = user;
                 getListRating();
-                mRatingBar.setRating((float)(user.mMainPoint / user.mCountPeopleEvaluate) / 2 );
+                if(user.mCountPeopleEvaluate != 0) {
+                    mRatingBar.setRating((float) (user.mMainPoint / user.mCountPeopleEvaluate) / 2);
+                }
             }
 
             @Override

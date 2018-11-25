@@ -10,11 +10,26 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/dimen_16dp">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/avatarImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="@dimen/dimen_16dp"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_16dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/avatarImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_default_avatar"/>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/onlineImageView"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="end|bottom"
+                android:background="@drawable/bg_circle_solig_green"
+                android:visibility="invisible"/>
+        </FrameLayout>
+
 
         <LinearLayout
             android:layout_width="0dp"
@@ -32,23 +47,22 @@
                 android:textSize="16sp"/>
 
             <TextView
+                android:id="@+id/trustPointTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                tools:text="Do phu hop: 126"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginTop="@dimen/dimen_8dp"/>
         </LinearLayout>
 
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/checkedImageView"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_checked"
-            android:visibility="gone"/>
+        <me.zhanghai.android.materialratingbar.MaterialRatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="30dp"
+            android:minWidth="30dp"
+            android:isIndicator="true"/>
     </LinearLayout>
 
     <View

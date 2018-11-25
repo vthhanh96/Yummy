@@ -46,8 +46,7 @@
         <net.cachapa.expandablelayout.ExpandableLayout
             android:id="@+id/filterExpandableLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:el_expanded="true">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -159,8 +158,9 @@
                 app:rb_color="@color/colorPrimary"
                 app:rb_radius="32dp"
                 app:rb_rippleAmount="4"
-                app:rb_duration="3000"
-                app:rb_scale="6">
+                app:rb_duration="1000"
+                app:rb_scale="6"
+                android:visibility="gone">
 
                 <android.support.v7.widget.AppCompatImageButton
                     android:id="@+id/searchImageButton"
@@ -170,8 +170,7 @@
                     android:src="@drawable/ic_search_menu"
                     android:background="@drawable/bg_circle_solig_green"
                     android:scaleType="fitCenter"
-                    android:padding="@dimen/dimen_8dp"
-                    android:visibility="gone"/>
+                    android:padding="@dimen/dimen_8dp"/>
             </com.skyfishjy.library.RippleBackground>
 
             <android.support.v7.widget.RecyclerView

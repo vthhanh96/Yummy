@@ -184,6 +184,7 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
             helper.setVisible(R.id.checkbox, mIsCreator);
 
             helper.setChecked(R.id.checkbox, item.mIsSelected);
+            helper.setText(R.id.trustPointTextView, getString(R.string.trust_point_amount, item.mTrustPoint));
         }
     }
 }

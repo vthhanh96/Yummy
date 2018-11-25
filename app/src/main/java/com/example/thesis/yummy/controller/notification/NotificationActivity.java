@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -49,6 +50,7 @@ public class NotificationActivity extends DrawerActivity {
 
     @BindView(R.id.topBar) TopBarView mTopBarView;
     @BindView(R.id.notificationRecyclerView) RecyclerView mNotificationRecyclerView;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private NotificationAdapter mAdapter;
 
@@ -71,6 +73,7 @@ public class NotificationActivity extends DrawerActivity {
 
     private void init() {
         initTopBar();
+        initSwipeRefreshLayout();
         initRecyclerView();
         getNotifications();
     }
@@ -87,6 +90,17 @@ public class NotificationActivity extends DrawerActivity {
             @Override
             public void onRightClick() {
 
+            }
+        });
+    }
+
+    private void initSwipeRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                mAdapter.setNewData(new ArrayList<Notification>());
+                getNotifications();
             }
         });
     }

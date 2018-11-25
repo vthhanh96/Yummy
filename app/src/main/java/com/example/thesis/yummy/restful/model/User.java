@@ -20,6 +20,7 @@ public class User extends Base{
     @Json(name = "trust_point") public Long mTrustPoint;
     @Json(name = "count_post") public Integer mPostAmount;
     @Json(name = "count_meeting") public Integer mMeetingAmount;
+    @Json(name = "isOnline") public boolean mIsOnline;
 //    @Json(name = "myCharacter") public String mCharacter;
 //    @Json(name = "myStyle") public String mStyle;
 //    @Json(name = "targetCharacter") public String mTargetCharacter;
