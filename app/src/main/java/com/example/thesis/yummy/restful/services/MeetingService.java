@@ -52,4 +52,15 @@ public interface MeetingService {
 
     @DELETE("meeting/comment/{commentId}")
     Call<RestResponse<Base>> deleteComment(@Path("commentId") int commentId);
+
+    @FormUrlEncoded
+    @POST("meeting/leave_meeting/{meetingId}")
+    Call<RestResponse<Base>> leaveMeeting(@Path("meetingId") int meetingId,
+                                          @Field("reason") String reason);
+
+    @FormUrlEncoded
+    @POST("meeting/kick_user/{meetingId}")
+    Call<RestResponse<Base>> kickUser(@Path("meetingId") int meetingId,
+                                      @Field("user_id") int userId,
+                                      @Field("reason") String reason);
 }

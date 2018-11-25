@@ -16,11 +16,13 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.view.MultipleImageCircleView;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.ReasonDialog;
 import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 
 import java.util.ArrayList;
@@ -112,11 +114,13 @@ public class MeetingActivity extends DrawerActivity {
         ServiceManager.getInstance().getMeetingService().getMeetings(false).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
+                hideLoading();
                 mAdapter.setNewData(meetings);
             }
 
             @Override
             public void onFailure(String message) {
+                hideLoading();
                 Toast.makeText(MeetingActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -132,14 +136,45 @@ public class MeetingActivity extends DrawerActivity {
 
             @Override
             public void dialogPerformAction() {
-                leaveMeeting(meeting);
+                showReasonDialog(meeting);
             }
         });
         questionDialog.show(getSupportFragmentManager(), MeetingActivity.class.getName());
     }
 
-    private void leaveMeeting(Meeting meeting) {
+    private void showReasonDialog(final Meeting meeting) {
+        ReasonDialog dialog = new ReasonDialog(getString(R.string.leave_meeting_reason));
+        dialog.setReasonDialogListener(new ReasonDialog.ReasonDialogListener() {
+            @Override
+            public void onCancelButtonClicked() {
 
+            }
+
+            @Override
+            public void onAcceptButtonClicked(String reason) {
+                leaveMeeting(meeting, reason);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), MeetingActivity.class.getName());
+    }
+
+    private void leaveMeeting(final Meeting meeting, String reason) {
+        showLoading();
+        ServiceManager.getInstance().getMeetingService().leaveMeeting(meeting.mId, reason).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                Toast.makeText(MeetingActivity.this, message, Toast.LENGTH_SHORT).show();
+                mAdapter.getData().remove(meeting);
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(MeetingActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private class MeetingAdapter extends BaseQuickAdapter<Meeting, BaseViewHolder> {

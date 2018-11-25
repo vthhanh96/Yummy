@@ -25,10 +25,12 @@ import com.example.thesis.yummy.controller.base.DrawerActivity;
 import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.ReasonDialog;
 import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 
 import java.util.ArrayList;
@@ -131,14 +133,45 @@ public class MeetingInfoFragment extends Fragment {
 
             @Override
             public void dialogPerformAction() {
-                removeUser(user);
+                showReasonDialog(user);
             }
         });
         questionDialog.show(getChildFragmentManager(), MeetingInfoFragment.class.getName());
     }
 
-    private void removeUser(User user) {
+    private void showReasonDialog(final User user) {
+        ReasonDialog dialog = new ReasonDialog(getString(R.string.leave_meeting_reason));
+        dialog.setReasonDialogListener(new ReasonDialog.ReasonDialogListener() {
+            @Override
+            public void onCancelButtonClicked() {
 
+            }
+
+            @Override
+            public void onAcceptButtonClicked(String reason) {
+                removeUser(user, reason);
+            }
+        });
+        dialog.show(getChildFragmentManager(), MeetingActivity.class.getName());
+    }
+
+    private void removeUser(final User user, String reason) {
+        showLoading();
+        ServiceManager.getInstance().getMeetingService().kickUser(mMeetingID, user.mId, reason).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                mUserAdapter.getData().remove(user);
+                mUserAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showLoading() {
