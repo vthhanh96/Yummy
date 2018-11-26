@@ -27,8 +27,9 @@ public interface MeetingService {
     Call<RestResponse<Meeting>> createMeeting(@Field("postId") int postId, @Field("joined_people")List<Integer> mJoinedPeople);
 
     @FormUrlEncoded
-    @POST("meeting/list_status")
-    Call<RestResponse<List<Meeting>>> getMeetings(@Field("status") boolean status);
+    @POST("meeting/{userId}/list_status")
+    Call<RestResponse<List<Meeting>>> getMeetings(@Field("status") boolean status,
+                                                  @Path("userId") int userID);
 
     @GET("meeting/{meetingId}/list_comment")
     Call<RestResponse<List<Comment>>> getMeetingComments(@Path("meetingId") int meetingId);

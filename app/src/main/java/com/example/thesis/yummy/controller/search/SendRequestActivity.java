@@ -6,17 +6,23 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.restful.RestCallback;
+import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.restful.request.UserRequest;
 import com.example.thesis.yummy.view.TopBarView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -64,6 +70,23 @@ public class SendRequestActivity extends BaseActivity {
     @OnClick(R.id.timeButton)
     public void timeButtonClicked() {
         showDateTimePickerDialog();
+    }
+
+    @OnClick(R.id.sendRequestButton)
+    public void sendRequestButtonClicked() {
+        if(TextUtils.isEmpty(mPlaceEditText.getText())){
+            Toast.makeText(this, R.string.choose_place, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(mTimeEditText.getText())) {
+            Toast.makeText(this, R.string.choose_time, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(mContentEditText.getText())) {
+            Toast.makeText(this, R.string.enter_content, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        sendRequest();
     }
 
     @Override
@@ -153,6 +176,25 @@ public class SendRequestActivity extends BaseActivity {
     private void setTime(Date date) {
         mTime = date;
         mTimeEditText.setText(DateFormat.format("dd/MM/yyyy hh:mm", mTime));
+    }
+
+    private void sendRequest() {
+        showLoading();
+        UserRequest.sendRequest(mUser.mId, mContentEditText.getText().toString(), mLocation.getLatitude(), mLocation.getLongitude(),
+                mPlaceEditText.getText().toString(), mTime, new RestCallback<Base>() {
+                    @Override
+                    public void onSuccess(String message, Base base) {
+                        hideLoading();
+                        Toast.makeText(SendRequestActivity.this, R.string.send_request_success, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        hideLoading();
+                        Toast.makeText(SendRequestActivity.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

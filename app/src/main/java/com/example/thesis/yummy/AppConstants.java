@@ -16,11 +16,13 @@ public class AppConstants {
     //TYPE NOTIFICATION
     public static final int NOTIFICATION_POST = 1;
     public static final int NOTIFICATION_MEETING = 2;
+    public static final int NOTIFICATION_REQUEST = 3;
 
     //TYPE SHOW NOTIFICATION
     public static final String NOTIFICATION_TYPE_NORMAL = "nomal";
     public static final String NOTIFICATION_TYPE_INVITE = "invite";
-    public static final String NOTIFICATION_TYPE_RESPONSE = "response";
+    public static final String NOTIFICATION_TYPE_ACCEPT = "accept";
+    public static final String NOTIFICATION_TYPE_REJECT = "reject";
     public static final String NOTIFICATION_TYPE_RATING = "rating";
     public static final String NOTIFICATION_RECONNECT_SOCKET = "connect_socket";
 

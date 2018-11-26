@@ -3,8 +3,11 @@ package com.example.thesis.yummy;
 import android.content.Context;
 
 import com.cloudinary.android.MediaManager;
+import com.example.thesis.yummy.controller.notification.AcceptRequestNotificationActivity;
 import com.example.thesis.yummy.controller.notification.NotificationHandler;
 import com.example.thesis.yummy.controller.notification.RatingNotificationActivity;
+import com.example.thesis.yummy.controller.notification.ReceiveRequestNotificationActivity;
+import com.example.thesis.yummy.controller.notification.RejectRequestNotificationActivity;
 import com.example.thesis.yummy.restful.ServiceGenerator;
 import com.example.thesis.yummy.restful.auth.AuthClient;
 import com.example.thesis.yummy.restful.model.Notification;
@@ -26,8 +29,11 @@ import java.net.URISyntaxException;
 
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_MEETING;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_RECONNECT_SOCKET;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_ACCEPT;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_INVITE;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_NORMAL;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_RATING;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_REJECT;
 import static com.example.thesis.yummy.AppConstants.SOCKET_BASE_URL;
 
 
@@ -79,6 +85,30 @@ public class Application extends android.app.Application {
             } else if(data.has(NOTIFICATION_RECONNECT_SOCKET)) {
                 clearSocket();
                 initSocket();
+            } else if(data.has(NOTIFICATION_TYPE_INVITE)) {
+                JsonAdapter<Notification> jsonAdapter = ServiceGenerator.getMoshiWithoutType(Notification.class).adapter(Notification.class);
+                try {
+                    Notification notification = jsonAdapter.fromJson(data.optString(NOTIFICATION_TYPE_INVITE));
+                    ReceiveRequestNotificationActivity.start(mContext, notification);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else if(data.has(NOTIFICATION_TYPE_ACCEPT)) {
+                JsonAdapter<Notification> jsonAdapter = ServiceGenerator.getMoshiWithoutType(Notification.class).adapter(Notification.class);
+                try {
+                    Notification notification = jsonAdapter.fromJson(data.optString(NOTIFICATION_TYPE_ACCEPT));
+                    AcceptRequestNotificationActivity.start(mContext, notification);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else if(data.has(NOTIFICATION_TYPE_REJECT)) {
+                JsonAdapter<Notification> jsonAdapter = ServiceGenerator.getMoshiWithoutType(Notification.class).adapter(Notification.class);
+                try {
+                    Notification notification = jsonAdapter.fromJson(data.optString(NOTIFICATION_TYPE_REJECT));
+                    RejectRequestNotificationActivity.start(mContext, notification);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     };

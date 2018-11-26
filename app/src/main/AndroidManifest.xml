@@ -66,7 +66,9 @@
         <activity android:name=".controller.meeting.MeetingActivity" />
         <activity android:name=".controller.meeting.MeetingDetailActivity" />
         <activity android:name=".controller.post.ListPeopleInterestedPostActivity" />
-        <activity android:name=".controller.notification.ReceiveRequestNotificationActivity" />
+        <activity android:name=".controller.notification.ReceiveRequestNotificationActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/MyCustomDialog"/>
         <activity android:name=".controller.notification.RatingNotificationActivity" />
         <activity android:name=".controller.rating.RatingActivity" />
         <activity android:name=".controller.profile.ProfileReviewDetailActivity" />
@@ -75,8 +77,12 @@
         <activity android:name=".controller.forgotpassword.ForgotPasswordActivity" />
         <activity android:name=".controller.forgotpassword.ResetPasswordActivity" />
         <activity android:name=".controller.search.SendRequestActivity" />
-        <activity android:name=".controller.notification.RejectRequestNotificationActivity" />
-        <activity android:name=".controller.notification.AcceptRequestNotificationActivity" />
+        <activity android:name=".controller.notification.RejectRequestNotificationActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/MyCustomDialog" />
+        <activity android:name=".controller.notification.AcceptRequestNotificationActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/MyCustomDialog" />
 
 
     </application>

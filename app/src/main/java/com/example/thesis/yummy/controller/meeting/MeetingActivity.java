@@ -20,6 +20,7 @@ import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.MultipleImageCircleView;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.QuestionDialog;
@@ -125,7 +126,7 @@ public class MeetingActivity extends DrawerActivity {
     }
 
     private void getMeetings() {
-        ServiceManager.getInstance().getMeetingService().getMeetings(false).enqueue(new RestCallback<List<Meeting>>() {
+        ServiceManager.getInstance().getMeetingService().getMeetings(false, StorageManager.getUser().mId).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
                 hideLoading();

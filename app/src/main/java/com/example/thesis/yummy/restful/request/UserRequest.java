@@ -2,6 +2,7 @@ package com.example.thesis.yummy.restful.request;
 
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.User;
 
 import java.util.Date;
@@ -47,5 +48,20 @@ public class UserRequest {
         params.put("longitude", longitude);
 
         ServiceManager.getInstance().getUserService().searchUser(page, params).enqueue(callback);
+    }
+
+    public static void sendRequest(int userId, String content, double latitude, double longitude, String place, Date time, RestCallback<Base> callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userSearch", userId);
+        params.put("content", content);
+        params.put("place", place);
+        params.put("time", time);
+
+        HashMap<String, Object> coordinate = new HashMap<>();
+        coordinate.put("coordinates", new Double[]{longitude, latitude});
+
+        params.put("location", coordinate);
+
+        ServiceManager.getInstance().getUserService().sendRequest(params).enqueue(callback);
     }
 }

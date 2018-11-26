@@ -102,7 +102,7 @@ public class ProfileHistoryActivity extends BaseActivity {
     }
 
     private void getMeetingHistory() {
-        ServiceManager.getInstance().getMeetingService().getMeetings(true).enqueue(new RestCallback<List<Meeting>>() {
+        ServiceManager.getInstance().getMeetingService().getMeetings(true, mUserId).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
                 mAdapter.addData(meetings);

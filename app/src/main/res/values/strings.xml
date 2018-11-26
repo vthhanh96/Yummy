@@ -97,4 +97,11 @@
     <string name="trust_point_amount">Độ tin cậy: %d</string>
     <string name="review_point">Điểm đánh giá</string>
     <string name="send_request_to">Gửi yêu cầu đến</string>
+    <string name="choose_place">Chọn địa điểm</string>
+    <string name="choose_time">Chọn thời gian</string>
+    <string name="enter_content">Nhập nội dung</string>
+    <string name="send_request_success">Đã gửi yêu cầu thành công</string>
+    <string name="send_request_title">%s đã gửi cho bạn một lời mời đi ăn chung</string>
+    <string name="reject_request_message">Bạn đã từ chối lời mời</string>
+    <string name="accept_request_message">Bạn đã đồng ý lời mời đi ăn</string>
 </resources>

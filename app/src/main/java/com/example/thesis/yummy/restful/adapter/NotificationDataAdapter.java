@@ -6,6 +6,7 @@ import com.example.thesis.yummy.restful.ServiceGenerator;
 import com.example.thesis.yummy.restful.model.NotificationData;
 import com.example.thesis.yummy.restful.model.NotificationMeetingData;
 import com.example.thesis.yummy.restful.model.NotificationPostData;
+import com.example.thesis.yummy.restful.model.NotificationRequestData;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonReader;
 import com.squareup.moshi.JsonWriter;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_MEETING;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_POST;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_REQUEST;
 
 public class NotificationDataAdapter extends JsonAdapter<NotificationData> {
     @Override
@@ -35,6 +37,9 @@ public class NotificationDataAdapter extends JsonAdapter<NotificationData> {
                     case NOTIFICATION_MEETING:
                         JsonAdapter<NotificationMeetingData> meetingDataJsonAdapter = ServiceGenerator.getMoshiWithoutType(NotificationData.class).adapter(NotificationMeetingData.class);
                         return meetingDataJsonAdapter.fromJsonValue(map);
+                    case NOTIFICATION_REQUEST:
+                        JsonAdapter<NotificationRequestData> requestDataJsonAdapter = ServiceGenerator.getMoshiWithoutType(NotificationData.class).adapter(NotificationRequestData.class);
+                        return requestDataJsonAdapter.fromJsonValue(map);
                 }
 
                 JsonAdapter<NotificationData> notificationDataJsonAdapter = ServiceGenerator.getMoshiWithoutType(NotificationData.class).adapter(NotificationData.class);

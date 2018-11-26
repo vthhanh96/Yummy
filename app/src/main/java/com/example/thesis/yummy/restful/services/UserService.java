@@ -69,4 +69,15 @@ public interface UserService {
     @POST("search/{page}")
     Call<RestResponse<List<User>>> searchUser(@Path("page") int pageNumber,
                                               @Body Map<String, Object> params);
+
+    @POST("sendRequest")
+    Call<RestResponse<Base>> sendRequest(@Body Map<String, Object> params);
+
+    @FormUrlEncoded
+    @POST("acceptRequest")
+    Call<RestResponse<Base>> acceptRequest(@Field("request") int requestId);
+
+    @FormUrlEncoded
+    @POST("rejectRequest")
+    Call<RestResponse<Base>> rejectRequest(@Field("request") int requestId);
 }
