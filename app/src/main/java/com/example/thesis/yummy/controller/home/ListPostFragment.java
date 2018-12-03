@@ -69,7 +69,8 @@ public class ListPostFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser && !mIsLoaded) {
+        if(isVisibleToUser && !mIsLoaded && mIsInterested) {
+            mIsLoaded = true;
             getPosts();
         }
     }
@@ -84,6 +85,7 @@ public class ListPostFragment extends Fragment {
         initRecyclerView();
         initRefreshLayout();
         EventBus.getDefault().register(this);
+        if(!mIsInterested) getPosts();
     }
 
     private void initRefreshLayout() {
@@ -123,9 +125,11 @@ public class ListPostFragment extends Fragment {
     }
 
     private void getPosts() {
+        mPostRecyclerView.showShimmer();
         PostRequest.getListPost(mPageNumber, mIsInterested, new RestCallback<List<Post>>() {
             @Override
             public void onSuccess(String message, List<Post> posts) {
+                mPostRecyclerView.hideShimmer();
                 mRefreshLayout.setRefreshing(false);
                 if(posts == null || posts.isEmpty()) {
                     mPostRecyclerView.loadMoreEnd();
@@ -138,6 +142,7 @@ public class ListPostFragment extends Fragment {
 
             @Override
             public void onFailure(String message) {
+                mPostRecyclerView.hideShimmer();
                 mRefreshLayout.setRefreshing(false);
                 mPostRecyclerView.loadMoreFail();
             }

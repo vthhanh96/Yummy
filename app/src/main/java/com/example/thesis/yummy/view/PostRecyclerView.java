@@ -36,6 +36,8 @@ import com.example.thesis.yummy.utils.DateUtils;
 import com.example.thesis.yummy.view.dialog.QuestionDialog;
 import com.example.thesis.yummy.view.dialog.SelectPostOptionsDialogFragment;
 import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,6 +53,7 @@ public class PostRecyclerView extends RecyclerView {
 
     private PostAdapter mPostAdapter;
     private User mUser;
+    private ShimmerFrameLayout mShimmerView;
 
     public PostRecyclerView(Context context) {
         this(context, null, 0);
@@ -75,6 +78,8 @@ public class PostRecyclerView extends RecyclerView {
     }
 
     private void initRecyclerView() {
+        mShimmerView = (ShimmerFrameLayout) View.inflate(getContext(), R.layout.shimmer_post_layout, null);
+
         mPostAdapter = new PostAdapter();
         mPostAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -236,6 +241,20 @@ public class PostRecyclerView extends RecyclerView {
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void showShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.startShimmer();
+            mPostAdapter.addFooterView(mShimmerView);
+        }
+    }
+
+    public void hideShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.stopShimmer();
+            mPostAdapter.removeFooterView(mShimmerView);
+        }
     }
 
     public interface OnPostRecyclerViewLoadMoreListener {

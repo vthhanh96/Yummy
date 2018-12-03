@@ -2,6 +2,7 @@ package com.example.thesis.yummy.controller.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,11 +67,11 @@ public abstract class DrawerActivity extends BaseActivity {
 
     private void setUpListDrawer() {
         mMenuItems = new ArrayList<>();
-        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_HOME_PAGE, getString(R.string.home), R.drawable.ic_home, getNavId() == NAV_DRAWER_ID_HOME_PAGE));
-        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_NOTIFICATION_PAGE, getString(R.string.notification), R.drawable.ic_notification, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
-        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_MEETING, getString(R.string.meeting), R.drawable.ic_meeting, getNavId() == NAV_DRAWER_ID_MEETING));
-        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_SEARCH_PAGE, getString(R.string.quick_search), R.drawable.ic_search_menu, getNavId() == NAV_DRAWER_ID_SEARCH_PAGE));
-        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_LOGOUT, getString(R.string.logout), R.drawable.ic_logout, getNavId() == NAV_DRAWER_ID_LOGOUT));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_HOME_PAGE, getString(R.string.home), R.drawable.ic_home_black, R.drawable.ic_home_green, getNavId() == NAV_DRAWER_ID_HOME_PAGE));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_NOTIFICATION_PAGE, getString(R.string.notification), R.drawable.ic_notification_black, R.drawable.ic_notification_green, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_MEETING, getString(R.string.meeting), R.drawable.ic_meeting_black, R.drawable.ic_meeting_green, getNavId() == NAV_DRAWER_ID_MEETING));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_SEARCH_PAGE, getString(R.string.quick_search), R.drawable.ic_search_menu_black, R.drawable.ic_search_menu_green, getNavId() == NAV_DRAWER_ID_SEARCH_PAGE));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_LOGOUT, getString(R.string.logout), R.drawable.ic_logout_black, R.drawable.ic_logout_black,getNavId() == NAV_DRAWER_ID_LOGOUT));
     }
 
     private void initRecyclerView() {
@@ -198,10 +199,16 @@ public abstract class DrawerActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, ItemMenu item) {
-            helper.setImageResource(R.id.imgIcon, item.mIcon);
             helper.setText(R.id.txtText, item.mText);
-            helper.setBackgroundColor(R.id.rootLayout, item.mIsSelected ? mContext.getResources().getColor(R.color.colorPrimary) : mContext.getResources().getColor(R.color.colorPrimaryDark));
-            helper.setVisible(R.id.lineView, item.mIsSelected);
+            if(item.mIsSelected) {
+                helper.setBackgroundRes(R.id.rootLayout, R.drawable.bg_corner_solid_green_light);
+                helper.setTextColor(R.id.txtText, ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+                helper.setImageResource(R.id.imgIcon, item.mIconSelected);
+            } else {
+                helper.setImageResource(R.id.imgIcon, item.mIcon);
+                helper.setBackgroundColor(R.id.rootLayout, ContextCompat.getColor(mContext, R.color.white));
+                helper.setTextColor(R.id.txtText, ContextCompat.getColor(mContext, R.color.black));
+            }
         }
     }
 }

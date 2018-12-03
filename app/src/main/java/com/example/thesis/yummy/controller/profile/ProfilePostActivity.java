@@ -86,9 +86,11 @@ public class ProfilePostActivity extends BaseActivity {
     }
 
     private void getMyPost() {
+        mPostRecyclerView.showShimmer();
         ServiceManager.getInstance().getUserService().getListPostOfUser(mUserId, mPageNumber).enqueue(new RestCallback<List<Post>>() {
             @Override
             public void onSuccess(String message, List<Post> posts) {
+                mPostRecyclerView.hideShimmer();
                 if(posts == null || posts.isEmpty()) {
                     mPostRecyclerView.loadMoreEnd();
                     return;
@@ -100,6 +102,7 @@ public class ProfilePostActivity extends BaseActivity {
 
             @Override
             public void onFailure(String message) {
+                mPostRecyclerView.hideShimmer();
                 mPostRecyclerView.loadMoreFail();
             }
         });
