@@ -89,6 +89,7 @@
         <activity android:name=".controller.register.RegisterFavoriteFoodActivity" />
         <activity android:name=".controller.sale.SaleActivity" />
         <activity android:name=".controller.sale.VoucherDetailActivity" />
+        <activity android:name=".controller.main.MainActivity" />
 
 
     </application>

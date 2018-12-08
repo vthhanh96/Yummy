@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.home.HomeActivity;
+import com.example.thesis.yummy.controller.main.MainActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Category;
@@ -124,7 +125,7 @@ public class RegisterFavoriteFoodActivity extends BaseActivity {
             }
         }
         if(categories.isEmpty()) {
-            HomeActivity.start(this);
+            MainActivity.start(this);
             return;
         }
         showLoading();
@@ -132,7 +133,7 @@ public class RegisterFavoriteFoodActivity extends BaseActivity {
             @Override
             public void onSuccess(String message, User user) {
                 hideLoading();
-                HomeActivity.start(RegisterFavoriteFoodActivity.this);
+                MainActivity.start(RegisterFavoriteFoodActivity.this);
             }
 
             @Override

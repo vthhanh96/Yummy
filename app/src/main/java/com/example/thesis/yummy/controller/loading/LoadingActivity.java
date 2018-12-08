@@ -9,6 +9,7 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.controller.login.LoginActivity;
+import com.example.thesis.yummy.controller.main.MainActivity;
 import com.example.thesis.yummy.restful.auth.AuthClient;
 
 import butterknife.BindView;
@@ -39,7 +40,7 @@ public class LoadingActivity extends BaseActivity {
         if(AuthClient.isExpireToken()) {
             LoginActivity.start(this, mLogoImageView);
         } else {
-            HomeActivity.start(this);
+            MainActivity.start(this);
         }
         new Handler().postDelayed(new Runnable() {
             @Override

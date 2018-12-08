@@ -18,6 +18,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.controller.login.LoginActivity;
+import com.example.thesis.yummy.controller.main.MainActivity;
 import com.example.thesis.yummy.controller.meeting.MeetingActivity;
 import com.example.thesis.yummy.controller.notification.NotificationActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
@@ -40,6 +41,7 @@ import butterknife.OnClick;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_HOME_PAGE;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_LOGOUT;
+import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_MAIN;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_MEETING;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_NOTIFICATION_PAGE;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_SALE;
@@ -69,7 +71,7 @@ public abstract class DrawerActivity extends BaseActivity {
 
     private void setUpListDrawer() {
         mMenuItems = new ArrayList<>();
-        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_HOME_PAGE, getString(R.string.home), R.drawable.ic_home_black, R.drawable.ic_home_green, getNavId() == NAV_DRAWER_ID_HOME_PAGE));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_MAIN, getString(R.string.home), R.drawable.ic_home_black, R.drawable.ic_home_green, getNavId() == NAV_DRAWER_ID_MAIN));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_NOTIFICATION_PAGE, getString(R.string.notification), R.drawable.ic_notification_black, R.drawable.ic_notification_green, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_SALE, getString(R.string.sale), R.drawable.ic_sale_black, R.drawable.ic_sale_green, getNavId() == NAV_DRAWER_ID_SALE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_MEETING, getString(R.string.meeting), R.drawable.ic_meeting_black, R.drawable.ic_meeting_green, getNavId() == NAV_DRAWER_ID_MEETING));
@@ -108,10 +110,10 @@ public abstract class DrawerActivity extends BaseActivity {
 
     private void onItemClickListener(ItemMenu itemMenu) {
         switch (itemMenu.mKey) {
-            case NAV_DRAWER_ID_HOME_PAGE:
-                if(this instanceof HomeActivity) return;
+            case NAV_DRAWER_ID_MAIN:
+                if(this instanceof MainActivity) return;
                 finish();
-                HomeActivity.start(this);
+                MainActivity.start(this);
                 break;
             case NAV_DRAWER_ID_NOTIFICATION_PAGE:
                 if(this instanceof NotificationActivity) return;
