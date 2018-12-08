@@ -64,4 +64,15 @@ public class UserRequest {
 
         ServiceManager.getInstance().getUserService().sendRequest(params).enqueue(callback);
     }
+
+    public static void updateCurrentLocation(Double latitude, Double longitude, RestCallback<User> callback) {
+        HashMap<String, Object> params = new HashMap<>();
+
+        HashMap<String, Object> coordinate = new HashMap<>();
+        coordinate.put("coordinates", new Double[]{longitude, latitude});
+
+        params.put("latLngAddress", coordinate);
+
+        ServiceManager.getInstance().getUserService().updateCurrentLocation(params).enqueue(callback);
+    }
 }

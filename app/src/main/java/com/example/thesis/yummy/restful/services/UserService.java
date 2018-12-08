@@ -63,6 +63,9 @@ public interface UserService {
     @POST("editUser")
     Call<RestResponse<User>> updateProfile(@Body Map<String, Object> params);
 
+    @POST("editUser")
+    Call<RestResponse<User>> updateCurrentLocation(@Body Map<String, Object> params);
+
     @FormUrlEncoded
     @POST("listpostuser")
     Call<RestResponse<List<Post>>> getListPostOfUser(@Field("user_id") int userId, @Field("page") int page);
