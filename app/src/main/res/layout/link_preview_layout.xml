@@ -35,7 +35,9 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    tools:text="GOOGLE.COM" />
+                    tools:text="GOOGLE.COM"
+                    android:maxLines="2"
+                    android:ellipsize="end"/>
 
                 <TextView
                     android:id="@+id/linkDescriptionTextView"

@@ -107,4 +107,7 @@
     <string name="characteristic_description">Bạn hãy mô tả về tính cách của bạn.</string>
     <string name="select_your_favorite_food">Bạn hãy chọn loại món ăn mà bạn yêu thích</string>
     <string name="finish">Hoàn tất</string>
+    <string name="sale">Khuyến mãi</string>
+    <string name="create_post_with_link">Tạo bài viết với link đính kèm</string>
+    <string name="voucher_detail">Chi tiết khuyến mãi</string>
 </resources>

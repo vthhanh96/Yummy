@@ -84,6 +84,8 @@
             android:excludeFromRecents="true"
             android:theme="@style/MyCustomDialog" />
         <activity android:name=".controller.register.RegisterFavoriteFoodActivity" />
+        <activity android:name=".controller.sale.SaleActivity" />
+        <activity android:name=".controller.sale.VoucherDetailActivity" />
 
 
     </application>

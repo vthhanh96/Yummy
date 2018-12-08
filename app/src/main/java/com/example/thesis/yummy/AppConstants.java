@@ -12,6 +12,7 @@ public class AppConstants {
     public static final int NAV_DRAWER_ID_SEARCH_PAGE = 4;
     public static final int NAV_DRAWER_ID_LOGOUT = 5;
     public static final int NAV_DRAWER_ID_MEETING = 6;
+    public static final int NAV_DRAWER_ID_SALE = 7;
 
     //TYPE NOTIFICATION
     public static final int NOTIFICATION_POST = 1;

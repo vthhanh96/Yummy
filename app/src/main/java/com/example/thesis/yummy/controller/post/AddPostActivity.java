@@ -82,6 +82,8 @@ import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 public class AddPostActivity extends BaseActivity {
 
     private static final String ARG_KEY_SELECTED_CATEGORIES = "ARG_KEY_SELECTED_CATEGORIES";
+    private static final String ARG_KEY_LINK_URL = "ARG_KEY_LINK_URL";
+
     private static final int REQUEST_CODE_SELECT_CATEGORY = 1;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 2;
     private static final int REQUEST_CODE_TAKE_PICTURE = 3;
@@ -116,6 +118,12 @@ public class AddPostActivity extends BaseActivity {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, AddPostActivity.class);
+        context.startActivity(starter);
+    }
+
+    public static void start(Context context, String linkUrl) {
+        Intent starter = new Intent(context, AddPostActivity.class);
+        starter.putExtra(ARG_KEY_LINK_URL, linkUrl);
         context.startActivity(starter);
     }
 
@@ -173,9 +181,17 @@ public class AddPostActivity extends BaseActivity {
     }
 
     private void init() {
+        getExtras();
         initTopBar();
         initData();
         initCategoryRecyclerView();
+    }
+
+    private void getExtras() {
+        mLinkUrl = getIntent().getStringExtra(ARG_KEY_LINK_URL);
+        if(mLinkUrl != null) {
+            showLinkPreview(mLinkUrl);
+        }
     }
 
     private void initData() {
@@ -376,29 +392,33 @@ public class AddPostActivity extends BaseActivity {
 
             @Override
             public void onDoneClick(String content) {
-                RichPreview richPreview = new RichPreview(new ResponseListener() {
-                    @Override
-                    public void onData(MetaData metaData) {
-                        if(metaData == null) return;
-
-                        mLinkUrl = metaData.getUrl();
-                        mLinkPreviewLayout.setVisibility(View.VISIBLE);
-                        mLinkPreviewLayout.setMetaData(metaData);
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        mLinkUrl = null;
-                        mLinkPreviewLayout.setVisibility(View.GONE);
-                    }
-                });
-
-                if(URLUtil.isValidUrl(content)) {
-                    richPreview.getPreview(content);
-                }
+                showLinkPreview(content);
             }
         });
         inputDialog.show();
+    }
+
+    private void showLinkPreview(String link) {
+        RichPreview richPreview = new RichPreview(new ResponseListener() {
+            @Override
+            public void onData(MetaData metaData) {
+                if(metaData == null) return;
+
+                mLinkUrl = metaData.getUrl();
+                mLinkPreviewLayout.setVisibility(View.VISIBLE);
+                mLinkPreviewLayout.setMetaData(metaData);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                mLinkUrl = null;
+                mLinkPreviewLayout.setVisibility(View.GONE);
+            }
+        });
+
+        if(URLUtil.isValidUrl(link)) {
+            richPreview.getPreview(link);
+        }
     }
 
     private void addPost() {

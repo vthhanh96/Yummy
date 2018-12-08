@@ -7,6 +7,7 @@ import com.example.thesis.yummy.restful.services.NotificationService;
 import com.example.thesis.yummy.restful.services.PostService;
 import com.example.thesis.yummy.restful.services.RatingService;
 import com.example.thesis.yummy.restful.services.UserService;
+import com.example.thesis.yummy.restful.services.VoucherService;
 
 public class ServiceManager {
 
@@ -18,6 +19,7 @@ public class ServiceManager {
     private static MeetingService mMeetingService;
     private static NotificationService mNotificationService;
     private static RatingService mRatingService;
+    private static VoucherService mVoucherService;
 
     private ServiceManager() {}
 
@@ -78,5 +80,14 @@ public class ServiceManager {
             mRatingService = ServiceGenerator.createService(RatingService.class);
         }
         return mRatingService;
+    }
+
+    public VoucherService getVoucherService() {
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_URL);
+        if(mVoucherService == null) {
+            mVoucherService = ServiceGenerator.createService(VoucherService.class);
+        }
+
+        return mVoucherService;
     }
 }
