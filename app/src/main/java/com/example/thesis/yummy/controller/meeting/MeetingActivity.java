@@ -26,6 +26,7 @@ import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.QuestionDialog;
 import com.example.thesis.yummy.view.dialog.ReasonDialog;
 import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class MeetingActivity extends DrawerActivity {
     @BindView(R.id.meetingRecyclerView) RecyclerView mMeetingRecyclerView;
 
     private MeetingAdapter mAdapter;
+    private ShimmerFrameLayout mShimmerView;
 
     @Override
     protected int getNavId() {
@@ -69,6 +71,7 @@ public class MeetingActivity extends DrawerActivity {
         initTopBar();
         initSwipeRefreshLayout();
         initRecyclerView();
+        showShimmer();
         getMeetings();
     }
 
@@ -100,6 +103,8 @@ public class MeetingActivity extends DrawerActivity {
     }
 
     private void initRecyclerView() {
+        mShimmerView = (ShimmerFrameLayout) View.inflate(this, R.layout.shimmer_notification_layout, null);
+
         mAdapter = new MeetingAdapter();
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -129,16 +134,32 @@ public class MeetingActivity extends DrawerActivity {
         ServiceManager.getInstance().getMeetingService().getMeetings(false, StorageManager.getUser().mId).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
+                hideShimmer();
                 hideLoading();
                 mAdapter.setNewData(meetings);
             }
 
             @Override
             public void onFailure(String message) {
+                hideShimmer();
                 hideLoading();
                 Toast.makeText(MeetingActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.startShimmer();
+            mAdapter.addFooterView(mShimmerView);
+        }
+    }
+
+    private void hideShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.stopShimmer();
+            mAdapter.removeFooterView(mShimmerView);
+        }
     }
 
     private void showConfirmDialog(final Meeting meeting) {

@@ -30,6 +30,7 @@ import com.example.thesis.yummy.restful.model.NotificationPostData;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class NotificationActivity extends DrawerActivity {
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private NotificationAdapter mAdapter;
+    private ShimmerFrameLayout mShimmerView;
 
     @Override
     protected int getLayoutId() {
@@ -106,6 +108,8 @@ public class NotificationActivity extends DrawerActivity {
     }
 
     private void initRecyclerView() {
+        mShimmerView = (ShimmerFrameLayout) View.inflate(this, R.layout.shimmer_notification_layout, null);
+
         mAdapter = new NotificationAdapter();
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -135,18 +139,36 @@ public class NotificationActivity extends DrawerActivity {
     private void getNotifications() {
         User user = StorageManager.getUser();
         if(user == null) return;
+        showShimmer();
         ServiceManager.getInstance().getNotificationService().getNotifications(user.mId).enqueue(new RestCallback<List<Notification>>() {
             @Override
             public void onSuccess(String message, List<Notification> notifications) {
+                hideShimmer();
                 mAdapter.setNewData(notifications);
             }
 
             @Override
             public void onFailure(String message) {
+                hideShimmer();
                 Toast.makeText(NotificationActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    private void showShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.startShimmer();
+            mAdapter.addFooterView(mShimmerView);
+        }
+    }
+
+    private void hideShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.stopShimmer();
+            mAdapter.removeFooterView(mShimmerView);
+        }
+    }
+
 
     private class NotificationAdapter extends BaseQuickAdapter<Notification, BaseViewHolder>{
 

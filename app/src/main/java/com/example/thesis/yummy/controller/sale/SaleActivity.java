@@ -20,6 +20,7 @@ import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Voucher;
 import com.example.thesis.yummy.view.TopBarView;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class SaleActivity extends DrawerActivity {
 
     private SaleAdapter mSaleAdapter;
     private int mPageNumber = 0;
+    private ShimmerFrameLayout mShimmerView;
 
     @Override
     protected int getNavId() {
@@ -97,6 +99,8 @@ public class SaleActivity extends DrawerActivity {
     }
 
     private void initRecyclerView() {
+        mShimmerView = (ShimmerFrameLayout) View.inflate(this, R.layout.shimmer_voucher_layout, null);
+
         mSaleAdapter = new SaleAdapter();
         mSaleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -119,9 +123,11 @@ public class SaleActivity extends DrawerActivity {
     }
 
     private void getVouchers() {
+        showShimmer();
         ServiceManager.getInstance().getVoucherService().getVouchers(mPageNumber).enqueue(new RestCallback<List<Voucher>>() {
             @Override
             public void onSuccess(String message, List<Voucher> vouchers) {
+                hideShimmer();
                 if(vouchers == null || vouchers.isEmpty()) {
                     mSaleAdapter.loadMoreEnd();
                     return;
@@ -133,10 +139,25 @@ public class SaleActivity extends DrawerActivity {
 
             @Override
             public void onFailure(String message) {
+                hideShimmer();
                 mSaleAdapter.loadMoreFail();
                 Toast.makeText(SaleActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.startShimmer();
+            mSaleAdapter.addFooterView(mShimmerView);
+        }
+    }
+
+    private void hideShimmer() {
+        if(mShimmerView != null) {
+            mShimmerView.stopShimmer();
+            mSaleAdapter.removeFooterView(mShimmerView);
+        }
     }
 
     private class SaleAdapter extends BaseQuickAdapter<Voucher, BaseViewHolder> {
