@@ -141,7 +141,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void initTopBar() {
         mTopBar.setImageViewLeft(TopBarView.LEFT_BACK);
-        mTopBar.setImageViewRight(R.drawable.ic_comment);
+        mTopBar.setImageViewRight(R.drawable.ic_add_comment);
         mTopBar.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
             public void onLeftClick() {

@@ -176,7 +176,9 @@ public class RegisterAvatarActivity extends BaseActivity {
             case REQUEST_CODE_GET_IMAGE:
                 if (data == null || data.getData() == null)
                     return;
-                mFile = new File(FileUtils.getPath(this, data.getData()));
+                String path = FileUtils.getPath(this, data.getData());
+                if(path == null) return;
+                mFile = new File(path);
                 mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
                 Glide.with(getApplicationContext()).load(mImageUri).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
                 break;

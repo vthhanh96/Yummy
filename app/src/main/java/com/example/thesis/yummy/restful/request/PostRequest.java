@@ -38,7 +38,7 @@ public class PostRequest {
     }
 
     public static void updatePost(int postId, String content, double latitude, double longitude, String place,
-                                  List<Category> categories, Date time, int amount, String imageUrl, RestCallback<Post> callback) {
+                                  List<Category> categories, Date time, int amount, String imageUrl, String link, RestCallback<Post> callback) {
         List<Integer> categoriesId = new ArrayList<>();
         for (Category category : categories) {
             categoriesId.add(category.mId);
@@ -51,6 +51,7 @@ public class PostRequest {
         params.put("time", time);
         params.put("amount", amount);
         params.put("image", imageUrl);
+        params.put("link", link);
 
         HashMap<String, Object> coordinate = new HashMap<>();
         coordinate.put("coordinates", new Double[]{longitude, latitude});

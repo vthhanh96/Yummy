@@ -41,14 +41,14 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcvCategories"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dimen_16dp"/>
 
     <LinearLayout
         android:id="@+id/loAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
-        android:layout_marginTop="@dimen/dimen_8dp"
         tools:ignore="UseCompoundDrawables"
         android:visibility="gone">
 
@@ -123,11 +123,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:minHeight="100dp"
         android:gravity="top"
         android:paddingEnd="@dimen/dimen_16dp"
         android:paddingStart="@dimen/dimen_16dp"
         app:backgroundTint="@android:color/transparent"
         tools:hint="Content..." />
+
+    <com.example.thesis.yummy.view.LinkPreviewLayout
+        android:id="@+id/linkPreviewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_margin="@dimen/dimen_16dp"/>
 
     <FrameLayout
         android:id="@+id/imageLayout"
@@ -169,6 +177,16 @@
         android:layout_marginTop="@dimen/dimen_8dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnAttachLink"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_attach_link"
+            android:scaleType="fitCenter"
+            android:layout_marginEnd="@dimen/dimen_8dp"/>
 
         <ImageButton
             android:id="@+id/btnCamera"

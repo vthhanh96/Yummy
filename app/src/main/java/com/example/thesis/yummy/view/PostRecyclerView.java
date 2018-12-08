@@ -316,6 +316,7 @@ public class PostRecyclerView extends RecyclerView {
                 } else {
                     helper.setText(R.id.txtInterested, mContext.getString(R.string.registered_amount, 0));
                 }
+                helper.setVisible(R.id.btnMenuPost, true);
             } else {
                 if(item.mIsActive) {
                     helper.addOnClickListener(R.id.loInterest);
@@ -330,6 +331,7 @@ public class PostRecyclerView extends RecyclerView {
                     helper.setGone(R.id.imgInterested, false);
                     helper.setText(R.id.txtInterested, mContext.getString(R.string.register));
                 }
+                helper.setVisible(R.id.btnMenuPost, false);
             }
 
             if (item.mComments != null) {

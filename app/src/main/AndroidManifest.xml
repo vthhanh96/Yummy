@@ -43,11 +43,13 @@
         </activity>
         <activity android:name=".controller.login.LoginActivity"/>
         <activity android:name=".controller.home.HomeActivity" />
-        <activity android:name=".controller.post.AddPostActivity" />
+        <activity android:name=".controller.post.AddPostActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".controller.post.CategoryActivity" />
         <activity android:name=".controller.post.PostDetailActivity" />
         <activity android:name=".controller.post.CommentActivity" />
-        <activity android:name=".controller.post.EditPostActivity" />
+        <activity android:name=".controller.post.EditPostActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".controller.profile.ProfileActivity" />
         <activity android:name=".controller.profile.EditProfileActivity" />
         <activity android:name=".controller.register.RegisterActivity" />

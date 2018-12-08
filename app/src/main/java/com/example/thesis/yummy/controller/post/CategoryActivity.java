@@ -34,7 +34,6 @@ public class CategoryActivity extends BaseActivity {
 
     @BindView(R.id.topBar) TopBarView mTopBarView;
     @BindView(R.id.rcvCategories) RecyclerView mCategoriesRecyclerView;
-    @BindView(R.id.edtSearch) AppCompatEditText mEdtSearch;
 
     private int mPageNumber = 0;
     private CategoryAdapter mCategoryAdapter;
@@ -63,7 +62,6 @@ public class CategoryActivity extends BaseActivity {
     private void init() {
         getExtras();
         initTopBar();
-        initEditText();
         initRecyclerView();
         getCategories(mQuery);
     }
@@ -81,6 +79,7 @@ public class CategoryActivity extends BaseActivity {
     }
 
     private void initTopBar() {
+        mTopBarView.setTitle(getString(R.string.food_category));
         mTopBarView.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBarView.setImageViewRight(R.drawable.ic_check_white);
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
@@ -95,28 +94,6 @@ public class CategoryActivity extends BaseActivity {
                 data.putExtra(ARG_KEY_SELECTED_CATEGORIES, new Gson().toJson(mSelectedCategories));
                 setResult(Activity.RESULT_OK, data);
                 finish();
-            }
-        });
-    }
-
-    private void initEditText() {
-        mEdtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mQuery = editable.toString();
-                mPageNumber = 0;
-                mCategoryAdapter.setEnableLoadMore(true);
-                getCategories(mQuery);
             }
         });
     }

@@ -71,7 +71,7 @@ public abstract class DrawerActivity extends BaseActivity {
         mMenuItems = new ArrayList<>();
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_HOME_PAGE, getString(R.string.home), R.drawable.ic_home_black, R.drawable.ic_home_green, getNavId() == NAV_DRAWER_ID_HOME_PAGE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_NOTIFICATION_PAGE, getString(R.string.notification), R.drawable.ic_notification_black, R.drawable.ic_notification_green, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
-        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_SALE, getString(R.string.sale), R.drawable.ic_sale_black, R.drawable.ic_sale_green, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_SALE, getString(R.string.sale), R.drawable.ic_sale_black, R.drawable.ic_sale_green, getNavId() == NAV_DRAWER_ID_SALE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_MEETING, getString(R.string.meeting), R.drawable.ic_meeting_black, R.drawable.ic_meeting_green, getNavId() == NAV_DRAWER_ID_MEETING));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_SEARCH_PAGE, getString(R.string.quick_search), R.drawable.ic_search_menu_black, R.drawable.ic_search_menu_green, getNavId() == NAV_DRAWER_ID_SEARCH_PAGE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_LOGOUT, getString(R.string.logout), R.drawable.ic_logout_black, R.drawable.ic_logout_black,getNavId() == NAV_DRAWER_ID_LOGOUT));
@@ -115,12 +115,16 @@ public abstract class DrawerActivity extends BaseActivity {
                 break;
             case NAV_DRAWER_ID_NOTIFICATION_PAGE:
                 if(this instanceof NotificationActivity) return;
-                finish();
+                if((!(this instanceof HomeActivity))) {
+                    finish();
+                }
                 NotificationActivity.start(this);
                 break;
             case NAV_DRAWER_ID_SEARCH_PAGE:
                 if(this instanceof SearchActivity) return;
-                finish();
+                if((!(this instanceof HomeActivity))) {
+                    finish();
+                }
                 SearchActivity.start(this);
                 break;
             case NAV_DRAWER_ID_LOGOUT:
@@ -128,12 +132,16 @@ public abstract class DrawerActivity extends BaseActivity {
                 break;
             case NAV_DRAWER_ID_MEETING:
                 if(this instanceof MeetingActivity) return;
-                finish();
+                if((!(this instanceof HomeActivity))) {
+                    finish();
+                }
                 MeetingActivity.start(this);
                 break;
             case NAV_DRAWER_ID_SALE:
                 if(this instanceof SaleActivity) return;
-                finish();
+                if((!(this instanceof HomeActivity))) {
+                    finish();
+                }
                 SaleActivity.start(this);
                 break;
         }

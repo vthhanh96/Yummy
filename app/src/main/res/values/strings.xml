@@ -110,4 +110,5 @@
     <string name="sale">Khuyến mãi</string>
     <string name="create_post_with_link">Tạo bài viết với link đính kèm</string>
     <string name="voucher_detail">Chi tiết khuyến mãi</string>
+    <string name="food_category">Loại món ăn</string>
 </resources>
