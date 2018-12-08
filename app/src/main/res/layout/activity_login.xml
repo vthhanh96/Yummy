@@ -9,12 +9,12 @@
     android:gravity="center_horizontal">
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_logo"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_launcher"
         android:layout_marginTop="@dimen/dimen_56dp"
-        android:layout_marginBottom="@dimen/dimen_32dp"/>
-
+        android:layout_marginBottom="@dimen/dimen_8dp"
+        android:transitionName="logoImageView"/>
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/edtEmail"

@@ -1,6 +1,8 @@
 package com.example.thesis.yummy.restful.services;
 
 
+import android.support.v7.widget.CardView;
+
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestResponse;
 import com.example.thesis.yummy.restful.model.Base;
@@ -46,6 +48,14 @@ public interface UserService {
     @FormUrlEncoded
     @POST("editUser")
     Call<RestResponse<User>> updateBirthday(@Field("birthday") Date birthDay);
+
+    @FormUrlEncoded
+    @POST("editUser")
+    Call<RestResponse<User>> updateCharacteristic(@Field("myCharacter") String characteristic);
+
+    @FormUrlEncoded
+    @POST("editUser")
+    Call<RestResponse<User>> updateFavoriteFood(@Field("favoriteFood") List<Integer> mFavoriteFood);
 
     @POST("editUser")
     Call<RestResponse<User>> updateAddress(@Body Map<String, Object> params);

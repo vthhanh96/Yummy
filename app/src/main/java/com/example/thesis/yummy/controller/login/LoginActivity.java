@@ -1,11 +1,14 @@
 package com.example.thesis.yummy.controller.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.thesis.yummy.R;
@@ -31,6 +34,12 @@ public class LoginActivity extends BaseActivity {
     public static void start(Context context) {
         Intent starter = new Intent(context, LoginActivity.class);
         context.startActivity(starter);
+    }
+
+    public static void start(Activity activity, View view) {
+        Intent starter = new Intent(activity, LoginActivity.class);
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, view, "logoImageView");
+        activity.startActivity(starter, optionsCompat.toBundle());
     }
 
     @Override
@@ -92,5 +101,10 @@ public class LoginActivity extends BaseActivity {
 
     private void register() {
         RegisterActivity.start(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

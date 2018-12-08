@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        app:title="@string/favorite" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_your_favorite_food"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_margin="@dimen/dimen_16dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/categoryRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/finishButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="@dimen/dimen_16dp"
+        app:fb_defaultColor="@color/colorPrimary"
+        app:fb_radius="25dp"
+        android:text="@string/finish"/>
+</LinearLayout>

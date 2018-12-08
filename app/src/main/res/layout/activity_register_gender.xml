@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        fancy:title="Gender"/>
+        fancy:title="@string/gender"/>
 
     <LinearLayout
         android:layout_width="match_parent"

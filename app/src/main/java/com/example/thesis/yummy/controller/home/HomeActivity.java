@@ -46,6 +46,8 @@ public class HomeActivity extends DrawerActivity {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, HomeActivity.class);
+        starter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(starter);
     }
 
