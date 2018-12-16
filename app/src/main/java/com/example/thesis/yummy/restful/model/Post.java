@@ -12,13 +12,11 @@ public class Post extends Base {
     @Json(name = "is_active") public Boolean mIsActive;
     @Json(name = "mContent") public String mContent;
     @Json(name = "place") public String mPlace;
-    @Json(name = "location") public Location mLocation;
+    @Json(name = "latLngAddress") public List<Float> mLocation;
     @Json(name = "amount") public Integer mAmount;
     @Json(name = "comments") public List<Comment> mComments;
     @Json(name = "time") public Date mTime;
     @Json(name = "interested_people") public List<User> mInterestedPeople;
-    @Json(name = "joined_people") public List<User> mJoinPeople;
     @Json(name = "image") public String mImage;
     @Json(name = "link") public String mLink;
-    @Json(name = "expires_time") public Date mExpiresTime;
 }

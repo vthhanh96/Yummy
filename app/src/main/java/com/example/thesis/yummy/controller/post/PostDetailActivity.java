@@ -115,8 +115,8 @@ public class PostDetailActivity extends BaseActivity {
 
     @OnClick(R.id.placeLayout)
     public void openMap() {
-        if(mPost.mLocation == null || mPost.mLocation.mCoordinates == null || mPost.mLocation.mCoordinates.size() < 2) return;
-        MapActivity.start(this, mPost.mLocation.mCoordinates.get(1), mPost.mLocation.mCoordinates.get(0), mPost.mPlace);
+        if(mPost.mLocation == null || mPost.mLocation.size() < 2) return;
+        MapActivity.start(this, mPost.mLocation.get(1), mPost.mLocation.get(0), mPost.mPlace);
     }
 
     @Override

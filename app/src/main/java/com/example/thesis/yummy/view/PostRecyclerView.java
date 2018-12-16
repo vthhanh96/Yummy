@@ -110,8 +110,8 @@ public class PostRecyclerView extends RecyclerView {
                         ProfileActivity.start(getContext(), post.mCreator.mId);
                         break;
                     case R.id.placeLayout:
-                        if(post.mLocation == null || post.mLocation.mCoordinates == null || post.mLocation.mCoordinates.size() < 2) return;
-                        MapActivity.start(getContext(), post.mLocation.mCoordinates.get(1), post.mLocation.mCoordinates.get(0), post.mPlace);
+                        if(post.mLocation == null || post.mLocation.size() < 2) return;
+                        MapActivity.start(getContext(), post.mLocation.get(1), post.mLocation.get(0), post.mPlace);
                         break;
                 }
             }

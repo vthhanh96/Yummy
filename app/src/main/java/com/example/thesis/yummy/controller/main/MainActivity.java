@@ -22,8 +22,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.controller.post.AddPostActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
+import com.example.thesis.yummy.controller.sale.SaleActivity;
 import com.example.thesis.yummy.controller.sale.VoucherDetailActivity;
 import com.example.thesis.yummy.controller.search.SearchActivity;
 import com.example.thesis.yummy.restful.RestCallback;
@@ -77,6 +79,16 @@ public class MainActivity extends DrawerActivity {
     @OnClick(R.id.searchCardView)
     public void openSearch() {
         SearchActivity.start(this);
+    }
+
+    @OnClick(R.id.seeMoreSale)
+    public void seeMoreSale() {
+        SaleActivity.start(this, true);
+    }
+
+    @OnClick(R.id.seeMorePost)
+    public void seeMorePost() {
+        HomeActivity.start(this);
     }
 
     @Override
@@ -218,8 +230,7 @@ public class MainActivity extends DrawerActivity {
     }
 
     private void getPeopleNearMe() {
-        if(mUser == null) return;
-        UserRequest.searchUsers(0, 1, 18, 25, 0f, 0f, new RestCallback<List<User>>() {
+        ServiceManager.getInstance().getUserService().getUserNearMe().enqueue(new RestCallback<List<User>>() {
             @Override
             public void onSuccess(String message, List<User> users) {
                 mPeopleAdapter.setNewData(users);
@@ -233,7 +244,7 @@ public class MainActivity extends DrawerActivity {
     }
 
     private void getVouchers() {
-        ServiceManager.getInstance().getVoucherService().getVouchers(0).enqueue(new RestCallback<List<Voucher>>() {
+        ServiceManager.getInstance().getVoucherService().getVouchersNearMe(0).enqueue(new RestCallback<List<Voucher>>() {
             @Override
             public void onSuccess(String message, List<Voucher> vouchers) {
                 mVoucherAdapter.setNewData(vouchers);
@@ -247,10 +258,10 @@ public class MainActivity extends DrawerActivity {
     }
 
     private void getPostNearMe() {
-        PostRequest.getListPost(0, false, new RestCallback<List<Post>>() {
+        ServiceManager.getInstance().getPostService().getPostsNearMe().enqueue(new RestCallback<List<Post>>() {
             @Override
             public void onSuccess(String message, List<Post> posts) {
-                mPostRecyclerView.addData(posts);
+                mPostRecyclerView.setNewData(posts);
             }
 
             @Override
@@ -296,9 +307,10 @@ public class MainActivity extends DrawerActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, Voucher item) {
+            if(item == null) return;
             ImageView imageView = helper.getView(R.id.voucherImageView);
             Glide.with(mContext.getApplicationContext()).load(item.mImage).into(imageView);
-            if(item.mHost.equals(HOT_DEAL)) {
+            if(HOT_DEAL.equals(item.mHost)) {
                 helper.setImageResource(R.id.logoImageView, R.drawable.logo_hotdeal);
             } else {
                 helper.setImageResource(R.id.logoImageView, R.drawable.logo_foody);

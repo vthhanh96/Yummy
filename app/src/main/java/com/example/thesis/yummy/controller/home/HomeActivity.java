@@ -63,8 +63,6 @@ public class HomeActivity extends DrawerActivity {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, HomeActivity.class);
-        starter.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(starter);
     }
 
@@ -92,12 +90,13 @@ public class HomeActivity extends DrawerActivity {
     }
 
     private void initTopBar() {
-        mTopBarView.setImageViewLeft(TopBarView.LEFT_MENU);
+        mTopBarView.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBarView.setTitle(getString(R.string.app_name));
+        lockDrawer();
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
             public void onLeftClick() {
-                openDrawer();
+                finish();
             }
 
             @Override

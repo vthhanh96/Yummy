@@ -13,4 +13,7 @@ public interface VoucherService {
 
     @GET("voucher/{pageNumber}")
     Call<RestResponse<List<Voucher>>> getVouchers(@Path("pageNumber") int pageNumber);
+
+    @GET("voucher/list_voucher_near/{pageNumber}")
+    Call<RestResponse<List<Voucher>>> getVouchersNearMe(@Path("pageNumber") int pageNumber);
 }

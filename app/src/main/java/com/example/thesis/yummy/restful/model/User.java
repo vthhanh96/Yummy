@@ -22,11 +22,6 @@ public class User extends Base{
     @Json(name = "count_meeting") public Integer mMeetingAmount;
     @Json(name = "isOnline") public boolean mIsOnline;
     @Json(name = "age") public Integer mAge;
-//    @Json(name = "myCharacter") public String mCharacter;
-//    @Json(name = "myStyle") public String mStyle;
-//    @Json(name = "targetCharacter") public String mTargetCharacter;
-//    @Json(name = "targetStyle") public String mTargetStyle;
-//    @Json(name = "targetFood") public String mTargetFood;
 
     public boolean mIsSelected;
 

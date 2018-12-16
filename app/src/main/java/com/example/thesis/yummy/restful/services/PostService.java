@@ -1,5 +1,6 @@
 package com.example.thesis.yummy.restful.services;
 
+import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestResponse;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Comment;
@@ -59,5 +60,8 @@ public interface PostService {
 
     @GET("post/{postId}/interested_list")
     Call<RestResponse<List<User>>> getInterestedPeople(@Path("postId") int postId);
+
+    @GET("post/nearme")
+    Call<RestResponse<List<Post>>> getPostsNearMe();
 
 }

@@ -33,8 +33,11 @@ import static com.example.thesis.yummy.restful.model.Voucher.HOT_DEAL;
 
 public class SaleActivity extends DrawerActivity {
 
-    public static void start(Context context) {
+    private static final String ARG_KEY_HAS_BACK_BUTTON = "ARG_KEY_HAS_BACK_BUTTON";
+
+    public static void start(Context context, boolean hasBackButton) {
         Intent starter = new Intent(context, SaleActivity.class);
+        starter.putExtra(ARG_KEY_HAS_BACK_BUTTON, hasBackButton);
         context.startActivity(starter);
     }
 
@@ -45,6 +48,7 @@ public class SaleActivity extends DrawerActivity {
     private SaleAdapter mSaleAdapter;
     private int mPageNumber = 0;
     private ShimmerFrameLayout mShimmerView;
+    private boolean mHasBackButton;
 
     @Override
     protected int getNavId() {
@@ -64,19 +68,31 @@ public class SaleActivity extends DrawerActivity {
     }
 
     private void init() {
+        getExtras();
         initTopBar();
         initRefreshLayout();
         initRecyclerView();
         getVouchers();
     }
 
+    private void getExtras() {
+        mHasBackButton = getIntent().getBooleanExtra(ARG_KEY_HAS_BACK_BUTTON, false);
+    }
+
     private void initTopBar() {
         mTopBarView.setTitle(getString(R.string.sale));
-        mTopBarView.setImageViewLeft(TopBarView.LEFT_MENU);
+        mTopBarView.setImageViewLeft(mHasBackButton ? TopBarView.LEFT_BACK : TopBarView.LEFT_MENU);
+        if(mHasBackButton) {
+            lockDrawer();
+        }
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
             public void onLeftClick() {
-                openDrawer();
+                if(mHasBackButton) {
+                    finish();
+                } else {
+                    openDrawer();
+                }
             }
 
             @Override
@@ -124,7 +140,7 @@ public class SaleActivity extends DrawerActivity {
 
     private void getVouchers() {
         showShimmer();
-        ServiceManager.getInstance().getVoucherService().getVouchers(mPageNumber).enqueue(new RestCallback<List<Voucher>>() {
+        ServiceManager.getInstance().getVoucherService().getVouchersNearMe(mPageNumber).enqueue(new RestCallback<List<Voucher>>() {
             @Override
             public void onSuccess(String message, List<Voucher> vouchers) {
                 hideShimmer();

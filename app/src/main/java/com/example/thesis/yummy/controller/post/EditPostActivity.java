@@ -206,8 +206,8 @@ public class EditPostActivity extends BaseActivity {
         mEdtContent.setText(mPost.mContent);
         mCategoryAdapter.setNewData(mPost.mCategories);
         mLocation = new Location("");
-        mLocation.setLongitude(mPost.mLocation.mCoordinates.get(0));
-        mLocation.setLatitude(mPost.mLocation.mCoordinates.get(1));
+        mLocation.setLongitude(mPost.mLocation.get(0));
+        mLocation.setLatitude(mPost.mLocation.get(1));
 
         if(TextUtils.isEmpty(mPost.mImage)) {
             mImageUrl = mPost.mImage;

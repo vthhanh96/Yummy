@@ -93,4 +93,7 @@ public interface UserService {
     @FormUrlEncoded
     @POST("rejectRequest")
     Call<RestResponse<Base>> rejectRequest(@Field("request") int requestId);
+
+    @GET("list_user_near")
+    Call<RestResponse<List<User>>> getUserNearMe();
 }

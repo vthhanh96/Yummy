@@ -137,13 +137,14 @@ public class SearchActivity extends DrawerActivity {
     }
 
     private void initTopBar() {
+        lockDrawer();
         mTopBarView.setTitle("Search");
-        mTopBarView.setImageViewLeft(TopBarView.LEFT_MENU);
+        mTopBarView.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBarView.setImageViewRight(TopBarView.DRAWABLE_SEARCH);
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
             public void onLeftClick() {
-                openDrawer();
+                finish();
             }
 
             @Override
