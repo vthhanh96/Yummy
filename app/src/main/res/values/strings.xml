@@ -116,4 +116,7 @@
     <string name="voucher_near_me">Khuyến mãi gần bạn</string>
     <string name="suggest_post">Gợi ý bài viết</string>
     <string name="see_more">Xem thêm >> </string>
+    <string name="post_detail">Chi tiết bài viết</string>
+    <string name="input_comment">Nhập bình luận</string>
+    <string name="done">Xong</string>
 </resources>

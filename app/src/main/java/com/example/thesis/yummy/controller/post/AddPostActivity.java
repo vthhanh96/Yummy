@@ -382,7 +382,7 @@ public class AddPostActivity extends BaseActivity {
     }
 
     private void showEnterLinkDialog() {
-        InputDialog inputDialog = new InputDialog(this);
+        InputDialog inputDialog = new InputDialog();
         inputDialog.setContentInput(mLinkUrl);
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
@@ -395,7 +395,7 @@ public class AddPostActivity extends BaseActivity {
                 showLinkPreview(content);
             }
         });
-        inputDialog.show();
+        inputDialog.show(getSupportFragmentManager(), "Input Dialog");
     }
 
     private void showLinkPreview(String link) {

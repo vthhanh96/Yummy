@@ -140,6 +140,7 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void initTopBar() {
+        mTopBar.setTitle(getString(R.string.post_detail));
         mTopBar.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBar.setImageViewRight(R.drawable.ic_add_comment);
         mTopBar.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
@@ -238,6 +239,7 @@ public class PostDetailActivity extends BaseActivity {
             } else {
                 mTvInterested.setText(mContext.getString(R.string.registered_amount, 0));
             }
+            mMenuPostImageButton.setVisibility(mPost.mIsActive ? View.VISIBLE : View.INVISIBLE);
         } else {
             if(isInterested(mPost.mInterestedPeople)) {
                 mTvInterested.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -248,6 +250,7 @@ public class PostDetailActivity extends BaseActivity {
                 mImgInterested.setVisibility(View.GONE);
                 mTvInterested.setText(R.string.register);
             }
+            mMenuPostImageButton.setVisibility(View.INVISIBLE);
         }
 
         if(mPost.mComments != null) {
@@ -262,7 +265,6 @@ public class PostDetailActivity extends BaseActivity {
 
         if(!mPost.mIsActive) {
             mInterestedLayout.setEnabled(false);
-            mMenuPostImageButton.setVisibility(View.INVISIBLE);
         }
 
         mAdapter.setNewData(mPost.mComments);
@@ -368,7 +370,7 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void openInputDialog() {
-        InputDialog inputDialog = new InputDialog(mContext);
+        InputDialog inputDialog = new InputDialog();
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -380,7 +382,7 @@ public class PostDetailActivity extends BaseActivity {
                 createComment(content);
             }
         });
-        inputDialog.show();
+        inputDialog.show(getSupportFragmentManager(), "Input Dialog");
     }
 
     private void showCommentActionPopup(final Comment comment) {
@@ -402,7 +404,7 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void showEditCommentDialog(final Comment comment) {
-        InputDialog inputDialog = new InputDialog(mContext);
+        InputDialog inputDialog = new InputDialog();
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -415,7 +417,7 @@ public class PostDetailActivity extends BaseActivity {
             }
         });
         inputDialog.setContentInput(comment.mContent);
-        inputDialog.show();
+        inputDialog.show(getSupportFragmentManager(), "Input Dialog");
     }
 
     private void editComment(String content, final Comment comment) {

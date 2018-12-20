@@ -1,88 +1,84 @@
 package com.example.thesis.yummy.view.dialog;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class InputDialog extends Dialog {
+@SuppressLint("ValidFragment")
+public class InputDialog extends BaseCustomDialogFragment {
 
-    @BindView(R.id.edt_input) EditText mEdtInput;
+    @BindView(R.id.contentTextView) TextView mContentTextView;
 
-    private Context mContext;
+    public interface InputDialogListener {
+        void onCancelClick();
+        void onDoneClick(String content);
+    }
+
     private InputDialogListener mListener;
-    private String mContent;
+
+    public InputDialog() {
+        super();
+        setView(R.layout.dialog_input);
+        setHasAction(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        if (view != null) {
+            ButterKnife.bind(this, view);
+        }
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init();
+    }
 
     public void setListener(InputDialogListener listener) {
         mListener = listener;
     }
 
-    public interface InputDialogListener{
-        void onCancelClick();
-        void onDoneClick(String content);
-    }
-
-    public InputDialog(@NonNull Context context) {
-        super(context);
-        mContext = context;
-    }
-
     public void setContentInput(String content) {
-        mContent = content;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Window window = getWindow();
-
-        assert window != null;
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if(getWindow() != null) {
-            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
-        setContentView(R.layout.dialog_input);
-        ButterKnife.bind(this);
-
-        WindowManager.LayoutParams params = window.getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
-        params.gravity = Gravity.CENTER;
-        window.setAttributes(params);
-
-        init();
+        mContentTextView.setText(content);
     }
 
     private void init() {
-        mEdtInput.setText(mContent);
+        initListener();
+        setActionName(getString(R.string.done));
     }
 
-    @OnClick(R.id.tv_cancel)
-    public void onCancel() {
-        dismiss();
-        mListener.onCancelClick();
-    }
+    private void initListener() {
+        setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                dismiss();
+                if(mListener != null) {
+                    mListener.onCancelClick();
+                }
+            }
 
-    @OnClick(R.id.tv_done)
-    public void onDone() {
-        if(TextUtils.isEmpty(mEdtInput.getText().toString().trim())) {
-            Toast.makeText(mContext, "Bạn phải nhập nội dung bình luận.", Toast.LENGTH_SHORT).show();
-        }
-        dismiss();
-        mListener.onDoneClick(mEdtInput.getText().toString());
+            @Override
+            public void dialogPerformAction() {
+                dismiss();
+                if(mListener != null) {
+                    mListener.onDoneClick(mContentTextView.getText().toString());
+                }
+            }
+        });
     }
 }

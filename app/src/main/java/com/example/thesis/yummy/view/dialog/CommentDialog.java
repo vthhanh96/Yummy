@@ -16,24 +16,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @SuppressLint("ValidFragment")
-public class ReasonDialog extends BaseCustomDialogFragment {
+public class CommentDialog extends BaseCustomDialogFragment {
 
-    @BindView(R.id.titleTextView) TextView mTitleTextView;
-    @BindView(R.id.reasonTextView) TextView mReasonTextView;
+    @BindView(R.id.commentTextView) TextView mCommentTextView;
 
-    public interface ReasonDialogListener{
+    public interface CommentDialogListener {
         void onCancelButtonClicked();
-        void onAcceptButtonClicked(String reason);
+        void onCommentButtonClicked(String reason);
     }
 
-    private String mTitle;
-    private ReasonDialogListener mListener;
+    private CommentDialogListener mListener;
 
-    public ReasonDialog(String title) {
+    public CommentDialog() {
         super();
-        setView(R.layout.dialog_reason);
-        setHasAction(true);
-        mTitle = title;
+        setView(R.layout.dialog_comment);
     }
 
     @Nullable
@@ -52,18 +48,12 @@ public class ReasonDialog extends BaseCustomDialogFragment {
         init();
     }
 
-    public void setReasonDialogListener(ReasonDialogListener listener) {
+    public void setCommentDialogListener(CommentDialogListener listener) {
         mListener = listener;
     }
 
     private void init() {
-        initData();
         initListener();
-    }
-
-    private void initData() {
-        mTitleTextView.setText(mTitle);
-        setActionName(getString(R.string.accept));
     }
 
     private void initListener() {
@@ -78,9 +68,8 @@ public class ReasonDialog extends BaseCustomDialogFragment {
 
             @Override
             public void dialogPerformAction() {
-                dismiss();
                 if(mListener != null) {
-                    mListener.onAcceptButtonClicked(mReasonTextView.getText().toString());
+                    mListener.onCommentButtonClicked(mCommentTextView.getText().toString());
                 }
             }
         });

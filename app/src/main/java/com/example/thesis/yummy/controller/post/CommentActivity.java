@@ -143,7 +143,7 @@ public class CommentActivity extends BaseActivity {
     }
 
     private void openInputDialog() {
-        InputDialog inputDialog = new InputDialog(mContext);
+        InputDialog inputDialog = new InputDialog();
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -155,7 +155,7 @@ public class CommentActivity extends BaseActivity {
                 createComment(content);
             }
         });
-        inputDialog.show();
+        inputDialog.show(getSupportFragmentManager(), "Input Dialog");
     }
 
     private void showCommentActionPopup(View view, final Comment comment) {
@@ -181,7 +181,7 @@ public class CommentActivity extends BaseActivity {
             Toast.makeText(mContext, "Bạn không có quyền chỉnh sửa bình luận này.", Toast.LENGTH_SHORT).show();
             return;
         }
-        InputDialog inputDialog = new InputDialog(mContext);
+        InputDialog inputDialog = new InputDialog();
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -194,7 +194,7 @@ public class CommentActivity extends BaseActivity {
             }
         });
         inputDialog.setContentInput(comment.mContent);
-        inputDialog.show();
+        inputDialog.show(getSupportFragmentManager(), "Input Dialog");
     }
 
     private void editComment(String content, final Comment comment) {

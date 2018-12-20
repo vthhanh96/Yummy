@@ -137,7 +137,7 @@ public class MeetingCommentFragment extends Fragment {
     }
 
     private void openInputDialog() {
-        InputDialog inputDialog = new InputDialog(getContext());
+        InputDialog inputDialog = new InputDialog();
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -149,7 +149,7 @@ public class MeetingCommentFragment extends Fragment {
                 createMeetingComment(content);
             }
         });
-        inputDialog.show();
+        inputDialog.show(getChildFragmentManager(), "Input Dialog");
     }
 
     private void createMeetingComment(String content) {
@@ -180,7 +180,7 @@ public class MeetingCommentFragment extends Fragment {
     private void showEditCommentDialog(final Comment comment) {
         if(getContext() == null) return;
 
-        InputDialog inputDialog = new InputDialog(getContext());
+        InputDialog inputDialog = new InputDialog();
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -193,7 +193,7 @@ public class MeetingCommentFragment extends Fragment {
             }
         });
         inputDialog.setContentInput(comment.mContent);
-        inputDialog.show();
+        inputDialog.show(getChildFragmentManager(), "Input Dialog");
     }
 
     private void editComment(String content, Comment comment) {

@@ -316,7 +316,7 @@ public class PostRecyclerView extends RecyclerView {
                 } else {
                     helper.setText(R.id.txtInterested, mContext.getString(R.string.registered_amount, 0));
                 }
-                helper.setVisible(R.id.btnMenuPost, true);
+                helper.setVisible(R.id.btnMenuPost, item.mIsActive);
             } else {
                 if(item.mIsActive) {
                     helper.addOnClickListener(R.id.loInterest);
@@ -358,8 +358,6 @@ public class PostRecyclerView extends RecyclerView {
             if(!TextUtils.isEmpty(item.mLink)) {
                 richPreview.getPreview(item.mLink);
             }
-
-            helper.setVisible(R.id.btnMenuPost, item.mIsActive);
 
             helper.addOnClickListener(R.id.loComment);
             helper.addOnClickListener(R.id.btnMenuPost);
