@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -35,8 +37,12 @@ public class ProfileHistoryActivity extends BaseActivity {
 
     private static final String ARG_KEY_USER_ID = "ARG_KEY_USER_ID";
 
-    @BindView(R.id.topBar) TopBarView mTopBarView;
-    @BindView(R.id.rcvHistory) RecyclerView mHistoryRecyclerView;
+    @BindView(R.id.topBar)
+    TopBarView mTopBarView;
+    @BindView(R.id.rcvHistory)
+    RecyclerView mHistoryRecyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private TimelineAdapter mAdapter;
     private int mUserId;
@@ -63,6 +69,7 @@ public class ProfileHistoryActivity extends BaseActivity {
         getExtras();
         initTopBar();
         initRecyclerView();
+        iniRefreshLayout();
         getMeetingHistory();
     }
 
@@ -86,13 +93,23 @@ public class ProfileHistoryActivity extends BaseActivity {
         });
     }
 
+    private void iniRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                getMeetingHistory();
+            }
+        });
+    }
+
     private void initRecyclerView() {
         mAdapter = new TimelineAdapter();
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Meeting item = mAdapter.getItem(position);
-                if(item == null) return;
+                if (item == null) return;
                 ProfileReviewDetailActivity.start(ProfileHistoryActivity.this, item.mId, mUserId);
             }
         });
@@ -102,15 +119,18 @@ public class ProfileHistoryActivity extends BaseActivity {
     }
 
     private void getMeetingHistory() {
+        showLoading();
         ServiceManager.getInstance().getMeetingService().getMeetings(true, mUserId).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
+                hideLoading();
                 mAdapter.addData(meetings);
             }
 
             @Override
             public void onFailure(String message) {
-
+                hideLoading();
+                Toast.makeText(ProfileHistoryActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -123,16 +143,17 @@ public class ProfileHistoryActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, Meeting item) {
-            if(item == null) return;
+            if (item == null) return;
             helper.setText(R.id.dateTextView, DateFormat.format("dd MMM yyyy", item.mTime));
             helper.setText(R.id.placeTextView, item.mPlace);
 
             RatingBar ratingBar = helper.getView(R.id.ratingBar);
             ratingBar.setRating(0);
-            if(item.mMeetingPoints != null) {
+            if (item.mMeetingPoints != null) {
                 for (MeetingPoint meetingPoint : item.mMeetingPoints) {
-                    if(meetingPoint.mUser == null || meetingPoint.mPointSum == null || meetingPoint.mCountPeople == null || meetingPoint.mCountPeople == 0) continue;
-                    if(meetingPoint.mUser.mId == mUserId) {
+                    if (meetingPoint.mUser == null || meetingPoint.mPointSum == null || meetingPoint.mCountPeople == null || meetingPoint.mCountPeople == 0)
+                        continue;
+                    if (meetingPoint.mUser.mId == mUserId) {
                         ratingBar.setRating((meetingPoint.mPointSum / meetingPoint.mCountPeople) / 2f);
                     }
                 }
@@ -155,8 +176,8 @@ public class ProfileHistoryActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, User item) {
-            if(item != null) {
-                if(TextUtils.isEmpty(item.mAvatar)) {
+            if (item != null) {
+                if (TextUtils.isEmpty(item.mAvatar)) {
                     helper.setImageResource(R.id.avatarImageView, R.drawable.ic_default_avatar);
                 } else {
                     ImageView avatarImageView = helper.getView(R.id.avatarImageView);

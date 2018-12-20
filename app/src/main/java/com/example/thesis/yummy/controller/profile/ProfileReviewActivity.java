@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -43,6 +44,7 @@ public class ProfileReviewActivity extends BaseActivity {
     @BindView(R.id.reviewsRecyclerView) RecyclerView mReviewsRecyclerView;
     @BindView(R.id.ratingBar) MaterialRatingBar mRatingBar;
     @BindView(R.id.rateButton) FancyButton mRateButton;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ReviewAdapter mReviewAdapter;
     private int mUserId;
@@ -74,6 +76,7 @@ public class ProfileReviewActivity extends BaseActivity {
     private void init() {
         getExtras();
         initTopBar();
+        iniRefreshLayout();
         initRecyclerView();
         showLoading();
         getUserInfo();
@@ -95,6 +98,17 @@ public class ProfileReviewActivity extends BaseActivity {
             @Override
             public void onRightClick() {
 
+            }
+        });
+    }
+
+    private void iniRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                showLoading();
+                getUserInfo();
             }
         });
     }

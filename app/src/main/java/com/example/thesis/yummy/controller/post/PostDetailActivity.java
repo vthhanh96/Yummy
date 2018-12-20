@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -87,6 +88,7 @@ public class PostDetailActivity extends BaseActivity {
     @BindView(R.id.txtComment) TextView mTvComment;
     @BindView(R.id.btnMenuPost) ImageButton mMenuPostImageButton;
     @BindView(R.id.loInterest) LinearLayout mInterestedLayout;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Post mPost;
     private String mToken;
@@ -134,6 +136,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void init() {
         initTopBar();
+        initRefreshLayout();
         getUser();
         getExtras();
         initRecyclerView();
@@ -152,6 +155,16 @@ public class PostDetailActivity extends BaseActivity {
             @Override
             public void onRightClick() {
                 openInputDialog();
+            }
+        });
+    }
+
+    private void initRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                getPostInfo();
             }
         });
     }
@@ -192,9 +205,11 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void getPostInfo() {
+        showLoading();
         ServiceManager.getInstance().getPostService().getPostDetail(mPostId).enqueue(new RestCallback<Post>() {
             @Override
             public void onSuccess(String message, Post post) {
+                hideLoading();
                 if(post == null) return;
                 mPost = post;
                 onGetPostSuccess();
@@ -202,6 +217,7 @@ public class PostDetailActivity extends BaseActivity {
 
             @Override
             public void onFailure(String message) {
+                hideLoading();
                 Toast.makeText(PostDetailActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });

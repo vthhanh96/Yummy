@@ -45,98 +45,105 @@
             </RelativeLayout>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.widget.NestedScrollView
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/dimen_16dp"
-                    android:text="@string/people_near_me"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/peopleNearMeRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dimen_16dp" />
+                android:layout_height="match_parent"
+                android:background="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_32dp">
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_16dp"
-                        android:layout_weight="1"
-                        android:text="@string/voucher_near_me"
+                        android:layout_margin="@dimen/dimen_16dp"
+                        android:text="@string/people_near_me"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/seeMoreSale"
-                        android:layout_width="wrap_content"
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/peopleNearMeRecyclerView"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/see_more"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"
-                        android:textAllCaps="false"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:layout_marginEnd="@dimen/dimen_8dp"/>
+                        android:layout_marginStart="@dimen/dimen_16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_32dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_16dp"
+                            android:layout_weight="1"
+                            android:text="@string/voucher_near_me"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/seeMoreSale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/see_more"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textStyle="bold"
+                            android:textAllCaps="false"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:layout_marginEnd="@dimen/dimen_8dp"/>
+                    </LinearLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/saleRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_32dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dimen_16dp"
+                            android:layout_weight="1"
+                            android:text="@string/suggest_post"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/seeMorePost"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/see_more"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textStyle="bold"
+                            android:textAllCaps="false"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:layout_marginEnd="@dimen/dimen_8dp"/>
+                    </LinearLayout>
+
+                    <com.example.thesis.yummy.view.PostRecyclerView
+                        android:id="@+id/postRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dimen_16dp" />
                 </LinearLayout>
+            </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/saleRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_32dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dimen_16dp"
-                        android:layout_weight="1"
-                        android:text="@string/suggest_post"
-                        android:textColor="@color/black"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/seeMorePost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/see_more"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"
-                        android:textAllCaps="false"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:layout_marginEnd="@dimen/dimen_8dp"/>
-                </LinearLayout>
-
-                <com.example.thesis.yummy.view.PostRecyclerView
-                    android:id="@+id/postRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/dimen_16dp" />
-            </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 
     <include layout="@layout/layout_menu" />

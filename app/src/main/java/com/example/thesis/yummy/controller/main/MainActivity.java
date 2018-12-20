@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class MainActivity extends DrawerActivity {
     @BindView(R.id.peopleNearMeRecyclerView) RecyclerView mPeopleRecyclerView;
     @BindView(R.id.saleRecyclerView) RecyclerView mSaleRecyclerView;
     @BindView(R.id.postRecyclerView) PostRecyclerView mPostRecyclerView;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private LocationCallback mLocationCallback;
     private PeopleAdapter mPeopleAdapter;
@@ -112,10 +114,9 @@ public class MainActivity extends DrawerActivity {
         getUser();
         initTopBar();
         initRecyclerView();
+        initRefreshLayout();
         checkGetLocationPermission();
-        getPeopleNearMe();
-        getVouchers();
-        getPostNearMe();
+        getData();
     }
 
     private void getUser() {
@@ -145,13 +146,29 @@ public class MainActivity extends DrawerActivity {
         initPostRecyclerView();
     }
 
+    private void initRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                getData();
+            }
+        });
+    }
+
+    private void getData() {
+        getPeopleNearMe();
+        getVouchers();
+        getPostNearMe();
+    }
+
     private void initPeopleRecyclerView() {
         mPeopleAdapter = new PeopleAdapter();
         mPeopleAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 User item = mPeopleAdapter.getItem(position);
-                if(item == null) return;
+                if (item == null) return;
                 ProfileActivity.start(MainActivity.this, item.mId);
             }
         });

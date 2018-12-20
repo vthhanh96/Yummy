@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -43,6 +45,7 @@ public class ProfileActivity extends DrawerActivity {
     @BindView(R.id.historyAmountTextView) TextView mHistoryAmountTextView;
     @BindView(R.id.reviewAmountTextView) TextView mReviewAmountTextView;
     @BindView(R.id.reviewPointTextView) TextView mReviewPointTextView;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private boolean mIsMyProfile = false;
     private boolean mIsLeftBack = false;
@@ -95,6 +98,7 @@ public class ProfileActivity extends DrawerActivity {
     private void init() {
         getExtras();
         initTopBar();
+        initRefreshLayout();
         initData();
     }
 
@@ -129,20 +133,33 @@ public class ProfileActivity extends DrawerActivity {
         });
     }
 
+    private void initRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                getUserInfo();
+            }
+        });
+    }
+
     private void initData() {
         getUserInfo();
     }
 
     private void getUserInfo() {
+        showLoading();
         ServiceManager.getInstance().getUserService().getUserInfo(mUserId).enqueue(new RestCallback<User>() {
             @Override
             public void onSuccess(String message, User user) {
+                hideLoading();
                 fillData(user);
             }
 
             @Override
             public void onFailure(String message) {
-
+                hideLoading();
+                Toast.makeText(ProfileActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }

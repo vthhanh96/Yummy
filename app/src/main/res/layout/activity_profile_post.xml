@@ -8,8 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <com.example.thesis.yummy.view.PostRecyclerView
-        android:id="@+id/rcvPosts"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+        <com.example.thesis.yummy.view.PostRecyclerView
+            android:id="@+id/rcvPosts"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

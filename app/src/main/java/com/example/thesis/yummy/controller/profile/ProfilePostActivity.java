@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
@@ -26,6 +27,7 @@ public class ProfilePostActivity extends BaseActivity {
 
     @BindView(R.id.topBar) TopBarView mTopBar;
     @BindView(R.id.rcvPosts) PostRecyclerView mPostRecyclerView;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int mPageNumber = 0;
     private int mUserId;
@@ -51,6 +53,7 @@ public class ProfilePostActivity extends BaseActivity {
     private void init() {
         getExtras();
         initTopBar();
+        iniRefreshLayout();
         initRecyclerView();
         getMyPost();
     }
@@ -71,6 +74,18 @@ public class ProfilePostActivity extends BaseActivity {
             @Override
             public void onRightClick() {
 
+            }
+        });
+    }
+
+    private void iniRefreshLayout() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(false);
+                mPostRecyclerView.setNewData(null);
+                mPageNumber = 0;
+                getMyPost();
             }
         });
     }
