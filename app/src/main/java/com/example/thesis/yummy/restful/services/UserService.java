@@ -96,4 +96,7 @@ public interface UserService {
 
     @GET("list_user_near")
     Call<RestResponse<List<User>>> getUserNearMe();
+
+    @POST("update_pass")
+    Call<RestResponse<Base>> changePass(@Body Map<String, Object> params);
 }

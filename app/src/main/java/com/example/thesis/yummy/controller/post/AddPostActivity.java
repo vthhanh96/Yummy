@@ -36,6 +36,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.eventbus.EventInterestedPost;
+import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
@@ -430,7 +431,7 @@ public class AddPostActivity extends BaseActivity {
                 mTime, mAmount, mImageUrl, mLinkUrl, new RestCallback<Post>() {
                     @Override
                     public void onSuccess(String message, Post post) {
-                        EventBus.getDefault().post(new EventInterestedPost(true));
+                        EventBus.getDefault().post(new EventUpdatePost());
                         hideLoading();
                         finish();
                     }

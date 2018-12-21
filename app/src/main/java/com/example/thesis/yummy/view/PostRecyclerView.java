@@ -25,6 +25,7 @@ import com.example.thesis.yummy.controller.post.ListPeopleInterestedPostActivity
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.eventbus.EventInterestedPost;
+import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -125,9 +126,7 @@ public class PostRecyclerView extends RecyclerView {
         ServiceManager.getInstance().getPostService().interested(post.mId).enqueue(new RestCallback<Post>() {
             @Override
             public void onSuccess(String message, Post post) {
-                mPostAdapter.remove(position);
-
-                EventBus.getDefault().post(new EventInterestedPost(isInterested(post.mInterestedPeople)));
+                EventBus.getDefault().post(new EventUpdatePost());
             }
 
             @Override

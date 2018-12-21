@@ -29,6 +29,7 @@ import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.controller.sale.SaleActivity;
 import com.example.thesis.yummy.controller.sale.VoucherDetailActivity;
 import com.example.thesis.yummy.controller.search.SearchActivity;
+import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
@@ -45,6 +46,10 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +115,12 @@ public class MainActivity extends DrawerActivity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void init() {
         getUser();
         initTopBar();
@@ -117,6 +128,7 @@ public class MainActivity extends DrawerActivity {
         initRefreshLayout();
         checkGetLocationPermission();
         getData();
+        EventBus.getDefault().register(this);
     }
 
     private void getUser() {
@@ -335,5 +347,10 @@ public class MainActivity extends DrawerActivity {
             helper.setText(R.id.titleTextView, item.mTitle);
             helper.setText(R.id.placeTextView, item.mLocation);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updatePost(EventUpdatePost eventUpdatePost) {
+        getPostNearMe();
     }
 }

@@ -75,4 +75,13 @@ public class UserRequest {
 
         ServiceManager.getInstance().getUserService().updateCurrentLocation(params).enqueue(callback);
     }
+
+    public static void changePass(String oldPass, String newPass, RestCallback<Base> callback) {
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("password", oldPass);
+        params.put("newPassWord", newPass);
+
+        ServiceManager.getInstance().getUserService().changePass(params).enqueue(callback);
+    }
 }

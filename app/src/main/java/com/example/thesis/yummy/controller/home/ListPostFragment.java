@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.post.AddPostActivity;
 import com.example.thesis.yummy.eventbus.EventInterestedPost;
+import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
@@ -156,5 +157,12 @@ public class ListPostFragment extends Fragment {
             mPostRecyclerView.setNewData(new ArrayList<Post>());
             getPosts();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eventUpdatePost(EventUpdatePost eventUpdatePost) {
+        mPageNumber = 0;
+        mPostRecyclerView.setNewData(new ArrayList<Post>());
+        getPosts();
     }
 }

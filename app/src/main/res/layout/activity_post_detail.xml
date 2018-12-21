@@ -193,15 +193,15 @@
                                 android:id="@+id/imgInterested"
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
-                                android:src="@drawable/ic_interested"
-                                android:contentDescription="@null"/>
+                                android:src="@drawable/ic_checked"
+                                android:contentDescription="@null"
+                                android:layout_marginEnd="@dimen/dimen_8dp"
+                                android:visibility="gone"/>
 
                             <TextView
                                 android:id="@+id/txtInterested"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Quan tâm (0)"
-                                android:layout_marginStart="@dimen/dimen_8dp"
                                 android:textColor="@color/black"/>
                         </LinearLayout>
 

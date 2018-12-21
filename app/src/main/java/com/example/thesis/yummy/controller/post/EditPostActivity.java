@@ -34,6 +34,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
@@ -56,6 +57,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -450,6 +453,7 @@ public class EditPostActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String message, Post post) {
                         hideLoading();
+                        EventBus.getDefault().post(new EventUpdatePost());
                         finish();
                     }
 

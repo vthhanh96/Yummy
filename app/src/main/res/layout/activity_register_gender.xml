@@ -70,6 +70,5 @@
         android:layout_marginTop="@dimen/dimen_32dp"
         fancy:fb_defaultColor="@color/colorPrimary"
         fancy:fb_radius="@dimen/dimen_32dp"
-        android:text="@string/next"
-        android:textAllCaps="true" />
+        android:text="@string/next" />
 </LinearLayout>

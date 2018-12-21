@@ -25,6 +25,7 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
+import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -42,6 +43,10 @@ import com.example.thesis.yummy.view.dialog.SelectCommentOptionsDialogFragment;
 import com.example.thesis.yummy.view.dialog.SelectPostOptionsDialogFragment;
 import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -248,6 +253,26 @@ public class PostDetailActivity extends BaseActivity {
         mTvPlace.setText(mPost.mPlace);
         mTvContent.setText(mPost.mContent);
 
+        updateInterestedState();
+
+        if(mPost.mComments != null) {
+            mTvComment.setText(mContext.getString(R.string.comment_amount, mPost.mComments.size()));
+        } else {
+            mTvComment.setText(mContext.getString(R.string.comment_amount, 0));
+        }
+
+        if(mPost.mTime != null) {
+            mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm", mPost.mTime));
+        }
+
+        if(!mPost.mIsActive) {
+            mInterestedLayout.setEnabled(false);
+        }
+
+        mAdapter.setNewData(mPost.mComments);
+    }
+
+    private void updateInterestedState() {
         if(mPost.mCreator.mId.equals(mUser.mId)) {
             mImgInterested.setVisibility(View.GONE);
             if (mPost.mInterestedPeople != null) {
@@ -268,22 +293,6 @@ public class PostDetailActivity extends BaseActivity {
             }
             mMenuPostImageButton.setVisibility(View.INVISIBLE);
         }
-
-        if(mPost.mComments != null) {
-            mTvComment.setText(mContext.getString(R.string.comment_amount, mPost.mComments.size()));
-        } else {
-            mTvComment.setText(mContext.getString(R.string.comment_amount, 0));
-        }
-
-        if(mPost.mTime != null) {
-            mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm", mPost.mTime));
-        }
-
-        if(!mPost.mIsActive) {
-            mInterestedLayout.setEnabled(false);
-        }
-
-        mAdapter.setNewData(mPost.mComments);
     }
 
     private boolean isInterested(List<User> users) {
@@ -367,15 +376,9 @@ public class PostDetailActivity extends BaseActivity {
         ServiceManager.getInstance().getPostService().interested(mPostId).enqueue(new RestCallback<Post>() {
             @Override
             public void onSuccess(String message, Post post) {
-                if(isInterested(mPost.mInterestedPeople)) {
-                    mTvInterested.setTextColor(ContextCompat.getColor(PostDetailActivity.this, R.color.colorPrimary));
-                    mImgInterested.setVisibility(View.VISIBLE);
-                    mTvInterested.setText(R.string.registered);
-                } else {
-                    mTvInterested.setTextColor(ContextCompat.getColor(PostDetailActivity.this, R.color.colorPrimary));
-                    mImgInterested.setVisibility(View.GONE);
-                    mTvInterested.setText(R.string.register);
-                }
+                mPost.mInterestedPeople = post.mInterestedPeople;
+                updateInterestedState();
+                EventBus.getDefault().post(new EventUpdatePost());
             }
 
             @Override

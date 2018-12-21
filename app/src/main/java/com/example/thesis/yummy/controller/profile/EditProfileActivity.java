@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.restful.request.UserRequest;
 import com.example.thesis.yummy.storage.StorageManager;
@@ -53,6 +56,12 @@ public class EditProfileActivity extends BaseActivity {
     @BindView(R.id.edtDateOfBirth) EditText mEdtDateOfBirth;
     @BindView(R.id.edtAddress) EditText mEdtAddress;
     @BindView(R.id.genderSpinner) Spinner mGenderSpinner;
+    @BindView(R.id.edtPassword_edit) EditText edtPassword;
+    @BindView(R.id.btnEditPassWord) ImageView btnEditPass;
+    @BindView(R.id.edtNewPass_edit) EditText edtNewPass;
+    @BindView(R.id.edtConfirmNewPass_edit) EditText edtConfirmNewPass;
+    @BindView(R.id.lnNewPass) LinearLayout lnNewPass;
+    @BindView(R.id.scrollView) ScrollView mScrollView;
 
     private ArrayAdapter<GenderItem> mGenderAdapter;
     private Date mBirthday;
@@ -71,6 +80,24 @@ public class EditProfileActivity extends BaseActivity {
     @OnClick(R.id.btnAddress)
     public void chooseAddress() {
         openSearchLocation();
+    }
+
+    @OnClick(R.id.btnEditPassWord)
+    public void editPassWord(){
+        if(lnNewPass.getVisibility() == View.GONE){
+            lnNewPass.setVisibility(View.VISIBLE);
+        }else {
+            lnNewPass.setVisibility(View.GONE);
+            edtPassword.setText("");
+            edtNewPass.setText("");
+            edtConfirmNewPass.setText("");
+        }
+        mScrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                mScrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 
     @Override
@@ -179,6 +206,8 @@ public class EditProfileActivity extends BaseActivity {
     }
 
     private void updateProfile() {
+        boolean isChangePass = false;
+
         if(TextUtils.isEmpty(mEdtName.getText())) {
             Toast.makeText(this, getString(R.string.enter_full_name), Toast.LENGTH_SHORT).show();
             return;
@@ -192,9 +221,52 @@ public class EditProfileActivity extends BaseActivity {
             return;
         }
 
-        int gender = ((GenderItem) mGenderSpinner.getSelectedItem()).mKey;
+        if(lnNewPass.getVisibility() == View.VISIBLE) {
+            if(TextUtils.isEmpty(edtPassword.getText())) {
+                Toast.makeText(this, R.string.enter_current_password, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(edtNewPass.getText())) {
+                Toast.makeText(this, R.string.enter_new_password, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(edtConfirmNewPass.getText())) {
+                Toast.makeText(this, R.string.enter_confirm_password, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(!edtNewPass.getText().toString().equals(edtConfirmNewPass.getText().toString())) {
+                Toast.makeText(this, R.string.wrong_confirm_password, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            isChangePass = true;
+        }
+
 
         showLoading();
+        if(isChangePass) {
+            changePass();
+        } else {
+            updateUser();
+        }
+    }
+
+    private void changePass() {
+        UserRequest.changePass(edtPassword.getText().toString(), edtNewPass.getText().toString(), new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                updateUser();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(EditProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateUser() {
+        int gender = ((GenderItem) mGenderSpinner.getSelectedItem()).mKey;
         UserRequest.updateProfile(mEdtName.getText().toString(),
                 gender, mBirthday, mEdtAddress.getText().toString(),
                 mLocation.getLatitude(), mLocation.getLongitude(), new RestCallback<User>() {

@@ -5,8 +5,10 @@ import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Rating;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -20,9 +22,8 @@ public interface RatingService {
     @GET("user/{userId}/list_rating")
     Call<RestResponse<List<Rating>>> getListRatingProfile(@Path("userId") int id);
 
-    @FormUrlEncoded
     @POST("user/is_had_rating")
-    Call<RestResponse<Base>> checkRatingPeople(@Field("people_evaluate") Integer id);
+    Call<RestResponse<Base>> checkRatingPeople(@Body Map<String, Object> params);
 
     @FormUrlEncoded
     @POST("rate/rating_people")

@@ -23,6 +23,7 @@ import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Rating;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.restful.request.RatingRequest;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.SelectReviewOptionsDialogFragment;
@@ -165,7 +166,7 @@ public class ProfileReviewActivity extends BaseActivity {
     }
 
     private void checkRating() {
-        ServiceManager.getInstance().getRatingService().checkRatingPeople(mUserId).enqueue(new RestCallback<Base>() {
+        RatingRequest.checkRatingPeople(mUserId, new RestCallback<Base>() {
             @Override
             public void onSuccess(String message, Base base) {
                 hideLoading();

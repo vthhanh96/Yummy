@@ -119,4 +119,9 @@
     <string name="post_detail">Chi tiết bài viết</string>
     <string name="input_comment">Nhập bình luận</string>
     <string name="done">Xong</string>
+    <string name="enter_current_password">Nhập mật khẩu hiện tại</string>
+    <string name="enter_new_password">Mật khẩu mới</string>
+    <string name="confirm_new_password">Xác nhận mật khẩu mới</string>
+    <string name="wrong_current_password">Mật khẩu hiện tại không đúng</string>
+    <string name="wrong_confirm_password">Xác nhận mật khẩu không khớp</string>
 </resources>
