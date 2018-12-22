@@ -138,6 +138,7 @@ public class MeetingCommentFragment extends Fragment {
 
     private void openInputDialog() {
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.input_comment));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -181,6 +182,7 @@ public class MeetingCommentFragment extends Fragment {
         if(getContext() == null) return;
 
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.input_comment));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {

@@ -20,12 +20,17 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.eventbus.EventRating;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.MeetingPoint;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.view.TopBarView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,12 +70,20 @@ public class ProfileHistoryActivity extends BaseActivity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void init() {
         getExtras();
         initTopBar();
         initRecyclerView();
         iniRefreshLayout();
+        showLoading();
         getMeetingHistory();
+        EventBus.getDefault().register(this);
     }
 
     private void getExtras() {
@@ -98,6 +111,7 @@ public class ProfileHistoryActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(false);
+                showLoading();
                 getMeetingHistory();
             }
         });
@@ -119,12 +133,11 @@ public class ProfileHistoryActivity extends BaseActivity {
     }
 
     private void getMeetingHistory() {
-        showLoading();
         ServiceManager.getInstance().getMeetingService().getMeetings(true, mUserId).enqueue(new RestCallback<List<Meeting>>() {
             @Override
             public void onSuccess(String message, List<Meeting> meetings) {
                 hideLoading();
-                mAdapter.addData(meetings);
+                mAdapter.setNewData(meetings);
             }
 
             @Override
@@ -185,5 +198,10 @@ public class ProfileHistoryActivity extends BaseActivity {
                 }
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateRating(EventRating eventRating) {
+        getMeetingHistory();
     }
 }

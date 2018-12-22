@@ -26,6 +26,7 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.eventbus.EventUpdatePost;
+import com.example.thesis.yummy.eventbus.EventUpdateProfile;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -139,12 +140,19 @@ public class PostDetailActivity extends BaseActivity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void init() {
         initTopBar();
         initRefreshLayout();
         getUser();
         getExtras();
         initRecyclerView();
+        EventBus.getDefault().register(this);
     }
 
     private void initTopBar() {
@@ -169,6 +177,7 @@ public class PostDetailActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(false);
+                showLoading();
                 getPostInfo();
             }
         });
@@ -180,6 +189,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void getExtras() {
         mPostId = getIntent().getIntExtra(ARG_KEY_POST_ID, -1);
+        showLoading();
         getPostInfo();
     }
 
@@ -210,7 +220,6 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void getPostInfo() {
-        showLoading();
         ServiceManager.getInstance().getPostService().getPostDetail(mPostId).enqueue(new RestCallback<Post>() {
             @Override
             public void onSuccess(String message, Post post) {
@@ -390,6 +399,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void openInputDialog() {
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.enter_link));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -424,6 +434,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void showEditCommentDialog(final Comment comment) {
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.enter_link));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -464,6 +475,7 @@ public class PostDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(String message, Base base) {
                 hideLoading();
+                EventBus.getDefault().post(new EventUpdatePost());
                 mAdapter.remove(mAdapter.getData().indexOf(comment));
                 mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
             }
@@ -482,6 +494,7 @@ public class PostDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(String message, Comment comment) {
                 hideLoading();
+                EventBus.getDefault().post(new EventUpdatePost());
                 mAdapter.addData(comment);
                 mTvComment.setText(getString(R.string.comment_amount, mAdapter.getData().size()));
             }
@@ -524,6 +537,11 @@ public class PostDetailActivity extends BaseActivity {
 
             helper.addOnClickListener(R.id.imgAvatar);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateProfile(EventUpdateProfile eventUpdateProfile) {
+        getPostInfo();
     }
 
 }

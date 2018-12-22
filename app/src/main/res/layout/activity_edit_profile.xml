@@ -36,7 +36,7 @@
                     android:layout_height="match_parent" />
 
                 <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/btnAvatar"
+                    android:id="@+id/avatarImageButton"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="end|bottom"
@@ -154,7 +154,7 @@
                     android:enabled="false"
                     android:paddingEnd="30dp"
                     android:paddingStart="0dp"
-                    android:textColor="#777777"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     app:backgroundTint="#dddddd" />
 
@@ -191,7 +191,7 @@
                     android:enabled="false"
                     android:paddingEnd="30dp"
                     android:paddingStart="0dp"
-                    android:textColor="#777777"
+                    android:textColor="@color/black"
                     android:textSize="16sp"
                     app:backgroundTint="#dddddd" />
 

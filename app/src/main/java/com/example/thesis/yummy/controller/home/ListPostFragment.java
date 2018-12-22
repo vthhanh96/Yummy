@@ -15,6 +15,7 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.post.AddPostActivity;
 import com.example.thesis.yummy.eventbus.EventInterestedPost;
 import com.example.thesis.yummy.eventbus.EventUpdatePost;
+import com.example.thesis.yummy.eventbus.EventUpdateProfile;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
@@ -93,9 +94,7 @@ public class ListPostFragment extends Fragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageNumber = 0;
-                mPostRecyclerView.setNewData(new ArrayList<Post>());
-                getPosts();
+                refreshPost();
             }
         });
     }
@@ -150,19 +149,26 @@ public class ListPostFragment extends Fragment {
         });
     }
 
+    private void refreshPost() {
+        mPageNumber = 0;
+        mPostRecyclerView.setNewData(new ArrayList<Post>());
+        getPosts();
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onResetListPost(EventInterestedPost eventInterestedPost) {
         if(eventInterestedPost.isInterested == mIsInterested) {
-            mPageNumber = 0;
-            mPostRecyclerView.setNewData(new ArrayList<Post>());
-            getPosts();
+            refreshPost();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void eventUpdatePost(EventUpdatePost eventUpdatePost) {
-        mPageNumber = 0;
-        mPostRecyclerView.setNewData(new ArrayList<Post>());
-        getPosts();
+        refreshPost();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eventUpdateProfile(EventUpdateProfile eventUpdateProfile) {
+        refreshPost();
     }
 }

@@ -14,16 +14,23 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.meeting.MeetingDetailActivity;
+import com.example.thesis.yummy.eventbus.EventRating;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Rating;
 import com.example.thesis.yummy.view.TopBarView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class ProfileReviewDetailActivity extends BaseActivity {
@@ -45,6 +52,11 @@ public class ProfileReviewDetailActivity extends BaseActivity {
     private int mMeetingId;
     private int mUserId;
 
+    @OnClick(R.id.meetingDetailButton)
+    public void openMeetingDetail() {
+        MeetingDetailActivity.start(this, mMeetingId);
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_profile_review_detail_layout;
@@ -57,11 +69,18 @@ public class ProfileReviewDetailActivity extends BaseActivity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void init() {
         getExtras();
         initTopBar();
         initReviewRecyclerView();
         getReviewDetail();
+        EventBus.getDefault().register(this);
     }
 
     private void getExtras() {
@@ -127,5 +146,10 @@ public class ProfileReviewDetailActivity extends BaseActivity {
                 helper.setImageResource(R.id.avatarImageView, R.drawable.ic_default_avatar);
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateRating(EventRating eventRating) {
+        getReviewDetail();
     }
 }

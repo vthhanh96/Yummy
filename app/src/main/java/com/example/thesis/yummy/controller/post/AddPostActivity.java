@@ -384,6 +384,7 @@ public class AddPostActivity extends BaseActivity {
 
     private void showEnterLinkDialog() {
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.enter_link));
         inputDialog.setContentInput(mLinkUrl);
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override

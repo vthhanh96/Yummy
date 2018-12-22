@@ -50,6 +50,7 @@ public interface PostService {
     @POST("post/{postId}/comment")
     Call<RestResponse<Comment>> createComment(@Path("postId") int postId, @Field("content") String content);
 
+    @FormUrlEncoded
     @PUT("post/{postId}/comment/{commentId}")
     Call<RestResponse<Comment>> editComment(@Path("postId") int postId,
                                             @Path("commentId") int commentId,

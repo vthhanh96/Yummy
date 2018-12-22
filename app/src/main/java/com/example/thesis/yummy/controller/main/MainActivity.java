@@ -30,6 +30,7 @@ import com.example.thesis.yummy.controller.sale.SaleActivity;
 import com.example.thesis.yummy.controller.sale.VoucherDetailActivity;
 import com.example.thesis.yummy.controller.search.SearchActivity;
 import com.example.thesis.yummy.eventbus.EventUpdatePost;
+import com.example.thesis.yummy.eventbus.EventUpdateProfile;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Post;
@@ -205,7 +206,8 @@ public class MainActivity extends DrawerActivity {
     }
 
     private void initPostRecyclerView() {
-        mPostRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mPostRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mPostRecyclerView.setNestedScrollingEnabled(false);
     }
 
     private void checkGetLocationPermission() {
@@ -351,6 +353,12 @@ public class MainActivity extends DrawerActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void updatePost(EventUpdatePost eventUpdatePost) {
+        getPostNearMe();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateProfile(EventUpdateProfile eventUpdateProfile) {
+        getPeopleNearMe();
         getPostNearMe();
     }
 }

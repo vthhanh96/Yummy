@@ -209,8 +209,11 @@ public class EditPostActivity extends BaseActivity {
         mEdtContent.setText(mPost.mContent);
         mCategoryAdapter.setNewData(mPost.mCategories);
         mLocation = new Location("");
-        mLocation.setLongitude(mPost.mLocation.get(0));
-        mLocation.setLatitude(mPost.mLocation.get(1));
+
+        if(mPost.mLocation != null && mPost.mLocation.size() == 2) {
+            mLocation.setLongitude(mPost.mLocation.get(0));
+            mLocation.setLatitude(mPost.mLocation.get(1));
+        }
 
         if(TextUtils.isEmpty(mPost.mImage)) {
             mImageUrl = mPost.mImage;
@@ -226,6 +229,7 @@ public class EditPostActivity extends BaseActivity {
 
     private void showEnterLinkDialog() {
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.enter_link));
         inputDialog.setContentInput(mLinkUrl);
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
@@ -431,7 +435,7 @@ public class EditPostActivity extends BaseActivity {
             @Override
             public void uploadSuccess(String url) {
                 mImageUrl = url;
-                uploadImage();
+                updatePost();
             }
 
             @Override

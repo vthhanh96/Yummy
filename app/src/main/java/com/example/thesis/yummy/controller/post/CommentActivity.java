@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -28,6 +29,8 @@ import com.example.thesis.yummy.utils.DateUtils;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.InputDialog;
 import com.example.thesis.yummy.view.dialog.SelectCommentOptionsDialogFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -144,6 +147,7 @@ public class CommentActivity extends BaseActivity {
 
     private void openInputDialog() {
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.input_comment));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -182,6 +186,7 @@ public class CommentActivity extends BaseActivity {
             return;
         }
         InputDialog inputDialog = new InputDialog();
+        inputDialog.setTitle(getString(R.string.input_comment));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -222,6 +227,7 @@ public class CommentActivity extends BaseActivity {
             @Override
             public void onSuccess(String message, Base base) {
                 hideLoading();
+                EventBus.getDefault().post(new EventUpdatePost());
                 mAdapter.getData().remove(comment);
                 mAdapter.setNewData(mAdapter.getData());
             }
@@ -240,6 +246,7 @@ public class CommentActivity extends BaseActivity {
             @Override
             public void onSuccess(String message, Comment comment) {
                 hideLoading();
+                EventBus.getDefault().post(new EventUpdatePost());
                 mAdapter.addData(comment);
             }
 

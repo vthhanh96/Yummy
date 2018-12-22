@@ -19,22 +19,23 @@ public class UserRequest {
         HashMap<String, Object> coordinate = new HashMap<>();
         coordinate.put("coordinates", new Double[]{longitude, latitude});
 
-        params.put("latLngAddress", coordinate);
+        params.put("latlngAddress", coordinate);
 
         ServiceManager.getInstance().getUserService().updateAddress(params).enqueue(callback);
     }
 
-    public static void updateProfile(String name, int gender, Date birthday, String address, Double latitude, Double longitude, RestCallback<User> callback) {
+    public static void updateProfile(String avatar, String name, int gender, Date birthday, String address, Double latitude, Double longitude, RestCallback<User> callback) {
         HashMap<String, Object> params = new HashMap<>();
         params.put("fullName", name);
         params.put("gender", gender);
         params.put("birthday", birthday);
         params.put("address", address);
+        params.put("avatar", avatar);
 
         HashMap<String, Object> coordinate = new HashMap<>();
         coordinate.put("coordinates", new Double[]{longitude, latitude});
 
-        params.put("latLngAddress", coordinate);
+        params.put("latlngAddress", coordinate);
 
         ServiceManager.getInstance().getUserService().updateProfile(params).enqueue(callback);
     }
@@ -71,7 +72,7 @@ public class UserRequest {
         HashMap<String, Object> coordinate = new HashMap<>();
         coordinate.put("coordinates", new Double[]{longitude, latitude});
 
-        params.put("latLngAddress", coordinate);
+        params.put("latlngAddress", coordinate);
 
         ServiceManager.getInstance().getUserService().updateCurrentLocation(params).enqueue(callback);
     }

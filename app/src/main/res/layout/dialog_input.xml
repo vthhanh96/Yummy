@@ -6,9 +6,9 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/input_comment"
         android:textColor="@color/black"
         android:textStyle="bold"
         android:padding="@dimen/dimen_16dp"
@@ -28,7 +28,6 @@
         android:textSize="16sp"
         android:textColor="@color/black"
         android:gravity="top"
-        android:hint="@string/comment"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp" />
 

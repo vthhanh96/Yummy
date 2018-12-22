@@ -1,13 +1,17 @@
 package com.example.thesis.yummy.controller.profile;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -24,13 +28,19 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.eventbus.EventUpdateProfile;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.restful.request.UserRequest;
 import com.example.thesis.yummy.storage.StorageManager;
+import com.example.thesis.yummy.utils.FileUtils;
+import com.example.thesis.yummy.utils.PermissionUtils;
+import com.example.thesis.yummy.utils.UploadImageListener;
+import com.example.thesis.yummy.utils.UploadImageUtils;
 import com.example.thesis.yummy.view.TopBarView;
+import com.example.thesis.yummy.view.dialog.SelectModeImageDialogFragment;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -39,6 +49,10 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -48,6 +62,9 @@ import butterknife.OnClick;
 
 public class EditProfileActivity extends BaseActivity {
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final int REQUEST_CODE_TAKE_PICTURE = 3;
+    private static final int REQUEST_CODE_GET_IMAGE = 4;
+    private static final int REQUEST_CODE_CAMERA = 5;
 
     @BindView(R.id.topBar) TopBarView mTopBarView;
     @BindView(R.id.imgAvatar) ImageView mImgAvatar;
@@ -66,10 +83,22 @@ public class EditProfileActivity extends BaseActivity {
     private ArrayAdapter<GenderItem> mGenderAdapter;
     private Date mBirthday;
     private Location mLocation = new Location("");
+    private String mImageUrl;
+    private File mFile;
+    private Uri mImageUri;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, EditProfileActivity.class);
         context.startActivity(starter);
+    }
+
+    @OnClick(R.id.avatarImageButton)
+    public void cameraButtonClicked() {
+        if (PermissionUtils.checkPermission(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE})) {
+            openDialog();
+        } else {
+            PermissionUtils.requestPermission(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_CAMERA);
+        }
     }
 
     @OnClick(R.id.btnBirthday)
@@ -130,7 +159,12 @@ public class EditProfileActivity extends BaseActivity {
 
             @Override
             public void onRightClick() {
-                updateProfile();
+                showLoading();
+                if(mImageUri != null) {
+                    uploadImage();
+                } else {
+                    updateProfile();
+                }
             }
         });
     }
@@ -147,6 +181,7 @@ public class EditProfileActivity extends BaseActivity {
         User user = StorageManager.getUser();
         if(user == null) return;
 
+        mImageUrl = user.mAvatar;
         Glide.with(getApplicationContext()).load(user.mAvatar).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
         mEdtEmail.setText(user.mEmail);
         mEdtName.setText(user.mFullName);
@@ -250,6 +285,57 @@ public class EditProfileActivity extends BaseActivity {
         }
     }
 
+    private void openDialog() {
+        SelectModeImageDialogFragment selectModeImageDialogFragment = new SelectModeImageDialogFragment();
+        selectModeImageDialogFragment.setPostArticleEditListener(new SelectModeImageDialogFragment.SelectModeImageListener() {
+            @Override
+            public void callCamera() {
+                openCamera();
+            }
+
+            @Override
+            public void callGallery() {
+                openLibrary();
+            }
+        });
+        selectModeImageDialogFragment.show(getSupportFragmentManager(), this.getClass().getName());
+    }
+
+    private void openCamera() {
+        try {
+            mFile = FileUtils.createImageFile();
+            mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void openLibrary() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_CODE_GET_IMAGE);
+    }
+
+    private void uploadImage() {
+        UploadImageUtils.uploadImage(mImageUri, new UploadImageListener() {
+            @Override
+            public void uploadSuccess(String url) {
+                mImageUrl = url;
+                updateProfile();
+            }
+
+            @Override
+            public void uploadFailure(String err) {
+                hideLoading();
+                Toast.makeText(EditProfileActivity.this, err, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void changePass() {
         UserRequest.changePass(edtPassword.getText().toString(), edtNewPass.getText().toString(), new RestCallback<Base>() {
             @Override
@@ -267,13 +353,14 @@ public class EditProfileActivity extends BaseActivity {
 
     private void updateUser() {
         int gender = ((GenderItem) mGenderSpinner.getSelectedItem()).mKey;
-        UserRequest.updateProfile(mEdtName.getText().toString(),
+        UserRequest.updateProfile(mImageUrl, mEdtName.getText().toString(),
                 gender, mBirthday, mEdtAddress.getText().toString(),
                 mLocation.getLatitude(), mLocation.getLongitude(), new RestCallback<User>() {
                     @Override
                     public void onSuccess(String message, User user) {
                         hideLoading();
                         StorageManager.saveUser(user);
+                        EventBus.getDefault().post(new EventUpdateProfile());
                         finish();
                     }
 
@@ -300,6 +387,19 @@ public class EditProfileActivity extends BaseActivity {
                     mLocation.setLatitude(place.getLatLng().latitude);
                     mLocation.setLongitude(place.getLatLng().longitude);
                 }
+                break;
+            case REQUEST_CODE_TAKE_PICTURE:
+                if(mFile == null) return;
+                Glide.with(getApplicationContext()).load(mImageUri).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+                break;
+            case REQUEST_CODE_GET_IMAGE:
+                if (data == null || data.getData() == null)
+                    return;
+                String path = FileUtils.getPath(this, data.getData());
+                if(path == null) return;
+                mFile = new File(path);
+                mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
+                Glide.with(getApplicationContext()).load(mImageUri).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
                 break;
         }
     }

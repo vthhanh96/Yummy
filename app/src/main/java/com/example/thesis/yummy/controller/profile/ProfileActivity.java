@@ -16,11 +16,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.eventbus.EventUpdateProfile;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Locale;
 
@@ -95,11 +100,18 @@ public class ProfileActivity extends DrawerActivity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void init() {
         getExtras();
         initTopBar();
         initRefreshLayout();
         initData();
+        EventBus.getDefault().register(this);
     }
 
     private void getExtras() {
@@ -138,17 +150,18 @@ public class ProfileActivity extends DrawerActivity {
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(false);
+                showLoading();
                 getUserInfo();
             }
         });
     }
 
     private void initData() {
+        showLoading();
         getUserInfo();
     }
 
     private void getUserInfo() {
-        showLoading();
         ServiceManager.getInstance().getUserService().getUserInfo(mUserId).enqueue(new RestCallback<User>() {
             @Override
             public void onSuccess(String message, User user) {
@@ -184,5 +197,10 @@ public class ProfileActivity extends DrawerActivity {
         if(user.mCountPeopleEvaluate != 0) {
             mReviewPointTextView.setText(String.format(Locale.getDefault(), "%.2f", (user.mMainPoint / user.mCountPeopleEvaluate) / 2f));
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateUser(EventUpdateProfile eventUpdateProfile) {
+        getUserInfo();
     }
 }

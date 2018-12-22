@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.eventbus.EventRating;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -23,6 +25,8 @@ import com.example.thesis.yummy.restful.model.Rating;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.view.TopBarView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +39,12 @@ import mehdi.sakout.fancybuttons.FancyButton;
 
 public class RatingDetailActivity extends BaseActivity {
 
-    private static final String ARG_USER_RATING_ID = "ARG_USER_RATING_ID";
+    private static final String ARG_USER_RATING = "ARG_USER_RATING";
     private static final String ARG_MEETING_ID = "ARG_MEETING_ID";
 
-    public static void start(Context context, int userID, int meetingID) {
+    public static void start(Context context, User user, int meetingID) {
         Intent starter = new Intent(context, RatingDetailActivity.class);
-        starter.putExtra(ARG_USER_RATING_ID, userID);
+        starter.putExtra(ARG_USER_RATING, user);
         starter.putExtra(ARG_MEETING_ID, meetingID);
         context.startActivity(starter);
     }
@@ -50,7 +54,7 @@ public class RatingDetailActivity extends BaseActivity {
     @BindView(R.id.rateButton) FancyButton mRateButton;
     @BindView(R.id.editRatingButton) FancyButton mEditRatingButton;
 
-    private int mRatingUserID;
+    private User mUser;
     private int mMeetingID;
     private ReviewAdapter mAdapter;
     private Rating mCurrentRating;
@@ -86,12 +90,13 @@ public class RatingDetailActivity extends BaseActivity {
     }
 
     private void getExtras() {
-        mRatingUserID = getIntent().getIntExtra(ARG_USER_RATING_ID, -1);
+        mUser = (User) getIntent().getSerializableExtra(ARG_USER_RATING);
         mMeetingID = getIntent().getIntExtra(ARG_MEETING_ID, -1);
     }
 
     private void initTopBar() {
-        mTopBarView.setTitle(getString(R.string.review_detail));
+        String title = getString(R.string.review_detail) + (mUser == null || TextUtils.isEmpty(mUser.mFullName) ? "" : " cho " + mUser.mFullName);
+        mTopBarView.setTitle(title);
         mTopBarView.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
@@ -114,7 +119,7 @@ public class RatingDetailActivity extends BaseActivity {
     }
 
     private void getReviewDetail() {
-        ServiceManager.getInstance().getMeetingService().getMeetingRating(mMeetingID, mRatingUserID).enqueue(new RestCallback<List<Rating>>() {
+        ServiceManager.getInstance().getMeetingService().getMeetingRating(mMeetingID, mUser.mId).enqueue(new RestCallback<List<Rating>>() {
             @Override
             public void onSuccess(String message, List<Rating> ratings) {
                 hideLoading();
@@ -132,8 +137,8 @@ public class RatingDetailActivity extends BaseActivity {
 
     private void showButton(List<Rating> ratings) {
         User currentUser = StorageManager.getUser();
-        if(currentUser == null || ratings == null) return;
-        if(mRatingUserID == currentUser.mId) {
+        if(currentUser == null || ratings == null || mUser == null) return;
+        if(mUser.mId.equals(currentUser.mId)) {
             mRateButton.setVisibility(View.GONE);
             mEditRatingButton.setVisibility(View.GONE);
             return;
@@ -188,10 +193,12 @@ public class RatingDetailActivity extends BaseActivity {
     }
 
     private void rating(Float rate, String comment) {
+        if(mUser == null) return;
         showLoading();
-        ServiceManager.getInstance().getRatingService().createRatingMeeting(mMeetingID, comment, (int) (rate * 2), mRatingUserID).enqueue(new RestCallback<Base>() {
+        ServiceManager.getInstance().getRatingService().createRatingMeeting(mMeetingID, comment, (int) (rate * 2), mUser.mId).enqueue(new RestCallback<Base>() {
             @Override
             public void onSuccess(String message, Base base) {
+                EventBus.getDefault().post(new EventRating());
                 getReviewDetail();
             }
 
@@ -208,6 +215,7 @@ public class RatingDetailActivity extends BaseActivity {
         ServiceManager.getInstance().getRatingService().updateRatingProfile(ratingID, (int)(rate * 2), comment).enqueue(new RestCallback<Base>() {
             @Override
             public void onSuccess(String message, Base base) {
+                EventBus.getDefault().post(new EventRating());
                 getReviewDetail();
             }
 

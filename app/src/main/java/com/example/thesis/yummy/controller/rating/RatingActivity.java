@@ -20,12 +20,17 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.eventbus.EventRating;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.MeetingPoint;
 import com.example.thesis.yummy.restful.model.Rating;
 import com.example.thesis.yummy.view.TopBarView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -60,11 +65,19 @@ public class RatingActivity extends BaseActivity {
         init();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void init() {
         getExtras();
         initTopBar();
         initRecyclerView();
+        showLoading();
         getMeetingDetail();
+        EventBus.getDefault().register(this);
     }
 
     private void getExtras() {
@@ -95,7 +108,7 @@ public class RatingActivity extends BaseActivity {
                 MeetingPoint item = mRatingAdapter.getItem(position);
                 if(item == null || item.mUser == null) return;
 
-                RatingDetailActivity.start(RatingActivity.this, item.mUser.mId, mMeetingID);
+                RatingDetailActivity.start(RatingActivity.this, item.mUser, mMeetingID);
             }
         });
 
@@ -104,7 +117,6 @@ public class RatingActivity extends BaseActivity {
     }
 
     private void getMeetingDetail() {
-        showLoading();
         ServiceManager.getInstance().getMeetingService().getMeetingDetail(mMeetingID).enqueue(new RestCallback<Meeting>() {
             @Override
             public void onSuccess(String message, Meeting meeting) {
@@ -150,5 +162,10 @@ public class RatingActivity extends BaseActivity {
                 ratingBar.setRating((item.mPointSum / item.mCountPeople) / 2f);
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void updateMeeting(EventRating eventRating) {
+        getMeetingDetail();
     }
 }

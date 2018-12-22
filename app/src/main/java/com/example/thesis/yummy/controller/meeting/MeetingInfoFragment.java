@@ -23,6 +23,7 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
 import com.example.thesis.yummy.controller.home.MapActivity;
+import com.example.thesis.yummy.controller.rating.RatingActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -39,12 +40,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import mehdi.sakout.fancybuttons.FancyButton;
 
 public class MeetingInfoFragment extends Fragment {
 
     @BindView(R.id.placeTextView) TextView mPlaceTextView;
     @BindView(R.id.timeTextView) TextView mTimeTextView;
     @BindView(R.id.joinedPeopleRecyclerView) RecyclerView mPeopleRecyclerView;
+    @BindView(R.id.ratingMeetingButton) FancyButton mRatingButton;
 
     private int mMeetingID;
     private Meeting mMeeting;
@@ -54,6 +57,11 @@ public class MeetingInfoFragment extends Fragment {
         MeetingInfoFragment instance = new MeetingInfoFragment();
         instance.mMeetingID = meetingID;
         return instance;
+    }
+
+    @OnClick(R.id.ratingMeetingButton)
+    public void openRating() {
+        RatingActivity.start(getContext(), mMeetingID);
     }
 
     @Nullable
@@ -108,6 +116,8 @@ public class MeetingInfoFragment extends Fragment {
         if(meeting.mTime != null) {
             mTimeTextView.setText(DateFormat.format("dd/MM/yyyy hh:mm", meeting.mTime));
         }
+
+        mRatingButton.setVisibility(mMeeting.mIsFinished ? View.VISIBLE : View.GONE);
 
         mUserAdapter.setNewData(meeting.mJoinedPeople);
     }
