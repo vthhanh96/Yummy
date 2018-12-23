@@ -37,7 +37,7 @@
     <string name="history">Lịch sử</string>
     <string name="review">Đánh giá</string>
     <string name="date_of_birth">Ngày sinh</string>
-    <string name="edit_profile">Chỉnh sửa Profile</string>
+    <string name="edit_profile">Chỉnh sửa thông tin</string>
     <string name="choose_date_of_birth">Chọn ngày sinh</string>
     <string name="enter_address">Nhập địa chỉ</string>
     <string name="male">Nam</string>
@@ -124,5 +124,9 @@
     <string name="confirm_new_password">Xác nhận mật khẩu mới</string>
     <string name="wrong_current_password">Mật khẩu hiện tại không đúng</string>
     <string name="wrong_confirm_password">Xác nhận mật khẩu không khớp</string>
-    <string name="enter_link">Nhập link</string>
+    <string name="enter_link">Nhập liên kết</string>
+    <string name="wrong_link">Liên kết không hợp lệ</string>
+    <string name="enter_amount_of_people">Nhập số lượng người</string>
+    <string name="enter_place">Chọn địa điểm</string>
+    <string name="enter_time">Chọn thời gian</string>
 </resources>

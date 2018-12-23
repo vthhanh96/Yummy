@@ -113,9 +113,10 @@ public class AddPostActivity extends BaseActivity {
     private File mFile;
     private Uri mImageUri;
     private Date mTime;
-    private int mAmount;
+    private int mAmount = 0;
     private String mImageUrl;
     private String mLinkUrl;
+    private Date mMinDate = Calendar.getInstance().getTime();
 
     public static void start(Context context) {
         Intent starter = new Intent(context, AddPostActivity.class);
@@ -218,11 +219,13 @@ public class AddPostActivity extends BaseActivity {
 
             @Override
             public void onRightClick() {
-                showLoading();
-                if(mImageUri != null) {
-                    uploadImage();
-                } else {
-                    addPost();
+                if(isValid()) {
+                    showLoading();
+                    if (mImageUri != null) {
+                        uploadImage();
+                    } else {
+                        addPost();
+                    }
                 }
             }
         });
@@ -344,6 +347,7 @@ public class AddPostActivity extends BaseActivity {
 
         dialogFragment.startAtTimeView();
         dialogFragment.setHighlightAMPMSelection(true);
+        dialogFragment.setMinimumDateTime(mMinDate);
         dialogFragment.setDefaultDateTime(mTime);
         dialogFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
             @Override
@@ -404,7 +408,10 @@ public class AddPostActivity extends BaseActivity {
         RichPreview richPreview = new RichPreview(new ResponseListener() {
             @Override
             public void onData(MetaData metaData) {
-                if(metaData == null) return;
+                if(metaData == null) {
+                    Toast.makeText(AddPostActivity.this, R.string.wrong_link, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 mLinkUrl = metaData.getUrl();
                 mLinkPreviewLayout.setVisibility(View.VISIBLE);
@@ -413,6 +420,7 @@ public class AddPostActivity extends BaseActivity {
 
             @Override
             public void onError(Exception e) {
+                Toast.makeText(AddPostActivity.this, R.string.wrong_link, Toast.LENGTH_SHORT).show();
                 mLinkUrl = null;
                 mLinkPreviewLayout.setVisibility(View.GONE);
             }
@@ -420,7 +428,25 @@ public class AddPostActivity extends BaseActivity {
 
         if(URLUtil.isValidUrl(link)) {
             richPreview.getPreview(link);
+        } else {
+            Toast.makeText(AddPostActivity.this, R.string.wrong_link, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean isValid() {
+        if(mAmountLayout.getVisibility() == View.GONE) {
+            Toast.makeText(this, R.string.enter_amount_of_people, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(mPlaceLayout.getVisibility() == View.GONE) {
+            Toast.makeText(this, R.string.enter_place, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(mTimeLayout.getVisibility() == View.GONE) {
+            Toast.makeText(this, R.string.enter_time, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void addPost() {

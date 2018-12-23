@@ -36,6 +36,7 @@ import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.DateUtils;
+import com.example.thesis.yummy.view.LinkPreviewLayout;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.CustomProgressDialog;
 import com.example.thesis.yummy.view.dialog.InputDialog;
@@ -55,6 +56,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.github.ponnamkarthik.richlinkpreview.MetaData;
+import io.github.ponnamkarthik.richlinkpreview.ResponseListener;
+import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -95,6 +99,8 @@ public class PostDetailActivity extends BaseActivity {
     @BindView(R.id.btnMenuPost) ImageButton mMenuPostImageButton;
     @BindView(R.id.loInterest) LinearLayout mInterestedLayout;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.linkPreviewLayout) LinkPreviewLayout mLinkPreviewLayout;
+    @BindView(R.id.postImageView) ImageView mPostImageView;
 
     private Post mPost;
     private String mToken;
@@ -260,7 +266,11 @@ public class PostDetailActivity extends BaseActivity {
 
         mTvAmount.setText(getString(R.string.post_amount, mPost.mAmount));
         mTvPlace.setText(mPost.mPlace);
-        mTvContent.setText(mPost.mContent);
+
+        if(!TextUtils.isEmpty(mPost.mContent)) {
+            mTvContent.setVisibility(View.VISIBLE);
+            mTvContent.setText(mPost.mContent);
+        }
 
         updateInterestedState();
 
@@ -276,6 +286,29 @@ public class PostDetailActivity extends BaseActivity {
 
         if(!mPost.mIsActive) {
             mInterestedLayout.setEnabled(false);
+        }
+
+        RichPreview richPreview = new RichPreview(new ResponseListener() {
+            @Override
+            public void onData(MetaData metaData) {
+                if(metaData == null) return;
+
+                mLinkPreviewLayout.setVisibility(View.VISIBLE);
+                mLinkPreviewLayout.setMetaData(metaData);
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        if(!TextUtils.isEmpty(mPost.mLink)) {
+            richPreview.getPreview(mPost.mLink);
+        }
+
+        if(!TextUtils.isEmpty(mPost.mImage)) {
+            mPostImageView.setVisibility(View.VISIBLE);
+            Glide.with(mContext.getApplicationContext()).load(mPost.mImage).into(mPostImageView);
         }
 
         mAdapter.setNewData(mPost.mComments);

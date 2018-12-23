@@ -156,7 +156,8 @@
                     tools:text="Nhà hàng ABC đang có khuyến mãi dành cho 5 người. Bạn nào có nhu cầu đi ăn chung không?"
                     android:layout_marginTop="@dimen/dimen_8dp"
                     android:textColor="@color/black"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
 
                 <com.example.thesis.yummy.view.LinkPreviewLayout
                     android:id="@+id/linkPreviewLayout"
@@ -164,6 +165,14 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:layout_marginTop="@dimen/dimen_16dp"/>
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/postImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="@dimen/dimen_16dp"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <View

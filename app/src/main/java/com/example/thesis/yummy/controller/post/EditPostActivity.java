@@ -249,7 +249,10 @@ public class EditPostActivity extends BaseActivity {
         RichPreview richPreview = new RichPreview(new ResponseListener() {
             @Override
             public void onData(MetaData metaData) {
-                if(metaData == null) return;
+                if(metaData == null) {
+                    Toast.makeText(EditPostActivity.this, R.string.wrong_link, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 mLinkUrl = metaData.getUrl();
                 mLinkPreviewLayout.setVisibility(View.VISIBLE);
@@ -258,6 +261,7 @@ public class EditPostActivity extends BaseActivity {
 
             @Override
             public void onError(Exception e) {
+                Toast.makeText(EditPostActivity.this, R.string.wrong_link, Toast.LENGTH_SHORT).show();
                 mLinkUrl = null;
                 mLinkPreviewLayout.setVisibility(View.GONE);
             }
@@ -265,6 +269,8 @@ public class EditPostActivity extends BaseActivity {
 
         if(URLUtil.isValidUrl(link)) {
             richPreview.getPreview(link);
+        } else {
+            Toast.makeText(EditPostActivity.this, R.string.wrong_link, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -407,6 +413,7 @@ public class EditPostActivity extends BaseActivity {
         dialogFragment.startAtTimeView();
         dialogFragment.setHighlightAMPMSelection(true);
         dialogFragment.setDefaultDateTime(mTime);
+        dialogFragment.setMinimumDateTime(Calendar.getInstance().getTime());
         dialogFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Date date) {

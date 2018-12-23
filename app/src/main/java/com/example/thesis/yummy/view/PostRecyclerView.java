@@ -306,7 +306,12 @@ public class PostRecyclerView extends RecyclerView {
                 helper.setText(R.id.txtTime, DateFormat.format("dd/MM/yyyy hh:mm", item.mTime));
             }
 
-            helper.setText(R.id.txtContent, item.mContent);
+            if(TextUtils.isEmpty(item.mContent)) {
+                helper.setGone(R.id.txtContent, false);
+            } else {
+                helper.setGone(R.id.txtContent, true);
+                helper.setText(R.id.txtContent, item.mContent);
+            }
 
             if(item.mCreator.mId.equals(mUser.mId)) {
                 helper.setGone(R.id.imgInterested, false);
@@ -356,6 +361,14 @@ public class PostRecyclerView extends RecyclerView {
             });
             if(!TextUtils.isEmpty(item.mLink)) {
                 richPreview.getPreview(item.mLink);
+            }
+
+            if(TextUtils.isEmpty(item.mImage)) {
+                helper.setGone(R.id.postImageView, false);
+            } else {
+                helper.setGone(R.id.postImageView, true);
+                ImageView imageView = helper.getView(R.id.postImageView);
+                Glide.with(mContext.getApplicationContext()).load(item.mImage).into(imageView);
             }
 
             helper.addOnClickListener(R.id.loComment);
