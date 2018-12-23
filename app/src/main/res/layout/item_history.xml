@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:line="@color/colorPrimary"
-        app:lineSize="3dp"
+        app:lineSize="2dp"
+        app:marker="@drawable/ic_meeting_green"
         app:markerSize="20dp" />
 
     <android.support.v7.widget.CardView
@@ -48,9 +49,10 @@
                     android:id="@+id/ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:isIndicator="true"
                     android:minHeight="24dp"
                     android:minWidth="24dp"
-                    android:isIndicator="true"/>
+                    app:mrb_progressTint="#fec321"/>
             </LinearLayout>
 
             <LinearLayout

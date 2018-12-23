@@ -26,7 +26,8 @@
         android:layout_marginEnd="@dimen/dimen_48dp"
         android:layout_marginStart="@dimen/dimen_48dp"
         android:minHeight="40dp"
-        android:minWidth="40dp" />
+        android:minWidth="40dp"
+        app:mrb_progressTint="#fec321" />
 
     <TextView
         android:layout_width="wrap_content"

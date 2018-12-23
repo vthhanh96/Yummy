@@ -76,6 +76,7 @@ public class MeetingInfoFragment extends Fragment {
     private void init() {
         initRecyclerView();
         getMeetingDetail();
+        checkCanRating();
     }
 
     private void initRecyclerView() {
@@ -117,9 +118,21 @@ public class MeetingInfoFragment extends Fragment {
             mTimeTextView.setText(DateFormat.format("dd/MM/yyyy hh:mm", meeting.mTime));
         }
 
-        mRatingButton.setVisibility(mMeeting.mIsFinished ? View.VISIBLE : View.GONE);
-
         mUserAdapter.setNewData(meeting.mJoinedPeople);
+    }
+
+    private void checkCanRating() {
+        ServiceManager.getInstance().getMeetingService().canRatingMeeting(mMeetingID).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                mRatingButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                mRatingButton.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void showConfirmDialog(final User user) {

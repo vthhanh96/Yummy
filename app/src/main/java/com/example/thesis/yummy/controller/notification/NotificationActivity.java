@@ -189,6 +189,8 @@ public class NotificationActivity extends DrawerActivity {
             if(!TextUtils.isEmpty(item.mImage)) {
                 ImageView imageView = helper.getView(R.id.avatarImageView);
                 Glide.with(mContext.getApplicationContext()).load(item.mImage).apply(RequestOptions.circleCropTransform()).into(imageView);
+            } else {
+                helper.setImageResource(R.id.avatarImageView, R.drawable.ic_launcher_round);
             }
         }
     }

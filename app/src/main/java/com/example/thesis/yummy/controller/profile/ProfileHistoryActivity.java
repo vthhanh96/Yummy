@@ -2,8 +2,10 @@ package com.example.thesis.yummy.controller.profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +29,8 @@ import com.example.thesis.yummy.restful.model.Meeting;
 import com.example.thesis.yummy.restful.model.MeetingPoint;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.view.TopBarView;
+import com.github.vipulasri.timelineview.LineType;
+import com.github.vipulasri.timelineview.TimelineView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -157,6 +161,7 @@ public class ProfileHistoryActivity extends BaseActivity {
         @Override
         protected void convert(BaseViewHolder helper, Meeting item) {
             if (item == null) return;
+
             helper.setText(R.id.dateTextView, DateFormat.format("dd MMM yyyy", item.mTime));
             helper.setText(R.id.placeTextView, item.mPlace);
 

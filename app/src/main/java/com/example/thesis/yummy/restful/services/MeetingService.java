@@ -1,5 +1,6 @@
 package com.example.thesis.yummy.restful.services;
 
+import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.RestResponse;
 import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Comment;
@@ -64,4 +65,7 @@ public interface MeetingService {
     Call<RestResponse<Base>> kickUser(@Path("meetingId") int meetingId,
                                       @Field("user_id") int userId,
                                       @Field("reason") String reason);
+
+    @POST("meeting/check_rating/{meeting_id}")
+    Call<RestResponse<Base>> canRatingMeeting(@Path("meeting_id") int meetingId);
 }

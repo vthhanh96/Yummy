@@ -159,8 +159,6 @@ public class MeetingDetailActivity extends BaseActivity implements MeetingDetail
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
-
-
     private class MeetingViewPagerAdapter extends FragmentPagerAdapter {
 
         private List<Fragment> mFragments;
