@@ -236,7 +236,7 @@ public class MeetingActivity extends DrawerActivity {
             helper.setText(R.id.placeTextView, item.mPlace);
 
             if(item.mTime != null) {
-                helper.setText(R.id.timeTextView, DateFormat.format("dd/MM/yyyy hh:mm", item.mTime));
+                helper.setText(R.id.timeTextView, DateFormat.format("dd/MM/yyyy hh:mm aa", item.mTime));
             }
         }
     }

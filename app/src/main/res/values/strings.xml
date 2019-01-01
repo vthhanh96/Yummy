@@ -129,4 +129,7 @@
     <string name="enter_amount_of_people">Nhập số lượng người</string>
     <string name="enter_place">Chọn địa điểm</string>
     <string name="enter_time">Chọn thời gian</string>
+    <string name="content_hint">Nội dung...</string>
+    <string name="confirm_exit_app">Bạn có muốn thoát ứng dụng?</string>
+    <string name="people_register">Người đăng ký</string>
 </resources>

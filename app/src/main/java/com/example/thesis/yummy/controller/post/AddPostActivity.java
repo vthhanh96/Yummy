@@ -66,11 +66,13 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 import butterknife.BindView;
@@ -116,7 +118,6 @@ public class AddPostActivity extends BaseActivity {
     private int mAmount = 0;
     private String mImageUrl;
     private String mLinkUrl;
-    private Date mMinDate = Calendar.getInstance().getTime();
 
     public static void start(Context context) {
         Intent starter = new Intent(context, AddPostActivity.class);
@@ -336,6 +337,7 @@ public class AddPostActivity extends BaseActivity {
     }
 
     private void showDateTimePickerDialog() {
+
         if(mTime == null) {
             mTime = Calendar.getInstance().getTime();
         }
@@ -347,8 +349,15 @@ public class AddPostActivity extends BaseActivity {
 
         dialogFragment.startAtTimeView();
         dialogFragment.setHighlightAMPMSelection(true);
-        dialogFragment.setMinimumDateTime(mMinDate);
-        dialogFragment.setDefaultDateTime(mTime);
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/M/yyyy", Locale.getDefault());
+            String startDate = simpleDateFormat.format(Calendar.getInstance().getTime());
+            Date minDate = simpleDateFormat.parse(startDate);
+            dialogFragment.setMinimumDateTime(minDate);
+            dialogFragment.setDefaultDateTime(mTime);
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
         dialogFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Date date) {
@@ -366,7 +375,7 @@ public class AddPostActivity extends BaseActivity {
 
     private void setTime(Date date) {
         mTime = date;
-        mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm", mTime));
+        mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm aa", mTime));
         mTimeLayout.setVisibility(View.VISIBLE);
     }
 

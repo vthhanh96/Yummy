@@ -81,7 +81,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingStart="@dimen/dimen_16dp"
+                android:paddingEnd="@dimen/dimen_16dp"
+                android:paddingTop="@dimen/dimen_16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -149,15 +151,29 @@
                         android:textSize="14sp"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/txtContent"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/contentLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Nhà hàng ABC đang có khuyến mãi dành cho 5 người. Bạn nào có nhu cầu đi ăn chung không?"
+                    tools:ignore="UseCompoundDrawables"
                     android:layout_marginTop="@dimen/dimen_8dp"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:visibility="gone"/>
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_content"
+                        android:contentDescription="@null"/>
+
+                    <TextView
+                        android:id="@+id/txtContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Nhà hàng ABC đang có khuyến mãi dành cho 5 người. Bạn nào có nhu cầu đi ăn chung không?"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/dimen_8dp"
+                        android:textSize="14sp"/>
+                </LinearLayout>
 
                 <com.example.thesis.yummy.view.LinkPreviewLayout
                     android:id="@+id/linkPreviewLayout"
@@ -173,6 +189,16 @@
                     android:layout_marginTop="@dimen/dimen_16dp"
                     android:scaleType="centerCrop"
                     android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/registerAmountTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="0 nguoi dang ky"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="@dimen/dimen_8dp"/>
             </LinearLayout>
 
             <View
@@ -198,8 +224,7 @@
                         android:layout_height="18dp"
                         android:src="@drawable/ic_checked"
                         android:contentDescription="@null"
-                        android:layout_marginEnd="@dimen/dimen_8dp"
-                        android:visibility="gone"/>
+                        android:layout_marginEnd="@dimen/dimen_8dp"/>
 
                     <TextView
                         android:id="@+id/txtInterested"

@@ -175,7 +175,7 @@ public class SendRequestActivity extends BaseActivity {
 
     private void setTime(Date date) {
         mTime = date;
-        mTimeEditText.setText(DateFormat.format("dd/MM/yyyy hh:mm", mTime));
+        mTimeEditText.setText(DateFormat.format("dd/MM/yyyy hh:mm aa", mTime));
     }
 
     private void sendRequest() {

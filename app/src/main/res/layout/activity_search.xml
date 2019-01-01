@@ -168,7 +168,7 @@
                     android:layout_height="64dp"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_search_menu"
-                    android:background="@drawable/bg_circle_solig_green"
+                    android:background="@drawable/bg_circle_solid_red"
                     android:scaleType="fitCenter"
                     android:padding="@dimen/dimen_8dp"/>
             </com.skyfishjy.library.RippleBackground>

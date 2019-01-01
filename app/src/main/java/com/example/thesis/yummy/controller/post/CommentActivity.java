@@ -203,12 +203,12 @@ public class CommentActivity extends BaseActivity {
     }
 
     private void editComment(String content, final Comment comment) {
+        final int position = mAdapter.getData().indexOf(comment);
         showLoading();
         ServiceManager.getInstance().getPostService().editComment(mPostId, comment.mId, content).enqueue(new RestCallback<Comment>() {
             @Override
             public void onSuccess(String message, Comment comment) {
                 hideLoading();
-                int position = mAdapter.getData().indexOf(comment);
                 mAdapter.remove(position);
                 mAdapter.addData(position, comment);
             }

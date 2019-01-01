@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Meeting;
@@ -110,7 +111,7 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
     }
 
     private void initToolbar() {
-        mTopBarView.setTitle(getString(R.string.create_meeting));
+        mTopBarView.setTitle(getString(R.string.people_register));
         mTopBarView.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
@@ -127,6 +128,15 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
 
     private void initRecyclerView() {
         mUserAdapter = new UserAdapter();
+        mUserAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                User item = mUserAdapter.getItem(position);
+                if(item == null) return;
+
+                ProfileActivity.start(ListPeopleInterestedPostActivity.this, item.mId);
+            }
+        });
         mUserAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -185,6 +195,8 @@ public class ListPeopleInterestedPostActivity extends BaseActivity {
 
             helper.setChecked(R.id.checkbox, item.mIsSelected);
             helper.setText(R.id.trustPointTextView, getString(R.string.trust_point_amount, item.mTrustPoint));
+
+            helper.addOnClickListener(R.id.avatarImageView);
         }
     }
 }

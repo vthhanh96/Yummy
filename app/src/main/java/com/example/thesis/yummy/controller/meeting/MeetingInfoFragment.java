@@ -115,7 +115,7 @@ public class MeetingInfoFragment extends Fragment {
 
         mPlaceTextView.setText(meeting.mPlace);
         if(meeting.mTime != null) {
-            mTimeTextView.setText(DateFormat.format("dd/MM/yyyy hh:mm", meeting.mTime));
+            mTimeTextView.setText(DateFormat.format("dd/MM/yyyy hh:mm aa", meeting.mTime));
         }
 
         mUserAdapter.setNewData(meeting.mJoinedPeople);

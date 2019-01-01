@@ -22,7 +22,7 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_gravity="end|bottom"
-            android:background="@drawable/bg_circle_solig_green"
+            android:background="@drawable/bg_circle_solid_green"
             android:visibility="invisible"/>
     </FrameLayout>
 

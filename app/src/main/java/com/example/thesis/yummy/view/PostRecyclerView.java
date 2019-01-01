@@ -114,6 +114,10 @@ public class PostRecyclerView extends RecyclerView {
                         if(post.mLocation == null || post.mLocation.size() < 2) return;
                         MapActivity.start(getContext(), post.mLocation.get(1), post.mLocation.get(0), post.mPlace);
                         break;
+                    case R.id.registerAmountTextView:
+                        boolean isCanCreateMeeting = !(mUser == null || !mUser.mId.equals(post.mCreator.mId)) && post.mIsActive;
+                        ListPeopleInterestedPostActivity.start(getContext(), post.mId, isCanCreateMeeting);
+                        break;
                 }
             }
         });
@@ -303,36 +307,39 @@ public class PostRecyclerView extends RecyclerView {
             helper.setText(R.id.txtPlace, item.mPlace);
 
             if (item.mTime != null) {
-                helper.setText(R.id.txtTime, DateFormat.format("dd/MM/yyyy hh:mm", item.mTime));
+                helper.setText(R.id.txtTime, DateFormat.format("dd/MM/yyyy hh:mm aa", item.mTime));
             }
 
             if(TextUtils.isEmpty(item.mContent)) {
-                helper.setGone(R.id.txtContent, false);
+                helper.setGone(R.id.contentLayout, false);
             } else {
-                helper.setGone(R.id.txtContent, true);
+                helper.setGone(R.id.contentLayout, true);
                 helper.setText(R.id.txtContent, item.mContent);
             }
 
+            if (item.mInterestedPeople != null) {
+                helper.setText(R.id.registerAmountTextView, mContext.getString(R.string.registered_amount, item.mInterestedPeople.size()));
+            } else {
+                helper.setText(R.id.registerAmountTextView, mContext.getString(R.string.registered_amount, 0));
+            }
+            helper.addOnClickListener(R.id.registerAmountTextView);
+
             if(item.mCreator.mId.equals(mUser.mId)) {
-                helper.setGone(R.id.imgInterested, false);
-                if (item.mInterestedPeople != null) {
-                    helper.setText(R.id.txtInterested, mContext.getString(R.string.registered_amount, item.mInterestedPeople.size()));
-                } else {
-                    helper.setText(R.id.txtInterested, mContext.getString(R.string.registered_amount, 0));
-                }
+                helper.setGone(R.id.loInterest, false);
                 helper.setVisible(R.id.btnMenuPost, item.mIsActive);
             } else {
+                helper.setGone(R.id.loInterest, true);
                 if(item.mIsActive) {
                     helper.addOnClickListener(R.id.loInterest);
                 }
 
                 if(isInterested(item.mInterestedPeople)) {
                     helper.setTextColor(R.id.txtInterested, ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                    helper.setGone(R.id.imgInterested, true);
+                    helper.setImageResource(R.id.imgInterested, R.drawable.ic_register_color);
                     helper.setText(R.id.txtInterested, R.string.registered);
                 } else {
                     helper.setTextColor(R.id.txtInterested, ContextCompat.getColor(getContext(), R.color.grey));
-                    helper.setGone(R.id.imgInterested, false);
+                    helper.setImageResource(R.id.imgInterested, R.drawable.ic_register);
                     helper.setText(R.id.txtInterested, mContext.getString(R.string.register));
                 }
                 helper.setVisible(R.id.btnMenuPost, false);

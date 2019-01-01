@@ -432,7 +432,7 @@ public class EditPostActivity extends BaseActivity {
     private void setTime(Date date) {
         mTime = date;
         if(mTime != null) {
-            mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm", mTime));
+            mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm aa", mTime));
         }
         mTimeLayout.setVisibility(View.VISIBLE);
     }

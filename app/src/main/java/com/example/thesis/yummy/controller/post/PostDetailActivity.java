@@ -101,6 +101,8 @@ public class PostDetailActivity extends BaseActivity {
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.linkPreviewLayout) LinkPreviewLayout mLinkPreviewLayout;
     @BindView(R.id.postImageView) ImageView mPostImageView;
+    @BindView(R.id.contentLayout) LinearLayout mContentLayout;
+    @BindView(R.id.registerAmountTextView) TextView mRegisterAmountTextView;
 
     private Post mPost;
     private String mToken;
@@ -131,6 +133,14 @@ public class PostDetailActivity extends BaseActivity {
     public void openMap() {
         if(mPost.mLocation == null || mPost.mLocation.size() < 2) return;
         MapActivity.start(this, mPost.mLocation.get(1), mPost.mLocation.get(0), mPost.mPlace);
+    }
+
+    @OnClick(R.id.registerAmountTextView)
+    public void openRegisterPeople() {
+        if(mPost == null) return;
+
+        boolean isCanCreateMeeting = !(mUser == null || !mUser.mId.equals(mPost.mCreator.mId)) && mPost.mIsActive;
+        ListPeopleInterestedPostActivity.start(this, mPost.mId, isCanCreateMeeting);
     }
 
     @Override
@@ -268,7 +278,7 @@ public class PostDetailActivity extends BaseActivity {
         mTvPlace.setText(mPost.mPlace);
 
         if(!TextUtils.isEmpty(mPost.mContent)) {
-            mTvContent.setVisibility(View.VISIBLE);
+            mContentLayout.setVisibility(View.VISIBLE);
             mTvContent.setText(mPost.mContent);
         }
 
@@ -281,7 +291,7 @@ public class PostDetailActivity extends BaseActivity {
         }
 
         if(mPost.mTime != null) {
-            mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm", mPost.mTime));
+            mTvTime.setText(DateFormat.format("dd/MM/yyyy hh:mm aa", mPost.mTime));
         }
 
         if(!mPost.mIsActive) {
@@ -315,22 +325,24 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void updateInterestedState() {
+        if (mPost.mInterestedPeople != null) {
+            mRegisterAmountTextView.setText(mContext.getString(R.string.registered_amount, mPost.mInterestedPeople.size()));
+        } else {
+            mRegisterAmountTextView.setText(mContext.getString(R.string.registered_amount, 0));
+        }
+
         if(mPost.mCreator.mId.equals(mUser.mId)) {
-            mImgInterested.setVisibility(View.GONE);
-            if (mPost.mInterestedPeople != null) {
-                mTvInterested.setText(mContext.getString(R.string.registered_amount, mPost.mInterestedPeople.size()));
-            } else {
-                mTvInterested.setText(mContext.getString(R.string.registered_amount, 0));
-            }
+            mInterestedLayout.setVisibility(View.GONE);
             mMenuPostImageButton.setVisibility(mPost.mIsActive ? View.VISIBLE : View.INVISIBLE);
         } else {
+            mInterestedLayout.setVisibility(View.VISIBLE);
             if(isInterested(mPost.mInterestedPeople)) {
                 mTvInterested.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                mImgInterested.setVisibility(View.VISIBLE);
+                mImgInterested.setImageResource(R.drawable.ic_register_color);
                 mTvInterested.setText(R.string.registered);
             } else {
                 mTvInterested.setTextColor(ContextCompat.getColor(this, R.color.grey));
-                mImgInterested.setVisibility(View.GONE);
+                mImgInterested.setImageResource(R.drawable.ic_register);
                 mTvInterested.setText(R.string.register);
             }
             mMenuPostImageButton.setVisibility(View.INVISIBLE);
@@ -432,7 +444,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void openInputDialog() {
         InputDialog inputDialog = new InputDialog();
-        inputDialog.setTitle(getString(R.string.enter_link));
+        inputDialog.setTitle(getString(R.string.input_comment));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -467,7 +479,7 @@ public class PostDetailActivity extends BaseActivity {
 
     private void showEditCommentDialog(final Comment comment) {
         InputDialog inputDialog = new InputDialog();
-        inputDialog.setTitle(getString(R.string.enter_link));
+        inputDialog.setTitle(getString(R.string.input_comment));
         inputDialog.setListener(new InputDialog.InputDialogListener() {
             @Override
             public void onCancelClick() {
@@ -484,12 +496,12 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     private void editComment(String content, final Comment comment) {
+        final int position = mAdapter.getData().indexOf(comment);
         showLoading();
         ServiceManager.getInstance().getPostService().editComment(mPostId, comment.mId, content).enqueue(new RestCallback<Comment>() {
             @Override
             public void onSuccess(String message, Comment comment) {
                 hideLoading();
-                int position = mAdapter.getData().indexOf(comment);
                 mAdapter.remove(position);
                 mAdapter.addData(position, comment);
             }

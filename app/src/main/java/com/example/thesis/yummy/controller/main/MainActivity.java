@@ -42,6 +42,8 @@ import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.PermissionUtils;
 import com.example.thesis.yummy.view.PostRecyclerView;
 import com.example.thesis.yummy.view.TopBarView;
+import com.example.thesis.yummy.view.dialog.QuestionDialog;
+import com.example.thesis.yummy.view.dialog.listener.CustomDialogActionListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -302,6 +304,22 @@ public class MainActivity extends DrawerActivity {
         });
     }
 
+    private void confirmExitApp() {
+        final QuestionDialog questionDialog = new QuestionDialog(getString(R.string.confirm_exit_app));
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                finish();
+            }
+        });
+        questionDialog.show(getSupportFragmentManager(), DrawerActivity.class.getName());
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -360,5 +378,10 @@ public class MainActivity extends DrawerActivity {
     public void updateProfile(EventUpdateProfile eventUpdateProfile) {
         getPeopleNearMe();
         getPostNearMe();
+    }
+
+    @Override
+    public void onBackPressed() {
+        confirmExitApp();
     }
 }

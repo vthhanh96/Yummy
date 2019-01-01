@@ -124,8 +124,8 @@ public class ProfileActivity extends DrawerActivity {
 
     private void initTopBar() {
         mTopBarView.setImageViewLeft(mIsLeftBack ? TopBarView.LEFT_BACK : TopBarView.LEFT_MENU);
+        mTopBarView.setTitle(getString(R.string.profile));
         if(mIsMyProfile) {
-            mTopBarView.setTitle(getString(R.string.profile));
             mTopBarView.setImageViewRight(R.drawable.ic_edit);
         }
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {

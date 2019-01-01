@@ -109,7 +109,7 @@ public class ReceiveRequestNotificationActivity extends BaseActivity {
             if(requestData != null && requestData.mRequest != null) {
                 mRequestID = requestData.mRequest.mId;
                 mPlaceTextView.setText(requestData.mRequest.mPlace);
-                mTimeTextView.setText(DateFormat.format("dd/MM/yyyy hh:mm", requestData.mRequest.mTime));
+                mTimeTextView.setText(DateFormat.format("dd/MM/yyyy hh:mm aa", requestData.mRequest.mTime));
                 mContentTextView.setText(requestData.mRequest.mContent);
                 mMessageRequestTextView.setText(getString(R.string.send_request_title, requestData.mRequest.mCreator.mFullName));
             }
