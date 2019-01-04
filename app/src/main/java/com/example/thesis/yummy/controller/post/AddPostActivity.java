@@ -33,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.thesis.yummy.AppConstants;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.eventbus.EventInterestedPost;
@@ -42,6 +43,7 @@ import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.Post;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.restful.request.PostRequest;
+import com.example.thesis.yummy.restful.request.UploadRequest;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.FileUtils;
 import com.example.thesis.yummy.utils.PermissionUtils;
@@ -113,7 +115,6 @@ public class AddPostActivity extends BaseActivity {
     private CategoryAdapter mCategoryAdapter;
     private Location mLocation = new Location("");
     private File mFile;
-    private Uri mImageUri;
     private Date mTime;
     private int mAmount = 0;
     private String mImageUrl;
@@ -167,7 +168,6 @@ public class AddPostActivity extends BaseActivity {
     @OnClick(R.id.btnDeleteImage)
     public void deleteImage() {
         mFile = null;
-        mImageUri = null;
         mImageLayout.setVisibility(View.GONE);
     }
 
@@ -222,7 +222,7 @@ public class AddPostActivity extends BaseActivity {
             public void onRightClick() {
                 if(isValid()) {
                     showLoading();
-                    if (mImageUri != null) {
+                    if (mFile != null) {
                         uploadImage();
                     } else {
                         addPost();
@@ -288,10 +288,10 @@ public class AddPostActivity extends BaseActivity {
     private void openCamera() {
         try {
             mFile = FileUtils.createImageFile();
-            mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
+            Uri uri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -305,7 +305,7 @@ public class AddPostActivity extends BaseActivity {
     }
 
     private void updateImages() {
-        Glide.with(getApplicationContext()).load(mImageUri).into(mImgPost);
+        Glide.with(getApplicationContext()).load(mFile).into(mImgPost);
         mImageLayout.setVisibility(View.VISIBLE);
     }
 
@@ -380,17 +380,17 @@ public class AddPostActivity extends BaseActivity {
     }
 
     private void uploadImage() {
-        UploadImageUtils.uploadImage(mImageUri, new UploadImageListener() {
+        UploadRequest.uploadImage(mFile, new RestCallback<String>() {
             @Override
-            public void uploadSuccess(String url) {
-                mImageUrl = url;
+            public void onSuccess(String message, String s) {
+                mImageUrl = AppConstants.BASE_SERVER_URL + s;
                 addPost();
             }
 
             @Override
-            public void uploadFailure(String err) {
+            public void onFailure(String message) {
                 hideLoading();
-                Toast.makeText(AddPostActivity.this, err, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPostActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -530,7 +530,6 @@ public class AddPostActivity extends BaseActivity {
                 String path = FileUtils.getPath(this, data.getData());
                 if(path == null) return;
                 mFile = new File(path);
-                mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
                 updateImages();
                 break;
         }

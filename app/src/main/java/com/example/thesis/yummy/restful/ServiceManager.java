@@ -6,6 +6,7 @@ import com.example.thesis.yummy.restful.services.MeetingService;
 import com.example.thesis.yummy.restful.services.NotificationService;
 import com.example.thesis.yummy.restful.services.PostService;
 import com.example.thesis.yummy.restful.services.RatingService;
+import com.example.thesis.yummy.restful.services.UploadService;
 import com.example.thesis.yummy.restful.services.UserService;
 import com.example.thesis.yummy.restful.services.VoucherService;
 
@@ -20,6 +21,7 @@ public class ServiceManager {
     private static NotificationService mNotificationService;
     private static RatingService mRatingService;
     private static VoucherService mVoucherService;
+    private static UploadService mUploadService;
 
     private ServiceManager() {}
 
@@ -32,7 +34,7 @@ public class ServiceManager {
     }
 
     public PostService getPostService() {
-        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_URL);
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
         if(mPostService == null) {
             mPostService = ServiceGenerator.createService(PostService.class);
         }
@@ -48,7 +50,7 @@ public class ServiceManager {
     }
 
     public CategoryService getCategoryService() {
-        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_URL);
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
         if(mCategoryService == null) {
             mCategoryService = ServiceGenerator.createService(CategoryService.class);
         }
@@ -57,7 +59,7 @@ public class ServiceManager {
     }
 
     public MeetingService getMeetingService() {
-        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_URL);
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
         if(mMeetingService == null) {
             mMeetingService = ServiceGenerator.createService(MeetingService.class);
         }
@@ -66,7 +68,7 @@ public class ServiceManager {
     }
 
     public NotificationService getNotificationService() {
-        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_URL);
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
         if(mNotificationService == null) {
             mNotificationService = ServiceGenerator.createService(NotificationService.class);
         }
@@ -75,7 +77,7 @@ public class ServiceManager {
     }
 
     public RatingService getRatingService() {
-        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_URL);
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
         if(mRatingService == null) {
             mRatingService = ServiceGenerator.createService(RatingService.class);
         }
@@ -83,11 +85,19 @@ public class ServiceManager {
     }
 
     public VoucherService getVoucherService() {
-        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_URL);
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
         if(mVoucherService == null) {
             mVoucherService = ServiceGenerator.createService(VoucherService.class);
         }
 
         return mVoucherService;
+    }
+
+    public UploadService getUploadService() {
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
+        if(mUploadService == null) {
+            mUploadService = ServiceGenerator.createService(UploadService.class);
+        }
+        return mUploadService;
     }
 }

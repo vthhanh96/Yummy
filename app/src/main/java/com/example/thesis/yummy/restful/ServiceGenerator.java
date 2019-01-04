@@ -31,7 +31,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
 public class ServiceGenerator {
-    private static Retrofit.Builder builder = createBuilder(AppConstants.BASE_SERVER_URL);
+    private static Retrofit.Builder builder = createBuilder(AppConstants.BASE_SERVER_API_URL);
 
     private static Retrofit.Builder createBuilder(String baseUrl) {
         Moshi moshi = getMoshiWithoutType(null);

@@ -16,16 +16,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.thesis.yummy.AppConstants;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.restful.request.UploadRequest;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.FileUtils;
 import com.example.thesis.yummy.utils.PermissionUtils;
-import com.example.thesis.yummy.utils.UploadImageListener;
-import com.example.thesis.yummy.utils.UploadImageUtils;
 import com.example.thesis.yummy.view.dialog.SelectModeImageDialogFragment;
 
 import java.io.File;
@@ -44,7 +44,6 @@ public class RegisterAvatarActivity extends BaseActivity {
     @BindView(R.id.imgAvatar) ImageView mImgAvatar;
 
     private File mFile;
-    private Uri mImageUri;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, RegisterAvatarActivity.class);
@@ -99,10 +98,10 @@ public class RegisterAvatarActivity extends BaseActivity {
     private void openCamera() {
         try {
             mFile = FileUtils.createImageFile();
-            mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
+            Uri uri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -116,23 +115,23 @@ public class RegisterAvatarActivity extends BaseActivity {
     }
 
     private void uploadImage() {
-        if(mImageUri == null) {
+        if(mFile == null) {
             RegisterGenderActivity.start(this);
             return;
         }
 
         showLoading();
-        UploadImageUtils.uploadImage(mImageUri, new UploadImageListener() {
+        UploadRequest.uploadImage(mFile, new RestCallback<String>() {
             @Override
-            public void uploadSuccess(String url) {
-                hideLoading();
+            public void onSuccess(String message, String s) {
+                String url = AppConstants.BASE_SERVER_URL + s;
                 updateAvatar(url);
             }
 
             @Override
-            public void uploadFailure(String err) {
+            public void onFailure(String message) {
                 hideLoading();
-                Toast.makeText(RegisterAvatarActivity.this, err, Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterAvatarActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -171,7 +170,7 @@ public class RegisterAvatarActivity extends BaseActivity {
         switch (requestCode) {
             case REQUEST_CODE_TAKE_PICTURE:
                 if(mFile == null) return;
-                Glide.with(getApplicationContext()).load(mImageUri).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+                Glide.with(getApplicationContext()).load(mFile).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
                 break;
             case REQUEST_CODE_GET_IMAGE:
                 if (data == null || data.getData() == null)
@@ -179,8 +178,7 @@ public class RegisterAvatarActivity extends BaseActivity {
                 String path = FileUtils.getPath(this, data.getData());
                 if(path == null) return;
                 mFile = new File(path);
-                mImageUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", mFile);
-                Glide.with(getApplicationContext()).load(mImageUri).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
+                Glide.with(getApplicationContext()).load(mFile).apply(RequestOptions.circleCropTransform()).into(mImgAvatar);
                 break;
         }
     }
