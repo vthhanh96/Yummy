@@ -2,6 +2,7 @@ package com.example.thesis.yummy.restful;
 
 import com.example.thesis.yummy.AppConstants;
 import com.example.thesis.yummy.restful.services.CategoryService;
+import com.example.thesis.yummy.restful.services.ChatService;
 import com.example.thesis.yummy.restful.services.MeetingService;
 import com.example.thesis.yummy.restful.services.NotificationService;
 import com.example.thesis.yummy.restful.services.PostService;
@@ -22,6 +23,7 @@ public class ServiceManager {
     private static RatingService mRatingService;
     private static VoucherService mVoucherService;
     private static UploadService mUploadService;
+    private static ChatService mChatService;
 
     private ServiceManager() {}
 
@@ -99,5 +101,13 @@ public class ServiceManager {
             mUploadService = ServiceGenerator.createService(UploadService.class);
         }
         return mUploadService;
+    }
+
+    public ChatService getChatService() {
+        ServiceGenerator.changeBaseUrl(AppConstants.BASE_SERVER_API_URL);
+        if(mChatService == null) {
+            mChatService = ServiceGenerator.createService(ChatService.class);
+        }
+        return mChatService;
     }
 }

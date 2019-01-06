@@ -90,6 +90,8 @@
         <activity android:name=".controller.sale.SaleActivity" />
         <activity android:name=".controller.sale.VoucherDetailActivity" />
         <activity android:name=".controller.main.MainActivity" />
+        <activity android:name=".controller.chat.ChatListActivity" />
+        <activity android:name=".controller.chat.ChatActivity" />
 
 
     </application>

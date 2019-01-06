@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.chat.ChatListActivity;
 import com.example.thesis.yummy.controller.home.HomeActivity;
 import com.example.thesis.yummy.controller.login.LoginActivity;
 import com.example.thesis.yummy.controller.main.MainActivity;
@@ -39,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_CHAT;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_HOME_PAGE;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_LOGOUT;
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_MAIN;
@@ -75,6 +77,7 @@ public abstract class DrawerActivity extends BaseActivity {
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_NOTIFICATION_PAGE, getString(R.string.notification), R.drawable.ic_notification_black, R.drawable.ic_notification_green, getNavId() == NAV_DRAWER_ID_NOTIFICATION_PAGE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_SALE, getString(R.string.sale), R.drawable.ic_sale_black, R.drawable.ic_sale_green, getNavId() == NAV_DRAWER_ID_SALE));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_MEETING, getString(R.string.meeting), R.drawable.ic_meeting_black, R.drawable.ic_meeting_green, getNavId() == NAV_DRAWER_ID_MEETING));
+        mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_CHAT, getString(R.string.chat), R.drawable.ic_chat, R.drawable.ic_chat_selected, getNavId() == NAV_DRAWER_ID_CHAT));
         mMenuItems.add(new ItemMenu(NAV_DRAWER_ID_LOGOUT, getString(R.string.logout), R.drawable.ic_logout_black, R.drawable.ic_logout_black,getNavId() == NAV_DRAWER_ID_LOGOUT));
     }
 
@@ -138,15 +141,43 @@ public abstract class DrawerActivity extends BaseActivity {
                 }
                 SaleActivity.start(this, false);
                 break;
+            case NAV_DRAWER_ID_CHAT:
+                if(this instanceof ChatListActivity) return;
+                if((!(this instanceof HomeActivity))) {
+                    finish();
+                }
+                ChatListActivity.start(this);
+                break;
         }
     }
+
+    private void confirmExitApp() {
+        final QuestionDialog questionDialog = new QuestionDialog(getString(R.string.confirm_exit_app));
+        questionDialog.setDialogActionListener(new CustomDialogActionListener() {
+            @Override
+            public void dialogCancel() {
+                questionDialog.dismissDialog();
+            }
+
+            @Override
+            public void dialogPerformAction() {
+                finish();
+            }
+        });
+        questionDialog.show(getSupportFragmentManager(), DrawerActivity.class.getName());
+    }
+
 
     @Override
     public void onBackPressed() {
         if (isDrawerOpen()) {
             closeDrawer();
         } else {
-            super.onBackPressed();
+            if(isLockDrawer()) {
+                super.onBackPressed();
+            } else {
+                confirmExitApp();
+            }
         }
     }
 
@@ -176,6 +207,10 @@ public abstract class DrawerActivity extends BaseActivity {
         if (mDrawerLayout != null) {
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
+    }
+
+    protected boolean isLockDrawer() {
+        return mDrawerLayout != null && mDrawerLayout.getDrawerLockMode(mDrawerLayout) == DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
     }
 
     private void showConfirmLogoutDialog() {

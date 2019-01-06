@@ -132,4 +132,6 @@
     <string name="content_hint">Nội dung...</string>
     <string name="confirm_exit_app">Bạn có muốn thoát ứng dụng?</string>
     <string name="people_register">Người đăng ký</string>
+    <string name="chat">Trò chuyện</string>
+    <string name="input_message">Nhập nội dung</string>
 </resources>

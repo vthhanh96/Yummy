@@ -1,10 +1,11 @@
 package com.example.thesis.yummy.restful.model;
 
 import com.squareup.moshi.Json;
+import com.stfalcon.chatkit.commons.models.IUser;
 
 import java.util.Date;
 
-public class User extends Base{
+public class User extends Base implements IUser{
     @Json(name = "_id") public Integer mId;
     @Json(name = "phone") public String mPhone;
     @Json(name = "email") public String mEmail;
@@ -25,6 +26,8 @@ public class User extends Base{
 
     public boolean mIsSelected;
 
+    public User() {}
+
     public User(Integer id) {
         mId = id;
     }
@@ -32,5 +35,20 @@ public class User extends Base{
     public User(Integer id, String fullName) {
         mId = id;
         mFullName = fullName;
+    }
+
+    @Override
+    public String getId() {
+        return String.valueOf(mId);
+    }
+
+    @Override
+    public String getName() {
+        return mFullName;
+    }
+
+    @Override
+    public String getAvatar() {
+        return mAvatar;
     }
 }

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.chat.ChatActivity;
 import com.example.thesis.yummy.eventbus.EventUpdateProfile;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
@@ -55,6 +56,7 @@ public class ProfileActivity extends DrawerActivity {
     private boolean mIsMyProfile = false;
     private boolean mIsLeftBack = false;
     private int mUserId;
+    private User mUser;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, ProfileActivity.class);
@@ -127,6 +129,8 @@ public class ProfileActivity extends DrawerActivity {
         mTopBarView.setTitle(getString(R.string.profile));
         if(mIsMyProfile) {
             mTopBarView.setImageViewRight(R.drawable.ic_edit);
+        } else {
+            mTopBarView.setImageViewRight(R.drawable.ic_chat_white);
         }
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
             @Override
@@ -140,7 +144,11 @@ public class ProfileActivity extends DrawerActivity {
 
             @Override
             public void onRightClick() {
-                EditProfileActivity.start(ProfileActivity.this);
+                if(mIsMyProfile) {
+                    EditProfileActivity.start(ProfileActivity.this);
+                } else {
+                    ChatActivity.start(ProfileActivity.this, mUser);
+                }
             }
         });
     }
@@ -166,6 +174,7 @@ public class ProfileActivity extends DrawerActivity {
             @Override
             public void onSuccess(String message, User user) {
                 hideLoading();
+                mUser = user;
                 fillData(user);
             }
 

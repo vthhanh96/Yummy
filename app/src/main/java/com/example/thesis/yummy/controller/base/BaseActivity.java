@@ -39,4 +39,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             mProgressDialog.dismiss();
         }
     }
+
+    public boolean isLoading() {
+        return mProgressDialog != null && mProgressDialog.isShowing();
+    }
 }
