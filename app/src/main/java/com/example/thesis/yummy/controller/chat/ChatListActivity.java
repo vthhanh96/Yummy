@@ -205,7 +205,6 @@ public class ChatListActivity extends DrawerActivity {
                 helper.setBackgroundColor(R.id.rootLayout, ContextCompat.getColor(mContext, R.color.gray_light));
             }
             helper.setText(R.id.timeTextView, DateUtils.getTimeAgo(mContext, item.mLastDate));
-
         }
     }
 

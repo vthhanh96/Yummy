@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/input"
-            app:outcomingDefaultBubbleColor="@color/colorPrimaryDark"
-            app:outcomingDefaultBubblePressedColor="@color/colorPrimaryDark"
+            app:outcomingDefaultBubbleColor="@color/chat_bubble_color"
+            app:outcomingDefaultBubblePressedColor="@color/chat_bubble_color"
             app:outcomingBubblePaddingBottom="10dp"
             app:incomingBubblePaddingTop="10dp"
             app:incomingBubblePaddingBottom="10dp"
@@ -42,8 +42,8 @@
             android:layout_alignParentBottom="true"
             app:inputHint="@string/input_message"
             app:showAttachmentButton="false"
-            app:inputButtonDefaultBgColor="@color/colorPrimaryDark"
-            app:inputButtonDefaultBgPressedColor="@color/colorPrimaryDark"/>
+            app:inputButtonDefaultBgColor="@color/chat_bubble_color"
+            app:inputButtonDefaultBgPressedColor="@color/chat_bubble_color"/>
 
     </RelativeLayout>
 

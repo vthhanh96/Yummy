@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#EA202D</color>
-    <color name="colorPrimaryDark">#cf1936</color>
-    <color name="colorAccent">#EA202D</color>
+    <color name="colorPrimary">#dd4337</color>
+    <color name="colorPrimaryDark">#b93121</color>
+    <color name="colorAccent">#dd4337</color>
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="grey">#777777</color>
 
     <color name="gray_light">#efeeee</color>
+    <color name="chat_bubble_color">#d93724</color>
 </resources>

@@ -13,7 +13,7 @@ public class UploadRequest {
 
     public static void uploadImage(File file, RestCallback<String> callback) {
         RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), reqFile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("picture", file.getName(), reqFile);
 
         ServiceManager.getInstance().getUploadService().upload(body).enqueue(callback);
     }
