@@ -141,7 +141,6 @@ public class MainActivity extends DrawerActivity {
     }
 
     private void initTopBar() {
-        mTopBarView.setTitle(getString(R.string.app_name));
         mTopBarView.setImageViewLeft(TopBarView.LEFT_MENU);
         mTopBarView.setImageViewRight(R.drawable.ic_add);
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {

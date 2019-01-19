@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.thesis.yummy.R;
 
 public class QuestionDialog extends BaseCustomDialogFragment {
-    private TextView tvContent,txvTitle;
+    private TextView tvContent;
     private String content;
     public QuestionDialog() {
     }
@@ -34,7 +34,6 @@ public class QuestionDialog extends BaseCustomDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mainView = super.onCreateView(inflater, container, savedInstanceState);
-        txvTitle  = (TextView) mainView.findViewById(R.id.txvTitle);
         tvContent = (TextView) mainView.findViewById(R.id.tvQuestion);
         setActionName("Đồng ý");
         tvContent.setText(content);

@@ -34,6 +34,9 @@ public class TopBarView extends RelativeLayout implements View.OnClickListener{
     @BindView(R.id.txtTitle)
     TextView tvTitle;
 
+    @BindView(R.id.logoImageView)
+    ImageView mLogoImageView;
+
     private OnLeftRightClickListener leftRightClickListener;
 
     public void setOnLeftRightClickListener(OnLeftRightClickListener listener) {
@@ -90,6 +93,7 @@ public class TopBarView extends RelativeLayout implements View.OnClickListener{
     public void setTitle(String title) {
         tvTitle.setText(title);
         tvTitle.setVisibility(VISIBLE);
+        mLogoImageView.setVisibility(View.GONE);
     }
 
     public void setTransparentBackground(boolean isTransparent) {
