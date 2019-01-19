@@ -33,6 +33,12 @@ enum StorageKey {
         public String toString() {
             return "IS_COMMENT";
         }
+    },
+    IS_FIRST_TIME {
+        @Override
+        public String toString() {
+            return "IS_FIRST_TIME";
+        }
     }
 }
 
@@ -83,8 +89,20 @@ public class StorageManager {
         return Hawk.get(StorageKey.IS_COMMENT.toString(), false);
     }
 
+    public static void saveIsFirstTime(boolean isFirstTime) {
+        Hawk.put(StorageKey.IS_FIRST_TIME.toString(), isFirstTime);
+    }
+
+    public static boolean isFirstTime() {
+        return Hawk.get(StorageKey.IS_FIRST_TIME.toString(), true);
+    }
+
     public static void deleteAll() {
         mUser = null;
-        Hawk.deleteAll();
+        Hawk.delete(StorageKey.OAUTH2_ACCESS_TOKEN.toString());
+        Hawk.delete(StorageKey.USER_DATA.toString());
+        Hawk.delete(StorageKey.EXPIRE_IN.toString());
+        Hawk.delete(StorageKey.IS_CHATTING.toString());
+        Hawk.delete(StorageKey.IS_COMMENT.toString());
     }
 }

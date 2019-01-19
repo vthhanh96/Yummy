@@ -143,4 +143,15 @@
     <string name="near_me">Gần tôi</string>
     <string name="select_favorite_food">Chọn sở thích ăn uống</string>
     <string name="none_select_favorite">Chưa chọn sở thích</string>
+    <string name="boarding_title_1">Tạo bài viết trong 1 nốt nhạc</string>
+    <string name="boarding_sub_1">Hỗ trợ người dùng tạo bài viết tìm kiếm người đi ăn chung một cách nhanh chóng. Lúc này người dùng khác sẽ nhìn thấy mong muốn của bạn và đăng kí tham gia nếu có nhu cầu.</string>
+    <string name="boarding_title_2">Tạo cuộc hẹn - Gắn kết yêu thương</string>
+    <string name="boarding_sub_2">Nhanh chóng xúc tiến cuộc gặp gỡ bằng cách tạo cuộc hẹn hò cùng người bạn mới. Cùng nhau nhận xét và cho điểm lẫn nhau sau khi cuộc hẹn kết thúc.</string>
+    <string name="boarding_title_3">Truy lùng đối tượng nhanh như chớp</string>
+    <string name="boarding_sub_3">Bằng các thao tác đơn giản, bạn có thể nhanh chóng tìm kiếm người đi ăn chung phù hợp cho mình.</string>
+    <string name="boarding_title_4">Chat chi vi vu</string>
+    <string name="boarding_sub_4">Hãy để Yummy giúp bạn tìm hiểu \"Đồng thực\" rõ hơn trước và sau khi đi ăn bằng chức năng Trò chuyện.</string>
+    <string name="boarding_title_5">Hốt nhanh voucher - Tiết kiệm chi phí</string>
+    <string name="boarding_sub_5">Gợi ý nhiều Voucher hấp dẫn được cập nhật liên tục. Với nguồn thông tin xác đáng từ Hotdeal và Foody.</string>
+    <string name="skip">Bỏ qua</string>
 </resources>

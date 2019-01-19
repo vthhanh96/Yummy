@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        app:ci_drawable="@drawable/red_radius_square"
+        app:ci_height="6dp"
+        app:ci_margin="6dp"
+        app:ci_width="6dp" />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/skipButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:fb_defaultColor="@color/colorPrimary"
+        app:fb_radius="25dp"
+        android:layout_margin="@dimen/dimen_16dp"
+        android:text="@string/skip"/>
+</LinearLayout>
