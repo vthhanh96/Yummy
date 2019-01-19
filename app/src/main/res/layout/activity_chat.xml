@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             app:inputHint="@string/input_message"
-            app:showAttachmentButton="false"
+            app:showAttachmentButton="true"
             app:inputButtonDefaultBgColor="@color/chat_bubble_color"
             app:inputButtonDefaultBgPressedColor="@color/chat_bubble_color"/>
 

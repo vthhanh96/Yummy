@@ -2,6 +2,8 @@ package com.example.thesis.yummy.utils;
 
 import android.annotation.SuppressLint;
 
+import static com.example.thesis.yummy.AppConstants.BASE_SERVER_URL;
+
 public class StringUtils {
 
     @SuppressLint("DefaultLocale")
@@ -13,5 +15,9 @@ public class StringUtils {
         }
 
         return String.format("%.2f km", distance);
+    }
+
+    public static boolean isImage(String text) {
+        return text.contains(BASE_SERVER_URL);
     }
 }
