@@ -11,6 +11,6 @@ import retrofit2.http.Path;
 
 public interface NotificationService {
 
-    @GET("notification/{user_id}")
-    Call<RestResponse<List<Notification>>> getNotifications(@Path("user_id") int userId);
+    @GET("notification/{page}")
+    Call<RestResponse<List<Notification>>> getNotifications(@Path("page") int userId);
 }

@@ -37,7 +37,7 @@ public class MeetingDetailActivity extends BaseActivity implements MeetingDetail
         context.startActivity(starter);
     }
 
-    public static Intent getMeetingDetailIntent(Context context, int meetingID) {
+    public static Intent getMeetingDetailIntent(Context context, Integer meetingID) {
         Intent intent = new Intent(context, MeetingDetailActivity.class);
         intent.putExtra(ARG_KEY_MEETING_ID, meetingID);
         return intent;
@@ -148,7 +148,7 @@ public class MeetingDetailActivity extends BaseActivity implements MeetingDetail
         fragments.add(MeetingInfoFragment.newInstance(mMeetingID));
 
         mMeetingCommentFragment = MeetingCommentFragment.newInstance(mMeetingID);
-        mMeetingCommentFragment.setMeetingDetailListener(this);
+//        mMeetingCommentFragment.setMeetingDetailListener(this);
         fragments.add(mMeetingCommentFragment);
 
         mViewPager.setAdapter(new MeetingViewPagerAdapter(getSupportFragmentManager(), fragments));

@@ -21,6 +21,18 @@ enum StorageKey {
         public String toString() {
             return "EXPIRE_IN";
         }
+    },
+    IS_CHATTING {
+        @Override
+        public String toString() {
+            return "IS_CHATTING";
+        }
+    },
+    IS_COMMENT {
+        @Override
+        public String toString() {
+            return "IS_COMMENT";
+        }
     }
 }
 
@@ -53,6 +65,22 @@ public class StorageManager {
 
     public static Long getExpireIn() {
         return Hawk.get(StorageKey.EXPIRE_IN.toString(), 0L);
+    }
+
+    public static void saveIsChatting(boolean isChatting) {
+        Hawk.put(StorageKey.IS_CHATTING.toString(), isChatting);
+    }
+
+    public static boolean isChatting() {
+        return Hawk.get(StorageKey.IS_CHATTING.toString(), false);
+    }
+
+    public static void saveIsComment(boolean isComment) {
+        Hawk.put(StorageKey.IS_COMMENT.toString(), isComment);
+    }
+
+    public static boolean isComment() {
+        return Hawk.get(StorageKey.IS_COMMENT.toString(), false);
     }
 
     public static void deleteAll() {

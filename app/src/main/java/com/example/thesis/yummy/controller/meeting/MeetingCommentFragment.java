@@ -19,42 +19,53 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.Application;
 import com.example.thesis.yummy.R;
+import com.example.thesis.yummy.controller.notification.NotificationHandler;
 import com.example.thesis.yummy.controller.post.CommentActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
+import com.example.thesis.yummy.eventbus.EventNewComment;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Comment;
+import com.example.thesis.yummy.restful.model.Message;
 import com.example.thesis.yummy.restful.model.User;
+import com.example.thesis.yummy.restful.request.MeetingRequest;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.DateUtils;
 import com.example.thesis.yummy.view.dialog.InputDialog;
 import com.example.thesis.yummy.view.dialog.SelectCommentOptionsDialogFragment;
+import com.stfalcon.chatkit.commons.ImageLoader;
+import com.stfalcon.chatkit.messages.MessageInput;
+import com.stfalcon.chatkit.messages.MessagesList;
+import com.stfalcon.chatkit.messages.MessagesListAdapter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MeetingCommentFragment extends Fragment {
+public class MeetingCommentFragment extends Fragment implements MessageInput.InputListener,
+        MessageInput.TypingListener {
 
-    @BindView(R.id.commentRecyclerView) RecyclerView mCommentRecyclerView;
-    @BindView(R.id.createCommentButton) FloatingActionButton mCreateCommentButton;
+    @BindView(R.id.messagesList) MessagesList mMessagesList;
+    @BindView(R.id.input) MessageInput mMessageInput;
 
-    private MeetingDetailListener mListener;
-    private CommentAdapter mCommentAdapter;
     private int mMeetingID;
+    private ImageLoader mImageLoader;
+    private MessagesListAdapter<Comment> mMessagesListAdapter;
+    private boolean mIsActive = true;
 
     public static MeetingCommentFragment newInstance(int meetingID) {
         MeetingCommentFragment instance = new MeetingCommentFragment();
         instance.mMeetingID = meetingID;
         return instance;
-    }
-
-    @OnClick(R.id.createCommentButton)
-    public void createComment() {
-        openInputDialog();
     }
 
     @Nullable
@@ -66,66 +77,77 @@ public class MeetingCommentFragment extends Fragment {
         return view;
     }
 
-    public void setMeetingDetailListener(MeetingDetailListener listener) {
-        mListener = listener;
+    @Override
+    public void onResume() {
+        super.onResume();
+        mIsActive = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mIsActive = false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        StorageManager.saveIsComment(false);
+        EventBus.getDefault().unregister(this);
     }
 
     private void init() {
-        initRecyclerView();
+        initImageLoader();
+        initAdapter();
+        initMessageInput();
         getMeetingComments();
+        StorageManager.saveIsComment(true);
+        EventBus.getDefault().register(this);
     }
 
-    private void initRecyclerView() {
-        mCommentAdapter = new CommentAdapter();
-        mCommentAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+    private void initImageLoader() {
+        mImageLoader = new ImageLoader() {
             @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                Comment comment = mCommentAdapter.getItem(position);
-                if(comment == null) return false;
-                showCommentActionPopup(comment);
-                return false;
+            public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
+                if(getContext() == null) return;
+                Glide.with(getContext().getApplicationContext()).load(url).apply(RequestOptions.circleCropTransform()).into(imageView);
+            }
+        };
+    }
+
+    private void initAdapter() {
+        mMessagesListAdapter = new MessagesListAdapter<>(String.valueOf(StorageManager.getUser().getId()), mImageLoader);
+        mMessagesListAdapter.setLoadMoreListener(new MessagesListAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+
             }
         });
 
-        mCommentAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mMessagesListAdapter.registerViewClickListener(R.id.messageUserAvatar, new MessagesListAdapter.OnMessageViewClickListener<Comment>() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                Comment comment = mCommentAdapter.getItem(position);
-                if(comment == null) return;
-                switch (view.getId()) {
-                    case R.id.imgAvatar:
-                        if(comment.mCreator == null) return;
-                        ProfileActivity.start(getContext(), comment.mCreator.mId);
-                        break;
+            public void onMessageViewClick(View view, Comment message) {
+                try {
+                    ProfileActivity.start(getContext(), Integer.parseInt(message.getUser().getId()));
+                } catch (Exception ex){
+                    ex.printStackTrace();
                 }
             }
         });
 
-        mCommentRecyclerView.setAdapter(mCommentAdapter);
-        mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mMessagesList.setAdapter(mMessagesListAdapter);
+    }
 
-        mCommentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-                if (dy<0 && !mCreateCommentButton.isShown())
-                    mCreateCommentButton.show();
-                else if(dy>0 && mCreateCommentButton.isShown())
-                    mCreateCommentButton.hide();
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-
+    private void initMessageInput() {
+        mMessageInput.setInputListener(this);
+        mMessageInput.setTypingListener(this);
     }
 
     public void getMeetingComments() {
         ServiceManager.getInstance().getMeetingService().getMeetingComments(mMeetingID).enqueue(new RestCallback<List<Comment>>() {
             @Override
             public void onSuccess(String message, List<Comment> comments) {
-                mCommentAdapter.setNewData(comments);
+                mMessagesListAdapter.addToEnd(comments, true);
             }
 
             @Override
@@ -154,9 +176,15 @@ public class MeetingCommentFragment extends Fragment {
     }
 
     private void createMeetingComment(String content) {
-        if(mListener != null) {
-            mListener.onCreateComment(content);
-        }
+        MeetingRequest.createComment(mMeetingID, content, new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+            }
+
+            @Override
+            public void onFailure(String message) {
+            }
+        });
     }
 
     private void showCommentActionPopup(final Comment comment) {
@@ -199,38 +227,43 @@ public class MeetingCommentFragment extends Fragment {
     }
 
     private void editComment(String content, Comment comment) {
-        if(mListener != null) {
-            mListener.onUpdateComment(content, comment);
-        }
+
     }
 
     private void onDeleteComment(Comment comment) {
-        if(mListener != null) {
-            mListener.onDeleteComment(comment);
-        }
-    }
 
-    public class CommentAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
-
-        public CommentAdapter() {
-            super(R.layout.item_comment_layout, new ArrayList<Comment>());
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Comment item) {
-            helper.setText(R.id.tvName, item.mCreator.mFullName);
-            helper.setText(R.id.tvTime, DateUtils.getTimeAgo(mContext, item.mCreatedDate));
-            helper.setText(R.id.tvContent, item.mContent);
-
-            ImageView imgAvatar = helper.getView(R.id.imgAvatar);
-            Glide.with(mContext).load(item.mCreator.mAvatar).apply(RequestOptions.circleCropTransform()).into(imgAvatar);
-
-            helper.addOnClickListener(R.id.imgAvatar);
-        }
     }
 
     @Override
     public String toString() {
         return Application.mContext.getString(R.string.comment);
+    }
+
+    @Override
+    public boolean onSubmit(CharSequence input) {
+        Comment comment = new Comment(-1, StorageManager.getUser(), input.toString(), Calendar.getInstance().getTime());
+        mMessagesListAdapter.addToStart(comment, true);
+        createMeetingComment(input.toString());
+        return true;
+    }
+
+    @Override
+    public void onStartTyping() {
+
+    }
+
+    @Override
+    public void onStopTyping() {
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewComment(EventNewComment eventNewComment) {
+        if(eventNewComment == null || eventNewComment.mComment == null || !mIsActive) return;
+        if(eventNewComment.mComment.mParentID == mMeetingID) {
+            mMessagesListAdapter.addToStart(eventNewComment.mComment, true);
+        } else {
+            NotificationHandler.createNotification(getContext(), eventNewComment.mDataNotification);
+        }
     }
 }

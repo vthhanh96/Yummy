@@ -16,12 +16,14 @@ import com.example.thesis.yummy.controller.meeting.MeetingDetailActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.restful.ServiceGenerator;
 import com.example.thesis.yummy.restful.model.Notification;
+import com.example.thesis.yummy.restful.model.NotificationCommentData;
 import com.example.thesis.yummy.restful.model.NotificationMeetingData;
 import com.example.thesis.yummy.restful.model.NotificationPostData;
 import com.squareup.moshi.JsonAdapter;
 
 import java.io.IOException;
 
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_COMMENT;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_MEETING;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_POST;
 
@@ -43,7 +45,8 @@ public class NotificationHandler {
                     .setContentTitle(context.getString(R.string.app_name))
                     .setContentText(notification.mTitle)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setSound(defaultSoundUri);
+                    .setSound(defaultSoundUri)
+                    .setAutoCancel(true);
 
             Intent intent = new Intent(context, LoadingActivity.class);
             switch (notification.notificationData.mType) {
@@ -57,9 +60,14 @@ public class NotificationHandler {
                     if (notificationMeetingData.mMeeting == null) break;
                     intent = MeetingDetailActivity.getMeetingDetailIntent(context, notificationMeetingData.mMeeting.mId);
                     break;
+                case NOTIFICATION_COMMENT:
+                    NotificationCommentData notificationCommentData = (NotificationCommentData) notification.notificationData;
+                    if(notificationCommentData.mComment == null) break;
+                    intent = MeetingDetailActivity.getMeetingDetailIntent(context, notificationCommentData.mComment.mParentID);
+                    break;
             }
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             builder.setContentIntent(pendingIntent);
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

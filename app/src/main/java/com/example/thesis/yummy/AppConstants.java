@@ -21,6 +21,7 @@ public class AppConstants {
     public static final int NOTIFICATION_POST = 1;
     public static final int NOTIFICATION_MEETING = 2;
     public static final int NOTIFICATION_REQUEST = 3;
+    public static final int NOTIFICATION_COMMENT = 4;
 
     //TYPE SHOW NOTIFICATION
     public static final String NOTIFICATION_TYPE_NORMAL = "nomal";
@@ -29,6 +30,7 @@ public class AppConstants {
     public static final String NOTIFICATION_TYPE_REJECT = "reject";
     public static final String NOTIFICATION_TYPE_RATING = "rating";
     public static final String NOTIFICATION_TYPE_CHAT = "message";
+    public static final String NOTIFICATION_TYPE_COMMENT = "comment";
     public static final String NOTIFICATION_RECONNECT_SOCKET = "connect_socket";
 
 }

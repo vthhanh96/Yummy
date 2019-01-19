@@ -23,6 +23,7 @@ public class User extends Base implements IUser{
     @Json(name = "count_meeting") public Integer mMeetingAmount;
     @Json(name = "isOnline") public boolean mIsOnline;
     @Json(name = "age") public Integer mAge;
+    @Json(name = "distance") public Double mDistance;
 
     public boolean mIsSelected;
 

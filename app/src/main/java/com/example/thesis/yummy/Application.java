@@ -8,11 +8,14 @@ import com.example.thesis.yummy.controller.notification.NotificationHandler;
 import com.example.thesis.yummy.controller.notification.RatingNotificationActivity;
 import com.example.thesis.yummy.controller.notification.ReceiveRequestNotificationActivity;
 import com.example.thesis.yummy.controller.notification.RejectRequestNotificationActivity;
+import com.example.thesis.yummy.eventbus.EventNewComment;
 import com.example.thesis.yummy.eventbus.EventNewMessage;
 import com.example.thesis.yummy.restful.ServiceGenerator;
 import com.example.thesis.yummy.restful.auth.AuthClient;
+import com.example.thesis.yummy.restful.model.Comment;
 import com.example.thesis.yummy.restful.model.Message;
 import com.example.thesis.yummy.restful.model.Notification;
+import com.example.thesis.yummy.restful.model.NotificationCommentData;
 import com.example.thesis.yummy.restful.model.NotificationMeetingData;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.socket.SocketManager;
@@ -34,6 +37,7 @@ import static com.example.thesis.yummy.AppConstants.NOTIFICATION_MEETING;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_RECONNECT_SOCKET;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_ACCEPT;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_CHAT;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_COMMENT;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_INVITE;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_NORMAL;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_TYPE_RATING;
@@ -118,6 +122,20 @@ public class Application extends android.app.Application {
                 try {
                     Message message = jsonAdapter.fromJson(data.optString(NOTIFICATION_TYPE_CHAT));
                     EventBus.getDefault().post(new EventNewMessage(message));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            } else if(data.has(NOTIFICATION_TYPE_COMMENT)) {
+                JsonAdapter<Notification> jsonAdapter = ServiceGenerator.getMoshiWithoutType(Notification.class).adapter(Notification.class);
+                try {
+                    Notification notification = jsonAdapter.fromJson(data.optString(NOTIFICATION_TYPE_COMMENT));
+                    if(notification == null) return;
+                    NotificationCommentData notificationCommentData = (NotificationCommentData) notification.notificationData;
+                    if(StorageManager.isComment()) {
+                        EventBus.getDefault().post(new EventNewComment(notificationCommentData.mComment, data.optString(NOTIFICATION_TYPE_COMMENT)));
+                    } else {
+                        NotificationHandler.createNotification(mContext, data.optString(NOTIFICATION_TYPE_COMMENT));
+                    }
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

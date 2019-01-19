@@ -3,6 +3,7 @@ package com.example.thesis.yummy.restful.adapter;
 import android.support.annotation.Nullable;
 
 import com.example.thesis.yummy.restful.ServiceGenerator;
+import com.example.thesis.yummy.restful.model.NotificationCommentData;
 import com.example.thesis.yummy.restful.model.NotificationData;
 import com.example.thesis.yummy.restful.model.NotificationMeetingData;
 import com.example.thesis.yummy.restful.model.NotificationPostData;
@@ -14,6 +15,7 @@ import com.squareup.moshi.JsonWriter;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_COMMENT;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_MEETING;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_POST;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_REQUEST;
@@ -40,6 +42,9 @@ public class NotificationDataAdapter extends JsonAdapter<NotificationData> {
                     case NOTIFICATION_REQUEST:
                         JsonAdapter<NotificationRequestData> requestDataJsonAdapter = ServiceGenerator.getMoshiWithoutType(NotificationData.class).adapter(NotificationRequestData.class);
                         return requestDataJsonAdapter.fromJsonValue(map);
+                    case NOTIFICATION_COMMENT:
+                        JsonAdapter<NotificationCommentData> commentDataJsonAdapter = ServiceGenerator.getMoshiWithoutType(NotificationData.class).adapter(NotificationCommentData.class);
+                        return commentDataJsonAdapter.fromJsonValue(map);
                 }
 
                 JsonAdapter<NotificationData> notificationDataJsonAdapter = ServiceGenerator.getMoshiWithoutType(NotificationData.class).adapter(NotificationData.class);

@@ -55,6 +55,7 @@ public class NotificationActivity extends DrawerActivity {
 
     private NotificationAdapter mAdapter;
     private ShimmerFrameLayout mShimmerView;
+    private int mPageNumber = 0;
 
     @Override
     protected int getLayoutId() {
@@ -101,6 +102,7 @@ public class NotificationActivity extends DrawerActivity {
             @Override
             public void onRefresh() {
                 mSwipeRefreshLayout.setRefreshing(false);
+                mPageNumber = 0;
                 mAdapter.setNewData(new ArrayList<Notification>());
                 getNotifications();
             }
@@ -134,22 +136,33 @@ public class NotificationActivity extends DrawerActivity {
 
         mNotificationRecyclerView.setAdapter(mAdapter);
         mNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                getNotifications();
+            }
+        }, mNotificationRecyclerView);
     }
 
     private void getNotifications() {
-        User user = StorageManager.getUser();
-        if(user == null) return;
         showShimmer();
-        ServiceManager.getInstance().getNotificationService().getNotifications(user.mId).enqueue(new RestCallback<List<Notification>>() {
+        ServiceManager.getInstance().getNotificationService().getNotifications(mPageNumber).enqueue(new RestCallback<List<Notification>>() {
             @Override
             public void onSuccess(String message, List<Notification> notifications) {
                 hideShimmer();
-                mAdapter.setNewData(notifications);
+                if(notifications == null || notifications.isEmpty()) {
+                    mAdapter.loadMoreEnd();
+                    return;
+                }
+                mAdapter.addData(notifications);
+                mAdapter.loadMoreComplete();
+                mPageNumber++;
             }
 
             @Override
             public void onFailure(String message) {
                 hideShimmer();
+                mAdapter.loadMoreFail();
                 Toast.makeText(NotificationActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });

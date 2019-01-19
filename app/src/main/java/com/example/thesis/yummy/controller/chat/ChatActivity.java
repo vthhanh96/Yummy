@@ -59,6 +59,7 @@ public class ChatActivity extends BaseActivity implements MessageInput.InputList
     private User mUserChat;
     private int mSenderId;
     private int mPageNumber = 0;
+    private boolean mIsLoadEnd = false;
 
     @Override
     protected int getLayoutId() {
@@ -147,7 +148,9 @@ public class ChatActivity extends BaseActivity implements MessageInput.InputList
         mMessagesListAdapter.setLoadMoreListener(new MessagesListAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-
+                if(!mIsLoadEnd) {
+                    getMessages();
+                }
             }
         });
         mMessagesListAdapter.registerViewClickListener(R.id.messageUserAvatar, new MessagesListAdapter.OnMessageViewClickListener<Message>() {
@@ -173,7 +176,12 @@ public class ChatActivity extends BaseActivity implements MessageInput.InputList
         ServiceManager.getInstance().getChatService().getChat(mUserChat.mId, mPageNumber).enqueue(new RestCallback<List<Message>>() {
             @Override
             public void onSuccess(String message, List<Message> messages) {
-                mMessagesListAdapter.addToEnd(messages, true);
+                if(messages == null || message.isEmpty()) {
+                    mIsLoadEnd = true;
+                    return;
+                }
+                mPageNumber++;
+                mMessagesListAdapter.addToEnd(messages, false);
             }
 
             @Override

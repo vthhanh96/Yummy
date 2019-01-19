@@ -115,7 +115,7 @@
                         android:layout_weight="1"
                         android:text="@string/accept"
                         android:textAllCaps="false"
-                        android:background="@color/colorPrimary"
+                        android:background="#37dd43"
                         android:textColor="@color/white"
                         android:textSize="16sp"/>
                 </LinearLayout>

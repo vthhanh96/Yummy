@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_marginEnd="@dimen/dimen_16dp"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
             android:id="@+id/avatarImageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/ic_default_avatar"/>
+            android:src="@drawable/ic_default_avatar" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/onlineImageView"
@@ -23,15 +23,18 @@
             android:layout_height="15dp"
             android:layout_gravity="end|bottom"
             android:background="@drawable/bg_circle_solid_green"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
     </FrameLayout>
 
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Hong Hanh"
-        android:textSize="16sp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:gravity="center"
+        android:maxLines="2"
+        android:maxWidth="80dp"
         android:textColor="@color/black"
-        android:layout_marginTop="@dimen/dimen_8dp"/>
+        android:textSize="16sp"
+        tools:text="Hong Hanh Hong Hanh" />
 </LinearLayout>
