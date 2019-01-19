@@ -21,6 +21,7 @@ import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
 import com.example.thesis.yummy.controller.meeting.MeetingDetailActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
+import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Notification;
@@ -133,6 +134,11 @@ public class NotificationActivity extends DrawerActivity {
                 }
             }
         });
+
+        EmptyLayout emptyLayout = new EmptyLayout(this);
+        emptyLayout.setEmptyImageMessage(getString(R.string.empty_notification));
+        emptyLayout.setEmptyImageResource(R.drawable.ic_empty_notification);
+        mAdapter.setEmptyView(emptyLayout);
 
         mNotificationRecyclerView.setAdapter(mAdapter);
         mNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));

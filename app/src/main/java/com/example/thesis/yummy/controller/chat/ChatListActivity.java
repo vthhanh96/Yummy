@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.Application;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.eventbus.EventNewMessage;
 import com.example.thesis.yummy.eventbus.EventUpdateListChat;
 import com.example.thesis.yummy.restful.RestCallback;
@@ -134,6 +135,11 @@ public class ChatListActivity extends DrawerActivity {
                 ChatActivity.start(ChatListActivity.this, user);
             }
         });
+
+        EmptyLayout emptyLayout = new EmptyLayout(this);
+        emptyLayout.setEmptyImageMessage(getString(R.string.empty_chat));
+        emptyLayout.setEmptyImageResource(R.drawable.ic_empty_chat);
+        mAdapter.setEmptyView(emptyLayout);
 
         mChatListRecyclerView.setAdapter(mAdapter);
         mChatListRecyclerView.setLayoutManager(new LinearLayoutManager(this));

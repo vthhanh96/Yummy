@@ -36,5 +36,13 @@
         android:maxWidth="80dp"
         android:textColor="@color/black"
         android:textSize="16sp"
-        tools:text="Hong Hanh Hong Hanh" />
+        tools:text="Hong Hanh" />
+
+    <TextView
+        android:id="@+id/distanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="15km"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:textSize="14sp"/>
 </LinearLayout>

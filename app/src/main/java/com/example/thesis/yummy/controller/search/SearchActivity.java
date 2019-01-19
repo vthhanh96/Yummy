@@ -25,11 +25,14 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.AppConstants;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.post.CategoryActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.restful.request.UserRequest;
+import com.example.thesis.yummy.utils.StringUtils;
 import com.example.thesis.yummy.view.SelectAgeDialog;
 import com.example.thesis.yummy.view.TopBarView;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -39,11 +42,13 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.gson.Gson;
 import com.skyfishjy.library.RippleBackground;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,6 +58,10 @@ import butterknife.OnClick;
 
 public class SearchActivity extends DrawerActivity {
 
+    private static final String ARG_KEY_SELECTED_CATEGORIES = "ARG_KEY_SELECTED_CATEGORIES";
+
+    private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static final int REQUEST_CODE_SELECT_CATEGORY = 2;
     private static final int GENDER_ALL = -1;
     private static final int GENDER_MALE = 1;
     private static final int GENDER_FEMALE = 0;
@@ -72,12 +81,16 @@ public class SearchActivity extends DrawerActivity {
     @BindView(R.id.maleButton) Button mMaleButton;
     @BindView(R.id.femaleButton) Button mFemaleButton;
     @BindView(R.id.ageRangeTextView) TextView mAgeRangeTextView;
+    @BindView(R.id.placeTextView) TextView mPlaceTextView;
+    @BindView(R.id.favoriteTextView) TextView mFavoriteTextView;
 
     private UserAdapter mUserAdapter;
     private int mGender = 1;
     private int mAgeFrom = 18;
     private int mAgeTo = 25;
     private int mPageNumber = 0;
+    private Location mLocation = new Location("");;
+    private List<Category> mSelectedCategories;
 
     @OnClick(R.id.searchImageButton)
     public void onSearchButtonClicked() {
@@ -113,6 +126,16 @@ public class SearchActivity extends DrawerActivity {
         showSelectAgeDialog();
     }
 
+    @OnClick(R.id.placeTextView)
+    public void placeTextViewClicked() {
+        openSearchLocation();
+    }
+
+    @OnClick(R.id.favoriteTextView)
+    public void favoriteTextViewClicked() {
+        CategoryActivity.startForResult(this, mSelectedCategories, REQUEST_CODE_SELECT_CATEGORY);
+    }
+
     @Override
     protected int getNavId() {
         return AppConstants.NAV_DRAWER_ID_SEARCH_PAGE;
@@ -138,7 +161,7 @@ public class SearchActivity extends DrawerActivity {
 
     private void initTopBar() {
         lockDrawer();
-        mTopBarView.setTitle("Search");
+        mTopBarView.setTitle(getString(R.string.search));
         mTopBarView.setImageViewLeft(TopBarView.LEFT_BACK);
         mTopBarView.setImageViewRight(TopBarView.DRAWABLE_SEARCH);
         mTopBarView.setOnLeftRightClickListener(new TopBarView.OnLeftRightClickListener() {
@@ -215,6 +238,8 @@ public class SearchActivity extends DrawerActivity {
 
         mAgeRangeTextView.setText(String.format(Locale.getDefault(), "%d - %d", mAgeFrom, mAgeTo));
         mFilterTextView.setText(getString(R.string.search_condition, gender, mAgeFrom, mAgeTo));
+        mPlaceTextView.setText(R.string.near_me);
+        mFavoriteTextView.setText(R.string.none_select_favorite);
     }
 
     private void selectedButton(Button button, boolean isSelected) {
@@ -289,6 +314,56 @@ public class SearchActivity extends DrawerActivity {
         dialog.show();
     }
 
+    private void openSearchLocation() {
+        try {
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                            .setBoundsBias(new LatLngBounds(
+                                    new LatLng(8.407168163601074, 104.1448974609375),
+                                    new LatLng(10.7723923007117563, 106.6981029510498)))
+                            .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != Activity.RESULT_OK) return;
+
+        switch (requestCode) {
+            case PLACE_AUTOCOMPLETE_REQUEST_CODE:
+                final Place place = PlacePicker.getPlace(this, data);
+
+                if (place != null) {
+                    mPlaceTextView.setText(place.getName().toString());
+                    mLocation.setLatitude(place.getLatLng().latitude);
+                    mLocation.setLongitude(place.getLatLng().longitude);
+                }
+                break;
+            case REQUEST_CODE_SELECT_CATEGORY:
+                if(data == null) return;
+                try {
+                    String selectedCategories = data.getStringExtra(ARG_KEY_SELECTED_CATEGORIES);
+                    List<Category> selected = Arrays.asList(new Gson().fromJson(selectedCategories, Category[].class));
+                    mSelectedCategories = new ArrayList<>();
+                    mSelectedCategories.addAll(selected);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    mSelectedCategories = new ArrayList<>();
+                }
+                StringBuilder categories = new StringBuilder();
+                for (Category category : mSelectedCategories) {
+                    categories.append(category.mName).append(", ");
+                }
+                categories.delete(categories.length() - 2, categories.length() - 1);
+                mFavoriteTextView.setText(categories);
+                break;
+        }
+    }
+
     private class UserAdapter extends BaseQuickAdapter<User, BaseViewHolder> {
 
         public UserAdapter() {
@@ -299,11 +374,12 @@ public class SearchActivity extends DrawerActivity {
         protected void convert(BaseViewHolder helper, User item) {
             if(item == null) return;
             ImageView imageView = helper.getView(R.id.avatarImageView);
-            Glide.with(mContext.getApplicationContext()).load(item.mAvatar).apply(RequestOptions.circleCropTransform()).into(imageView);
+            Glide.with(mContext.getApplicationContext()).load(item.mAvatar).apply(RequestOptions.circleCropTransform().placeholder(R.drawable.ic_default_avatar)).into(imageView);
 
             helper.setText(R.id.nameTextView, item.mFullName);
             helper.setVisible(R.id.onlineImageView, item.mIsOnline);
             helper.setText(R.id.trustPointTextView, getString(R.string.trust_point_amount, item.mTrustPoint));
+            helper.setText(R.id.distanceTextView, StringUtils.convertDistanceToString(item.mDistance));
 
             RatingBar ratingBar = helper.getView(R.id.ratingBar);
             if(item.mCountPeopleEvaluate != 0) {

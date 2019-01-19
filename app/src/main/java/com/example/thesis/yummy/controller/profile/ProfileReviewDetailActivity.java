@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.meeting.MeetingDetailActivity;
+import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.eventbus.EventRating;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
@@ -106,6 +107,11 @@ public class ProfileReviewDetailActivity extends BaseActivity {
 
     private void initReviewRecyclerView() {
         mAdapter = new ReviewAdapter();
+
+        EmptyLayout emptyLayout = new EmptyLayout(this);
+        emptyLayout.setEmptyImageMessage(getString(R.string.empty_rating));
+        emptyLayout.setEmptyImageResource(R.drawable.ic_empty_rating);
+        mAdapter.setEmptyView(emptyLayout);
 
         mReviewRecyclerView.setAdapter(mAdapter);
         mReviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));

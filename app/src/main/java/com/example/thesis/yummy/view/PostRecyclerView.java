@@ -24,6 +24,7 @@ import com.example.thesis.yummy.controller.post.EditPostActivity;
 import com.example.thesis.yummy.controller.post.ListPeopleInterestedPostActivity;
 import com.example.thesis.yummy.controller.post.PostDetailActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
+import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.eventbus.EventInterestedPost;
 import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
@@ -90,6 +91,11 @@ public class PostRecyclerView extends RecyclerView {
                 PostDetailActivity.start(getContext(), post.mId);
             }
         });
+
+        EmptyLayout emptyLayout = new EmptyLayout(getContext());
+        emptyLayout.setEmptyImageMessage(getContext().getString(R.string.empty_post));
+        emptyLayout.setEmptyImageResource(R.drawable.ic_empty_post);
+        mPostAdapter.setEmptyView(emptyLayout);
 
         mPostAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override

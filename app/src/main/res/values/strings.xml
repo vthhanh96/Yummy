@@ -134,4 +134,13 @@
     <string name="people_register">Người đăng ký</string>
     <string name="chat">Trò chuyện</string>
     <string name="input_message">Nhập nội dung</string>
+    <string name="empty_rating">Chưa có đánh giá nào!</string>
+    <string name="empty_post">Không có bài viết nào!</string>
+    <string name="empty_meeting">Chưa có cuộc hẹn nào!</string>
+    <string name="empty_notification">Không có thông báo nào!</string>
+    <string name="empty_chat">Chưa có cuộc trò chuyện nào</string>
+    <string name="empty_comment">Chưa có bình luận nào!</string>
+    <string name="near_me">Gần tôi</string>
+    <string name="select_favorite_food">Chọn sở thích ăn uống</string>
+    <string name="none_select_favorite">Chưa chọn sở thích</string>
 </resources>

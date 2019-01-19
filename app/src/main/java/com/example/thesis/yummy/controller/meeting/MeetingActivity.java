@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
+import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -125,6 +126,11 @@ public class MeetingActivity extends DrawerActivity {
                 return false;
             }
         });
+
+        EmptyLayout emptyLayout = new EmptyLayout(this);
+        emptyLayout.setEmptyImageMessage(getString(R.string.empty_meeting));
+        emptyLayout.setEmptyImageResource(R.drawable.ic_empty_meeting);
+        mAdapter.setEmptyView(emptyLayout);
 
         mMeetingRecyclerView.setAdapter(mAdapter);
         mMeetingRecyclerView.setLayoutManager(new LinearLayoutManager(this));

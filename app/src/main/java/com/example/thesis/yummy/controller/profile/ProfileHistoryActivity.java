@@ -22,6 +22,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.eventbus.EventRating;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
@@ -131,6 +132,11 @@ public class ProfileHistoryActivity extends BaseActivity {
                 ProfileReviewDetailActivity.start(ProfileHistoryActivity.this, item.mId, mUserId);
             }
         });
+
+        EmptyLayout emptyLayout = new EmptyLayout(this);
+        emptyLayout.setEmptyImageMessage(getString(R.string.empty_meeting));
+        emptyLayout.setEmptyImageResource(R.drawable.ic_empty_meeting);
+        mAdapter.setEmptyView(emptyLayout);
 
         mHistoryRecyclerView.setAdapter(mAdapter);
         mHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(this));

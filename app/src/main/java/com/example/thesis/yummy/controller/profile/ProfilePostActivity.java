@@ -97,7 +97,6 @@ public class ProfilePostActivity extends BaseActivity {
                 getMyPost();
             }
         });
-
     }
 
     private void getMyPost() {

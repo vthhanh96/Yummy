@@ -17,6 +17,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
+import com.example.thesis.yummy.controller.profile.ProfileActivity;
+import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.eventbus.EventUpdatePost;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
@@ -120,11 +122,19 @@ public class CommentActivity extends BaseActivity {
         mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                Comment comment = mAdapter.getItem(position);
+                if(comment == null || comment.mCreator == null) return;
                 if(view.getId() == R.id.imgAvatar) {
-//                    ProfileDetailActivity.start(mContext, mAdapter.getData().get(position).getCreator().getId());
+                    ProfileActivity.start(mContext, comment.mCreator.mId);
                 }
             }
         });
+
+        EmptyLayout emptyLayout = new EmptyLayout(this);
+        emptyLayout.setEmptyImageMessage(getString(R.string.empty_comment));
+        emptyLayout.setEmptyImageResource(R.drawable.ic_empty_chat);
+        mAdapter.setEmptyView(emptyLayout);
+
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         mCommentsRecyclerView.setAdapter(mAdapter);
     }

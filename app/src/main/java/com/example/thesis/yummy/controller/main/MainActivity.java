@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ import com.example.thesis.yummy.restful.request.PostRequest;
 import com.example.thesis.yummy.restful.request.UserRequest;
 import com.example.thesis.yummy.storage.StorageManager;
 import com.example.thesis.yummy.utils.PermissionUtils;
+import com.example.thesis.yummy.utils.StringUtils;
 import com.example.thesis.yummy.view.PostRecyclerView;
 import com.example.thesis.yummy.view.TopBarView;
 import com.example.thesis.yummy.view.dialog.QuestionDialog;
@@ -343,8 +345,9 @@ public class MainActivity extends DrawerActivity {
 
             helper.setVisible(R.id.onlineImageView, item.mIsOnline);
             ImageView imageView = helper.getView(R.id.avatarImageView);
-            Glide.with(mContext.getApplicationContext()).load(item.mAvatar).apply(RequestOptions.circleCropTransform()).into(imageView);
+            Glide.with(mContext.getApplicationContext()).load(item.mAvatar).apply(RequestOptions.circleCropTransform().placeholder(R.drawable.ic_default_avatar)).into(imageView);
             helper.setText(R.id.nameTextView, item.mFullName);
+            helper.setText(R.id.distanceTextView, StringUtils.convertDistanceToString(item.mDistance));
         }
     }
 

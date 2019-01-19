@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dimen_16dp">
+        android:padding="@dimen/dimen_16dp"
+        android:gravity="center_vertical">
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -57,14 +58,30 @@
                 android:layout_marginTop="@dimen/dimen_8dp"/>
         </LinearLayout>
 
-        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-            android:id="@+id/ratingBar"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="30dp"
-            android:minWidth="30dp"
-            android:isIndicator="true"
-            app:mrb_progressTint="#fec321"/>
+            android:orientation="vertical">
+
+            <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:minWidth="30dp"
+                android:isIndicator="true"
+                app:mrb_progressTint="#fec321"/>
+
+            <TextView
+                android:id="@+id/distanceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                tools:text="15 km"
+                android:textSize="14sp"
+                android:layout_marginTop="@dimen/dimen_8dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
