@@ -154,4 +154,9 @@
     <string name="boarding_title_5">Hốt nhanh voucher - Tiết kiệm chi phí</string>
     <string name="boarding_sub_5">Gợi ý nhiều Voucher hấp dẫn được cập nhật liên tục. Với nguồn thông tin xác đáng từ Hotdeal và Foody.</string>
     <string name="skip">Bỏ qua</string>
+    <string name="enter_validate_code">Nhập mã xác thực</string>
+    <string name="enter_validate_code_message">Bạn hãy nhập mã xác thực mà chúng tôi đã gửi qua email cho bạn.</string>
+    <string name="resend_code">Gửi lại mã</string>
+    <string name="validate">Xác thực</string>
+    <string name="resend_validate_code_success">Đã gửi mã xác thực qua email</string>
 </resources>

@@ -13,6 +13,7 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.auth.AuthClient;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.storage.StorageManager;
 
@@ -56,21 +57,22 @@ public class RegisterActivity extends BaseActivity {
         }
 
         showLoading();
-        AuthClient.register(mEdtEmail.getText().toString(),
-                mEdtName.getText().toString(),
-                mEdtPassword.getText().toString(), new AuthClient.AuthCallBack() {
-                    @Override
-                    public void onAuthorized() {
-                        hideLoading();
-                        RegisterAvatarActivity.start(RegisterActivity.this);
-                    }
+        ServiceManager.getInstance().getUserService().sendCodeForgotPassword(mEdtEmail.getText().toString()).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                RegisterEnterCodeActivity.start(RegisterActivity.this, mEdtName.getText().toString(),
+                        mEdtEmail.getText().toString(),
+                        mEdtPassword.getText().toString(),
+                        message);
+            }
 
-                    @Override
-                    public void onUnauthorized(String message) {
-                        hideLoading();
-                        Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
-                    }
-                });
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -173,11 +173,12 @@ public abstract class DrawerActivity extends BaseActivity {
         if (isDrawerOpen()) {
             closeDrawer();
         } else {
-            if(isLockDrawer()) {
-                super.onBackPressed();
-            } else {
-                confirmExitApp();
-            }
+            super.onBackPressed();
+//            if(isLockDrawer()) {
+//                super.onBackPressed();
+//            } else {
+//                confirmExitApp();
+//            }
         }
     }
 

@@ -95,7 +95,7 @@ public class PostRecyclerView extends RecyclerView {
         EmptyLayout emptyLayout = new EmptyLayout(getContext());
         emptyLayout.setEmptyImageMessage(getContext().getString(R.string.empty_post));
         emptyLayout.setEmptyImageResource(R.drawable.ic_empty_post);
-        mPostAdapter.setEmptyView(emptyLayout);
+//        mPostAdapter.setEmptyView(emptyLayout);
 
         mPostAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override

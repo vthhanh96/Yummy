@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:title="@string/enter_validate_code"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_validate_code_message"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:layout_marginStart="@dimen/dimen_32dp"
+        android:layout_marginEnd="@dimen/dimen_32dp"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:layout_marginBottom="@dimen/dimen_16dp"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/codeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_32dp"
+        android:layout_marginStart="@dimen/dimen_32dp"
+        android:hint="@string/enter_validate_code"
+        android:inputType="text"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/resendButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="@dimen/dimen_32dp"
+        android:layout_marginEnd="@dimen/dimen_32dp"
+        android:layout_marginTop="@dimen/dimen_32dp"
+        app:fb_defaultColor="@color/colorPrimary"
+        app:fb_radius="@dimen/dimen_32dp"
+        android:text="@string/resend_code"
+        android:textAllCaps="true" />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/validateButton"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="@dimen/dimen_32dp"
+        android:layout_marginEnd="@dimen/dimen_32dp"
+        android:layout_marginTop="@dimen/dimen_32dp"
+        app:fb_defaultColor="@color/colorPrimary"
+        app:fb_radius="@dimen/dimen_32dp"
+        android:text="@string/validate"
+        android:textAllCaps="true" />
+</LinearLayout>

@@ -39,11 +39,11 @@ public class LoadingActivity extends BaseActivity {
     }
 
     private void init() {
-        if(StorageManager.isFirstTime()) {
-            StorageManager.saveIsFirstTime(false);
-            BoardingActivity.start(this);
-            return;
-        }
+//        if(StorageManager.isFirstTime()) {
+//            StorageManager.saveIsFirstTime(false);
+//            BoardingActivity.start(this);
+//            return;
+//        }
         if(AuthClient.isExpireToken()) {
             LoginActivity.start(this, mLogoImageView);
         } else {

@@ -25,6 +25,7 @@ import com.example.thesis.yummy.controller.shared.EmptyLayout;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Notification;
+import com.example.thesis.yummy.restful.model.NotificationCommentData;
 import com.example.thesis.yummy.restful.model.NotificationData;
 import com.example.thesis.yummy.restful.model.NotificationMeetingData;
 import com.example.thesis.yummy.restful.model.NotificationPostData;
@@ -40,6 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.thesis.yummy.AppConstants.NAV_DRAWER_ID_NOTIFICATION_PAGE;
+import static com.example.thesis.yummy.AppConstants.NOTIFICATION_COMMENT;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_MEETING;
 import static com.example.thesis.yummy.AppConstants.NOTIFICATION_POST;
 
@@ -130,6 +132,11 @@ public class NotificationActivity extends DrawerActivity {
                         NotificationMeetingData meetingData = (NotificationMeetingData) notification.notificationData;
                         if(meetingData.mMeeting == null) return;
                         MeetingDetailActivity.start(NotificationActivity.this, meetingData.mMeeting.mId);
+                        break;
+                    case NOTIFICATION_COMMENT:
+                        NotificationCommentData notificationCommentData = (NotificationCommentData) notification.notificationData;
+                        if(notificationCommentData.mComment == null) break;
+                        MeetingDetailActivity.start(NotificationActivity.this, notificationCommentData.mComment.mParentID);
                         break;
                 }
             }

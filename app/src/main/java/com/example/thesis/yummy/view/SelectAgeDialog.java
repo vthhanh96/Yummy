@@ -2,8 +2,11 @@ package com.example.thesis.yummy.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.Window;
 
 import com.example.thesis.yummy.R;
 
@@ -51,6 +54,10 @@ public class SelectAgeDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if(getWindow() != null) {
+            getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
         setContentView(R.layout.dialog_select_age);
         ButterKnife.bind(this);
         init();

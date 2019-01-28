@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.thesis.yummy.R;
 import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.restful.RestCallback;
@@ -39,6 +42,7 @@ public class ReceiveRequestNotificationActivity extends BaseActivity {
     @BindView(R.id.placeTextView) TextView mPlaceTextView;
     @BindView(R.id.timeTextView) TextView mTimeTextView;
     @BindView(R.id.contentTextView) TextView mContentTextView;
+    @BindView(R.id.avatarImageView) ImageView mAvatarImageView;
 
     private Notification mNotification;
     private int mRequestID;
@@ -112,6 +116,9 @@ public class ReceiveRequestNotificationActivity extends BaseActivity {
                 mTimeTextView.setText(DateFormat.format("dd/MM/yyyy hh:mm aa", requestData.mRequest.mTime));
                 mContentTextView.setText(requestData.mRequest.mContent);
                 mMessageRequestTextView.setText(getString(R.string.send_request_title, requestData.mRequest.mCreator.mFullName));
+                if(requestData.mRequest.mCreator != null) {
+                    Glide.with(getApplicationContext()).load(requestData.mRequest.mCreator.mAvatar).apply(RequestOptions.circleCropTransform().placeholder(R.drawable.ic_default_avatar)).into(mAvatarImageView);
+                }
             }
         }
     }

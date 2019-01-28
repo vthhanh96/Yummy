@@ -93,6 +93,7 @@
         <activity android:name=".controller.chat.ChatListActivity" />
         <activity android:name=".controller.chat.ChatActivity" />
         <activity android:name=".controller.boarding.BoardingActivity" />
+        <activity android:name=".controller.register.RegisterEnterCodeActivity" />
 
 
     </application>

@@ -236,7 +236,7 @@ public class MeetingCommentFragment extends Fragment implements MessageInput.Inp
 
     @Override
     public String toString() {
-        return Application.mContext.getString(R.string.comment);
+        return Application.mContext.getString(R.string.chat);
     }
 
     @Override
