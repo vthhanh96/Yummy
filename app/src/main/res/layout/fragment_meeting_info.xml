@@ -85,14 +85,31 @@
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        android:text="@string/people_in_the_group"
-        android:layout_margin="@dimen/dimen_16dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="@string/people_in_the_group"
+            android:layout_margin="@dimen/dimen_16dp"/>
+
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/inviteUserButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_add_user"
+            android:scaleType="fitCenter"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="12dp"
+            android:layout_marginEnd="@dimen/dimen_8dp"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/joinedPeopleRecyclerView"

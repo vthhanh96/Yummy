@@ -68,4 +68,8 @@ public interface MeetingService {
 
     @POST("meeting/check_rating/{meeting_id}")
     Call<RestResponse<Base>> canRatingMeeting(@Path("meeting_id") int meetingId);
+
+    @FormUrlEncoded
+    @POST("meeting/invite_user/{meeting_id}")
+    Call<RestResponse<Base>> inviteUser(@Path("meeting_id") int meetingID, @Field("user_invite") int userID);
 }

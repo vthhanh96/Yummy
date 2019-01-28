@@ -10,6 +10,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.example.thesis.yummy.controller.base.BaseActivity;
 import com.example.thesis.yummy.controller.base.DrawerActivity;
 import com.example.thesis.yummy.controller.home.MapActivity;
 import com.example.thesis.yummy.controller.rating.RatingActivity;
+import com.example.thesis.yummy.controller.search.SearchActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
 import com.example.thesis.yummy.restful.model.Base;
@@ -48,6 +50,7 @@ public class MeetingInfoFragment extends Fragment {
     @BindView(R.id.timeTextView) TextView mTimeTextView;
     @BindView(R.id.joinedPeopleRecyclerView) RecyclerView mPeopleRecyclerView;
     @BindView(R.id.ratingMeetingButton) FancyButton mRatingButton;
+    @BindView(R.id.inviteUserButton) ImageButton mInviteUserButton;
 
     private int mMeetingID;
     private Meeting mMeeting;
@@ -62,6 +65,11 @@ public class MeetingInfoFragment extends Fragment {
     @OnClick(R.id.ratingMeetingButton)
     public void openRating() {
         RatingActivity.start(getContext(), mMeetingID);
+    }
+
+    @OnClick(R.id.inviteUserButton)
+    public void inviteUser() {
+        SearchActivity.start(getContext(), true, mMeetingID);
     }
 
     @Nullable
@@ -119,6 +127,15 @@ public class MeetingInfoFragment extends Fragment {
         }
 
         mUserAdapter.setNewData(meeting.mJoinedPeople);
+
+        User currentUser = StorageManager.getUser();
+        if(currentUser == null) return;
+
+        if(currentUser.mId.equals(mMeeting.mCreator.mId) && !meeting.mIsFinished) {
+            mInviteUserButton.setVisibility(View.VISIBLE);
+        } else {
+            mInviteUserButton.setVisibility(View.GONE);
+        }
     }
 
     private void checkCanRating() {

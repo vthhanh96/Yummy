@@ -29,6 +29,7 @@ import com.example.thesis.yummy.controller.post.CategoryActivity;
 import com.example.thesis.yummy.controller.profile.ProfileActivity;
 import com.example.thesis.yummy.restful.RestCallback;
 import com.example.thesis.yummy.restful.ServiceManager;
+import com.example.thesis.yummy.restful.model.Base;
 import com.example.thesis.yummy.restful.model.Category;
 import com.example.thesis.yummy.restful.model.User;
 import com.example.thesis.yummy.restful.request.UserRequest;
@@ -59,6 +60,8 @@ import butterknife.OnClick;
 public class SearchActivity extends DrawerActivity {
 
     private static final String ARG_KEY_SELECTED_CATEGORIES = "ARG_KEY_SELECTED_CATEGORIES";
+    private static final String ARG_KEY_IS_ADD_USER_TO_MEETING = "ARG_KEY_IS_ADD_USER_TO_MEETING";
+    private static final String ARG_KEY_MEETING_ID = "ARG_KEY_MEETING_ID";
 
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     private static final int REQUEST_CODE_SELECT_CATEGORY = 2;
@@ -68,6 +71,13 @@ public class SearchActivity extends DrawerActivity {
 
     public static void start(Context context) {
         Intent starter = new Intent(context, SearchActivity.class);
+        context.startActivity(starter);
+    }
+
+    public static void start(Context context, boolean isAddUserToMeeting, int meetingID) {
+        Intent starter = new Intent(context, SearchActivity.class);
+        starter.putExtra(ARG_KEY_IS_ADD_USER_TO_MEETING, isAddUserToMeeting);
+        starter.putExtra(ARG_KEY_MEETING_ID, meetingID);
         context.startActivity(starter);
     }
 
@@ -91,6 +101,8 @@ public class SearchActivity extends DrawerActivity {
     private int mPageNumber = 0;
     private Location mLocation = new Location("");;
     private List<Category> mSelectedCategories;
+    private boolean mIsAddUserToMeeting = false;
+    private int mMeetingID;
 
     @OnClick(R.id.searchImageButton)
     public void onSearchButtonClicked() {
@@ -154,9 +166,15 @@ public class SearchActivity extends DrawerActivity {
     }
 
     private void init() {
+        getExtras();
         initTopBar();
         initRecyclerView();
         updateData();
+    }
+
+    private void getExtras() {
+        mIsAddUserToMeeting = getIntent().getBooleanExtra(ARG_KEY_IS_ADD_USER_TO_MEETING, false);
+        mMeetingID = getIntent().getIntExtra(ARG_KEY_MEETING_ID, -1);
     }
 
     private void initTopBar() {
@@ -186,8 +204,11 @@ public class SearchActivity extends DrawerActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 User item = mUserAdapter.getItem(position);
                 if(item == null) return;
-
-                SendRequestActivity.start(SearchActivity.this, item);
+                if(mIsAddUserToMeeting) {
+                    inviteUser(item);
+                } else {
+                    SendRequestActivity.start(SearchActivity.this, item);
+                }
             }
         });
         mUserAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
@@ -326,6 +347,24 @@ public class SearchActivity extends DrawerActivity {
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
+    }
+
+    private void inviteUser(User user) {
+        showLoading();
+        ServiceManager.getInstance().getMeetingService().inviteUser(mMeetingID, user.mId).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                hideLoading();
+                Toast.makeText(SearchActivity.this, "Đã gửi lời mời", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(SearchActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
