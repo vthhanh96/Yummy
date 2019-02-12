@@ -51,12 +51,13 @@ public class UserRequest {
         ServiceManager.getInstance().getUserService().searchUser(page, params).enqueue(callback);
     }
 
-    public static void sendRequest(int userId, String content, double latitude, double longitude, String place, Date time, RestCallback<Base> callback) {
+    public static void sendRequest(int userId, String content, Double latitude, Double longitude, String place, Date time, Integer meetingID, RestCallback<Base> callback) {
         Map<String, Object> params = new HashMap<>();
         params.put("userSearch", userId);
         params.put("content", content);
         params.put("place", place);
         params.put("time", time);
+        params.put("meeting", meetingID);
 
         HashMap<String, Object> coordinate = new HashMap<>();
         coordinate.put("coordinates", new Double[]{longitude, latitude});

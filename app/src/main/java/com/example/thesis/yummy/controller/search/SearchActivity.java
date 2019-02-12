@@ -9,10 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -205,7 +203,7 @@ public class SearchActivity extends DrawerActivity {
                 User item = mUserAdapter.getItem(position);
                 if(item == null) return;
                 if(mIsAddUserToMeeting) {
-                    inviteUser(item);
+                    validateInviteUser(item);
                 } else {
                     SendRequestActivity.start(SearchActivity.this, item);
                 }
@@ -349,9 +347,24 @@ public class SearchActivity extends DrawerActivity {
         }
     }
 
-    private void inviteUser(User user) {
+    private void validateInviteUser(final User user) {
         showLoading();
-        ServiceManager.getInstance().getMeetingService().inviteUser(mMeetingID, user.mId).enqueue(new RestCallback<Base>() {
+        ServiceManager.getInstance().getMeetingService().checkInviteUser(mMeetingID, user.mId).enqueue(new RestCallback<Base>() {
+            @Override
+            public void onSuccess(String message, Base base) {
+                inviteUser(user);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                hideLoading();
+                Toast.makeText(SearchActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void inviteUser(User user) {
+        UserRequest.sendRequest(user.mId, null, null, null, null, null, mMeetingID, new RestCallback<Base>() {
             @Override
             public void onSuccess(String message, Base base) {
                 hideLoading();

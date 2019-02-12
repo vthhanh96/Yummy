@@ -181,7 +181,7 @@ public class SendRequestActivity extends BaseActivity {
     private void sendRequest() {
         showLoading();
         UserRequest.sendRequest(mUser.mId, mContentEditText.getText().toString(), mLocation.getLatitude(), mLocation.getLongitude(),
-                mPlaceEditText.getText().toString(), mTime, new RestCallback<Base>() {
+                mPlaceEditText.getText().toString(), mTime, null, new RestCallback<Base>() {
                     @Override
                     public void onSuccess(String message, Base base) {
                         hideLoading();

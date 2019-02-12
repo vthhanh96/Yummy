@@ -71,5 +71,5 @@ public interface MeetingService {
 
     @FormUrlEncoded
     @POST("meeting/invite_user/{meeting_id}")
-    Call<RestResponse<Base>> inviteUser(@Path("meeting_id") int meetingID, @Field("user_invite") int userID);
+    Call<RestResponse<Base>> checkInviteUser(@Path("meeting_id") int meetingID, @Field("user_invite") int userID);
 }
